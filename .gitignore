@@ -48,3 +48,7 @@ cmake_install.cmake
 *.exe
 *.out
 *.app
+*.opendb
+*.db-wal
+*.db-shm
+*.db
