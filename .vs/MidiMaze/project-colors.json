@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "ae0e95db-2f91-4fda-b3d8-1ad3fdd7efde": {
+      "ProjectGuid": "ae0e95db-2f91-4fda-b3d8-1ad3fdd7efde",
+      "DisplayName": "MidiMaze",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

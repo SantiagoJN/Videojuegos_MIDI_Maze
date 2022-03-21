@@ -52,3 +52,15 @@ cmake_install.cmake
 *.db-wal
 *.db-shm
 *.db
+*.tlog
+*.tlog
+*.recipe
+MidiMaze/x64/Debug/MidiMaze.exe.recipe
+MidiMaze/x64/Debug/MidiMaze.log
+MidiMaze/x64/Debug/MidiMaze.tlog/CL.command.1.tlog
+MidiMaze/x64/Debug/MidiMaze.tlog/CL.read.1.tlog
+MidiMaze/x64/Debug/MidiMaze.tlog/MidiMaze.lastbuildstate
+MidiMaze/x64/Debug/MidiMaze.tlog/link.write.1.tlog
+MidiMaze/x64/Debug/MidiMaze.tlog/link.read.1.tlog
+*.tlog
+*.tlog
