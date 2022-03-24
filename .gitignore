@@ -464,3 +464,8 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 *.tlog
+.vs/MidiMaze/v17/.suo
+.vs/MidiMaze/v17/.suo
+MidiMaze/MidiMaze.vcxproj
+MidiMaze/x64/Debug/MidiMaze.exe.recipe
+*.log
