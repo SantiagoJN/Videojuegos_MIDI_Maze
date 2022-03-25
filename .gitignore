@@ -12,10 +12,6 @@ CmakeSettings.json
 Makefile
 cmake_install.cmake
 
-#images:
-*.svg
-*.png
-
 # Prerequisites
 *.d
 

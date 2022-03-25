@@ -5,6 +5,11 @@
       "ProjectGuid": "ae0e95db-2f91-4fda-b3d8-1ad3fdd7efde",
       "DisplayName": "MidiMaze",
       "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Archivos varios",
+      "ColorIndex": -1
     }
   },
   "NextColorIndex": 1
