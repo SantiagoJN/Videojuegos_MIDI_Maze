@@ -95,10 +95,24 @@ int main()
         glm::vec3(1.5f,  0.2f, -1.5f),
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
+
+    // world space positions of our cubes
+    glm::vec3 sphereScales[] = {
+        glm::vec3(0.5f,  0.5f,  0.5f),
+        glm::vec3(0.5f,  0.5f,  0.5f),
+        glm::vec3(0.5f,  0.5f,  0.5f),
+        glm::vec3(0.7f,  0.7f,  0.7f),
+        glm::vec3(0.7f,  0.7f,  0.7f),
+        glm::vec3(0.7f,  0.7f,  0.7f),
+        glm::vec3(1.0f,  1.0f,  1.0f),
+        glm::vec3(1.0f,  1.0f,  1.0f),
+        glm::vec3(1.0f,  1.0f,  1.0f),
+        glm::vec3(0.2f,  0.2f,  0.2f)
+    };
     
     
-    Model spheres("resources/objects/sphere.obj");
-    
+    //Model spheres("resources/objects/sphere.obj");
+    Model ourModel("resources/objects/sphere.obj");
 
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el ratón
@@ -134,16 +148,19 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("view", view);
 
+        
+
+        
         //Render spheres
         for (unsigned int i = 0; i < 10; i++)
         {
             // calculate the model matrix for each object and pass it to shader before drawing
+            // render the loaded model
             glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, spherePositions[i]);
-            float angle = 20.0f * i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            
-            spheres.Draw(ourShader);
+            model = glm::translate(model, spherePositions[i]); // translate it down so it's at the center of the scene
+            model = glm::scale(model, sphereScales[i]);	// it's a bit too big for our scene, so scale it down
+            ourShader.setMat4("model", model);
+            ourModel.Draw(ourShader);
         }
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
