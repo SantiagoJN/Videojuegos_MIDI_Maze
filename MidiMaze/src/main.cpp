@@ -80,7 +80,7 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader ourShader("shaders/6.3.coordinate_systems.vs", "shaders/6.3.coordinate_systems.fs");
+    Shader ourShader("shaders/1.model_loading.vs", "shaders/1.model_loading.fs");
 
     // world space positions of our cubes
     glm::vec3 spherePositions[] = {
@@ -109,11 +109,12 @@ int main()
         glm::vec3(1.0f,  1.0f,  1.0f),
         glm::vec3(0.2f,  0.2f,  0.2f)
     };
+	for (int i = 0; i < 10; i++) sphereScales[i] = sphereScales[i] / glm::vec3(5, 5, 5);
     
     
     //Model spheres("resources/objects/sphere.obj");
-    Model ourModel("resources/objects/sphere.obj");
-
+    //Model ourModel("resources/objects/smiley/smiley.obj");
+    //Model ourModel("resources/objects/emoji/emoji_064.obj");
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el ratón
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -149,8 +150,15 @@ int main()
         ourShader.setMat4("view", view);
 
         
+		// Move spheres :)
+		// Change the array spherePosition to have random values
+        for (int i = 0; i < 10; i++) {
+            //spherePositions[i][0] += 0.005 * ((i % 2 == 0) ? 1 : -1);
+            //spherePositions[i][2] += 0.005 * ((i % 3 == 0) ? 1 : -1);
+        }
 
-        
+        Model ourModel("resources/objects/pruebas/prueba1.obj");
+        //spherePositions[0][2] += 0.005;
         //Render spheres
         for (unsigned int i = 0; i < 10; i++)
         {
