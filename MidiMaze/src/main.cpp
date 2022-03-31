@@ -116,6 +116,9 @@ int main()
     //Model ourModel("resources/objects/smiley/smiley.obj");
     //Model ourModel("resources/objects/emoji/emoji_064.obj");
 
+    Model ourModel("resources/objects/pruebas/textured.obj");
+    Model mapa("resources/objects/pruebas/mapa.obj");
+
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el ratón
     glfwSetCursorPosCallback(window, mouse_callback);
 
@@ -157,7 +160,6 @@ int main()
             //spherePositions[i][2] += 0.005 * ((i % 3 == 0) ? 1 : -1);
         }
 
-        Model ourModel("resources/objects/pruebas/prueba1.obj");
         //spherePositions[0][2] += 0.005;
         //Render spheres
         for (unsigned int i = 0; i < 10; i++)
@@ -170,6 +172,13 @@ int main()
             ourShader.setMat4("model", model);
             ourModel.Draw(ourShader);
         }
+		
+		//Dibujar el mapa
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-10, -2, -7)); // translate it so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.5, 1.5, 1.5));	// pretty small -> scale it up
+        ourShader.setMat4("model", model);
+        mapa.Draw(ourShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
