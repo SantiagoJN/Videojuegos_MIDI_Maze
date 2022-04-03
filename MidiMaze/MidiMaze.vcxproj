@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\HOME\Documents\midiMazeArch\lib;C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -118,12 +118,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\AssimpVS\include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\HOME\Documents\glm;C:\Users\HOME\Documents\glfw\glfw-3.3.6.bin.WIN64\include;C:\Users\HOME\Documents\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\HOME\Documents\midiMazeArch\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\include;C:\Users\HOME\Documents\AssimpVS\lib;C:\Users\santy\OneDrive - unizar.es\Videojuegos\glad\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\glfw-3.3.6.bin.WIN64\lib-vc2022;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\HOME\Documents\glfw\glfw-3.3.6.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\glad\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\glfw-3.3.6.bin.WIN64\lib-vc2022;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\HOME\Documents\midiMazeArch\include;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -153,6 +153,7 @@
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullets.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="model.h" />

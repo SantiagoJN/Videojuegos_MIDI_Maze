@@ -44,5 +44,8 @@
     <ClInclude Include="model.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Bullets.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
