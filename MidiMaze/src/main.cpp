@@ -6,8 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <Bullets.h>
-
 #include <Camera.h>
 #include <model.h>
 
@@ -15,7 +13,6 @@
 
 #include <assimp/scene.h>
 
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -24,13 +21,13 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-bool newBullet = false;
-
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f; // Initial values in the middle of the screen
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+
+Model tests;
 
 // valores para normalizar el movimiento de la cámara
 float deltaTime = 0.0f;	// Time between current frame and last frame
@@ -65,8 +62,6 @@ int main()
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -105,31 +100,32 @@ int main()
 
     // world space positions of our cubes
     glm::vec3 sphereScales[] = {
-        glm::vec3(0.05f,  0.05f,  0.05f),
         glm::vec3(0.5f,  0.5f,  0.5f),
         glm::vec3(0.5f,  0.5f,  0.5f),
+        glm::vec3(0.5f,  0.5f,  0.5f),
         glm::vec3(0.7f,  0.7f,  0.7f),
         glm::vec3(0.7f,  0.7f,  0.7f),
         glm::vec3(0.7f,  0.7f,  0.7f),
         glm::vec3(1.0f,  1.0f,  1.0f),
         glm::vec3(1.0f,  1.0f,  1.0f),
         glm::vec3(1.0f,  1.0f,  1.0f),
-        glm::vec3(0.1f,  0.1f,  0.1f)
+        glm::vec3(0.2f,  0.2f,  0.2f)
     };
-	for (int i = 0; i < 10; i++) sphereScales[i] = sphereScales[i] / glm::vec3(5, 5, 5);
-    
-    
+
+
+    glm::vec3 cameraSize = glm::vec3(1.0f, 1.0f, 0.0f);
+    for (int i = 0; i < 10; i++) sphereScales[i] = sphereScales[i] / glm::vec3(5, 5, 5);
+
+
     //Model spheres("resources/objects/sphere.obj");
     //Model ourModel("resources/objects/smiley/smiley.obj");
     //Model ourModel("resources/objects/emoji/emoji_064.obj");
 
-    //Model spheres("resources/objects/sphere.obj");
+    Model ourModel("resources/objects/pruebas/textured.obj");
     Model mapa("resources/objects/pruebas/mapa.obj");
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el ratón
     glfwSetCursorPosCallback(window, mouse_callback);
-
-    Bullet myBullets("resources/objects/sphere.obj", 0.1);
 
 
     // =====================================================================================================================
@@ -137,11 +133,12 @@ int main()
     // =====================================================================================================================
     while (!glfwWindowShouldClose(window))
     {
+        tests = mapa;
         // Datos para gestionar los fps
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        
+
         // input
         processInput(window);
 
@@ -161,15 +158,9 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("view", view);
 
-        if (newBullet) {
-            newBullet = false;
-            myBullets.newBullet(camera.Position,camera.Front);
-        }
 
-        myBullets.DrawBullets(ourShader);
-        
-		// Move spheres :)
-		// Change the array spherePosition to have random values
+        // Move spheres :)
+        // Change the array spherePosition to have random values
         for (int i = 0; i < 10; i++) {
             //spherePositions[i][0] += 0.005 * ((i % 2 == 0) ? 1 : -1);
             //spherePositions[i][2] += 0.005 * ((i % 3 == 0) ? 1 : -1);
@@ -177,7 +168,7 @@ int main()
 
         //spherePositions[0][2] += 0.005;
         //Render spheres
-        /*for (unsigned int i = 0; i < 10; i++)
+        for (unsigned int i = 0; i < 10; i++)
         {
             // calculate the model matrix for each object and pass it to shader before drawing
             // render the loaded model
@@ -185,10 +176,10 @@ int main()
             model = glm::translate(model, spherePositions[i]); // translate it down so it's at the center of the scene
             model = glm::scale(model, sphereScales[i]);	// it's a bit too big for our scene, so scale it down
             ourShader.setMat4("model", model);
-            spheres.Draw(ourShader);
+            ourModel.Draw(ourShader);
         }
-		*/
-		//Dibujar el mapa
+
+        //Dibujar el mapa
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(-10, -2, -7)); // translate it so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.5, 1.5, 1.5));	// pretty small -> scale it up
@@ -225,20 +216,28 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
+    bool moveF = true;
+    bool moveB = true;
+    bool moveL = true;
+    bool moveR = true;
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+        moveF = tests.checkCollisionsModel(camera.Position + (camera.Front * (camera.MovementSpeed*deltaTime)));
+        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime, moveF, moveB, moveL, moveR);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+        moveB = tests.checkCollisionsModel(camera.Position - (camera.Front * (camera.MovementSpeed * deltaTime)));
+        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, moveF, moveB, moveL, moveR);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
+        moveL = tests.checkCollisionsModel(camera.Position - (camera.Right * (camera.MovementSpeed * deltaTime)));
+        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime, moveF, moveB, moveL, moveR);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
+        moveR = tests.checkCollisionsModel(camera.Position + (camera.Right * (camera.MovementSpeed * deltaTime)));
+        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime, moveF, moveB, moveL, moveR);
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos){
-    if (firstMouse){ // initially set to true
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    if (firstMouse) { // initially set to true
         lastX = static_cast<float>(xpos); // To avoid warning messages
         lastY = static_cast<float>(ypos);
         firstMouse = false;
@@ -250,14 +249,4 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos){
     lastY = static_cast<float>(ypos);
 
     camera.ProcessMouseMovement(xoffset, yoffset);
-}
-
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        cout << "Hola" << endl;
-        cout << camera.Position[0]<<","<< camera.Position[1] << "," << camera.Position[2] << endl;
-        cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
-
-        newBullet = true;
-    }
 }
