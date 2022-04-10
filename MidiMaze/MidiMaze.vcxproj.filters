@@ -47,5 +47,8 @@
     <ClInclude Include="Bullets.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\irrKlang-64bit-1.6.0\examples\common\conio.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

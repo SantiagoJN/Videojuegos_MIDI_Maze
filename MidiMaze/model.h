@@ -52,10 +52,10 @@ public:
     {
         for (unsigned int i = 0; i < meshes.size(); i++) {
             if (meshes[i].checkCollision(cameraPosition)) {
-                cout << "Colisiona" << endl;
+                //cout << "Colisiona" << endl;
                 return true;
             }
-            cout << "Numero de meshes colisiones: " << i << endl;
+            //cout << "Numero de meshes colisiones: " << i << endl;
         }
         return false;
     }

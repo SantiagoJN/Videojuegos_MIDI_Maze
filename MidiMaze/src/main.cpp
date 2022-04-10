@@ -13,9 +13,18 @@
 
 #include <assimp/scene.h>
 
+#include <glut.h>
+
+#include <irrKlang/irrKlang.h>
+using namespace irrklang;
+
+ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+
+void showFPS(int fps);
 
 // Initial settings
 const unsigned int SCR_WIDTH = 800;
@@ -33,6 +42,8 @@ Model tests;
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
+float lastFrameFPS = 0.0f;
+int countFrames = 0; // Para saber los frames que ha habido en 1s
 
 int main()
 {
@@ -138,6 +149,15 @@ int main()
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+		
+        countFrames++; // Actualizar los frames en el último segundo
+		// Datos para gestionar los fps
+        if (currentFrame - lastFrameFPS > 1.0f) {
+            cout << "FPS: " << countFrames << endl;
+            showFPS(countFrames);
+			countFrames = 0;
+			lastFrameFPS = currentFrame; // Actualizamos
+        }
 
         // input
         processInput(window);
@@ -220,20 +240,26 @@ void processInput(GLFWwindow* window)
     bool moveB = true;
     bool moveL = true;
     bool moveR = true;
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        moveF = tests.checkCollisionsModel(camera.Position + (camera.Front * (camera.MovementSpeed*deltaTime)));
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+        moveF = tests.checkCollisionsModel(camera.Position + (camera.Front * (camera.MovementSpeed * deltaTime)));
         camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime, moveF, moveB, moveL, moveR);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         moveB = tests.checkCollisionsModel(camera.Position - (camera.Front * (camera.MovementSpeed * deltaTime)));
         camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, moveF, moveB, moveL, moveR);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        moveL = tests.checkCollisionsModel(camera.Position - (camera.Right * (camera.MovementSpeed * deltaTime)));
-        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime, moveF, moveB, moveL, moveR);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		moveL = tests.checkCollisionsModel(camera.Position - (camera.Right * (camera.MovementSpeed * deltaTime)));
+		camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime, moveF, moveB, moveL, moveR);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         moveR = tests.checkCollisionsModel(camera.Position + (camera.Right * (camera.MovementSpeed * deltaTime)));
         camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime, moveF, moveB, moveL, moveR);
+    }
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -249,4 +275,19 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     lastY = static_cast<float>(ypos);
 
     camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void showFPS(int fps) {
+    /*char string[5];
+	sprintf_s(string, "%d", fps);
+    //unsigned char string[] = to_string(fps);
+    int w = glutBitmapLength(GLUT_BITMAP_8_BY_13, reinterpret_cast<unsigned char*>(string));
+    glRasterPos2f(0., 0.);
+    float x = .5;
+    glRasterPos2f(x - (float)SCR_WIDTH / 2, 0.);
+    //glColor(1., 0., 0.);
+    int len = strlen(string);
+    for (int i = 0; i < len; i++) {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
+    }*/
 }
