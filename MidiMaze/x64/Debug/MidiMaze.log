@@ -1,10 +1,1 @@
-﻿  main.cpp
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Bullets.h(28,36): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\map.h(29,33): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\map.h(30,33): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\map.h(42,37): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\map.h(43,37): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\map.h(47,37): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\map.h(48,37): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\main.cpp(98,57): warning C4305: 'argumento': truncamiento de 'double' a 'float'
-  MidiMaze.vcxproj -> C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\x64\Debug\MidiMaze.exe
+﻿  MidiMaze.vcxproj -> C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\x64\Debug\MidiMaze.exe

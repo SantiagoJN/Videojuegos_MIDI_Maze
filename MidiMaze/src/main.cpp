@@ -17,13 +17,16 @@
 
 #include <assimp/scene.h>
 
-#include <glut.h>
+#include <glut/glut.h>
 
 #include <irrKlang/irrKlang.h>
 using namespace irrklang;
 
+bool newBullet = false;
+
 ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
 
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -40,7 +43,6 @@ float lastX = SCR_WIDTH / 2.0f; // Initial values in the middle of the screen
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
-Model tests;
 
 // valores para normalizar el movimiento de la c�mara
 float deltaTime = 0.0f;	// Time between current frame and last frame
@@ -78,6 +80,7 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -90,6 +93,7 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
+    //Model tests;
 
     // =====================================================================================================================
     // ================================== CONFIGURATION OF SHADERS, SHAPES AND TEXTURES ====================================
@@ -113,7 +117,8 @@ int main()
     // =====================================================================================================================
     while (!glfwWindowShouldClose(window))
     {
-        tests = mapa;
+        //tests = mapa;
+
         // Datos para gestionar los fps
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
@@ -149,6 +154,10 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("view", view);
 
+        if (newBullet) {
+            newBullet = false;
+            myBullets.newBullet(camera.Position, camera.Front);
+        }
 
         myBullets.DrawBullets(ourShader);
         
@@ -180,10 +189,27 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+
+
 void processInput(GLFWwindow* window)
 {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
+}
+
+
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ---------------------------------------------------------------------------------------------------------
+/*void processInput(GLFWwindow* window)                                                                                     MOVEMENT JESUS
+{   
     bool moveF = true;
     bool moveB = true;
     bool moveL = true;
@@ -192,7 +218,7 @@ void processInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
     }
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+       
         moveF = tests.checkCollisionsModel(camera.Position + (camera.Front * (camera.MovementSpeed * deltaTime)));
         camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime, moveF, moveB, moveL, moveR);
     }
@@ -208,7 +234,7 @@ void processInput(GLFWwindow* window)
         moveR = tests.checkCollisionsModel(camera.Position + (camera.Right * (camera.MovementSpeed * deltaTime)));
         camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime, moveF, moveB, moveL, moveR);
     }
-}
+}*/
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     if (firstMouse) { // initially set to true
@@ -217,12 +243,25 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
         firstMouse = false;
     }
 
+
     float xoffset = static_cast<float>(xpos - lastX);
     float yoffset = static_cast<float>(lastY - ypos); // reversed since y-coordinates range from bottom to top
     lastX = static_cast<float>(xpos);
     lastY = static_cast<float>(ypos);
 
     camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        cout << "Hola" << endl;
+        cout << camera.Position[0] << "," << camera.Position[1] << "," << camera.Position[2] << endl;
+        cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
+
+        newBullet = true;
+        SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+    }
 }
 
 void showFPS(int fps) {
