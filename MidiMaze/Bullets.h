@@ -28,7 +28,7 @@ public:
         for (unsigned int i = 0; i < numBullets; i++) {
             glm::mat4 model = glm::mat4(1.0f);
             positions[i] = positions[i] + directions[i];
-            model = glm::translate(model, positions[i]); // translate it down so it's at the center of the scene
+            model = glm::translate(model, positions[i]); 
             model = glm::scale(model, glm::vec3(scale,scale,scale));
             shader.setMat4("model", model);
             bullet.Draw(shader);

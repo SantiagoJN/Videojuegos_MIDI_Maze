@@ -7,6 +7,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <Bullets.h>
+#include <map.h>
+#include <wall.h>
 
 #include <Camera.h>
 #include <model.h>
@@ -89,48 +91,14 @@ int main()
     // ------------------------------------
     Shader ourShader("shaders/1.model_loading.vs", "shaders/1.model_loading.fs");
 
-    // world space positions of our cubes
-    glm::vec3 spherePositions[] = {
-        glm::vec3(0.0f,  0.0f,  0.0f),
-        glm::vec3(2.0f,  5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3(2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f,  3.0f, -7.5f),
-        glm::vec3(1.3f, -2.0f, -2.5f),
-        glm::vec3(1.5f,  2.0f, -2.5f),
-        glm::vec3(1.5f,  0.2f, -1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f)
-    };
-
-    // world space positions of our cubes
-    glm::vec3 sphereScales[] = {
-        glm::vec3(0.05f,  0.05f,  0.05f),
-        glm::vec3(0.5f,  0.5f,  0.5f),
-        glm::vec3(0.5f,  0.5f,  0.5f),
-        glm::vec3(0.7f,  0.7f,  0.7f),
-        glm::vec3(0.7f,  0.7f,  0.7f),
-        glm::vec3(0.7f,  0.7f,  0.7f),
-        glm::vec3(1.0f,  1.0f,  1.0f),
-        glm::vec3(1.0f,  1.0f,  1.0f),
-        glm::vec3(1.0f,  1.0f,  1.0f),
-        glm::vec3(0.1f,  0.1f,  0.1f)
-    };
-	for (int i = 0; i < 10; i++) sphereScales[i] = sphereScales[i] / glm::vec3(5, 5, 5);
-    
-    
-    //Model spheres("resources/objects/sphere.obj");
-    //Model ourModel("resources/objects/smiley/smiley.obj");
-    //Model ourModel("resources/objects/emoji/emoji_064.obj");
-
-    //Model spheres("resources/objects/sphere.obj");
-    Model mapa("resources/objects/pruebas/mapa.obj");
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el ratón
     glfwSetCursorPosCallback(window, mouse_callback);
 
     Bullet myBullets("resources/objects/sphere.obj", 0.1);
 
+    Map pared("resources/maps/map1.txt", ourShader);
+    //Wall pared(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), ourShader);
 
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
@@ -153,6 +121,8 @@ int main()
         // activate shader
         ourShader.use();
 
+        pared.Draw(ourShader);
+
         // create transformations
         glm::mat4 projection = glm::mat4(1.0f);
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -168,32 +138,7 @@ int main()
 
         myBullets.DrawBullets(ourShader);
         
-		// Move spheres :)
-		// Change the array spherePosition to have random values
-        for (int i = 0; i < 10; i++) {
-            //spherePositions[i][0] += 0.005 * ((i % 2 == 0) ? 1 : -1);
-            //spherePositions[i][2] += 0.005 * ((i % 3 == 0) ? 1 : -1);
-        }
-
-        //spherePositions[0][2] += 0.005;
-        //Render spheres
-        /*for (unsigned int i = 0; i < 10; i++)
-        {
-            // calculate the model matrix for each object and pass it to shader before drawing
-            // render the loaded model
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, spherePositions[i]); // translate it down so it's at the center of the scene
-            model = glm::scale(model, sphereScales[i]);	// it's a bit too big for our scene, so scale it down
-            ourShader.setMat4("model", model);
-            spheres.Draw(ourShader);
-        }
-		*/
-		//Dibujar el mapa
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-10, -2, -7)); // translate it so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.5, 1.5, 1.5));	// pretty small -> scale it up
-        ourShader.setMat4("model", model);
-        mapa.Draw(ourShader);
+		
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
