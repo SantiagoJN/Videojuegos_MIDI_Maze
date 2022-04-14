@@ -47,10 +47,7 @@
     <ClInclude Include="Bullets.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="wall.h">
+    <ClInclude Include="..\..\..\irrKlang-64bit-1.6.0\examples\common\conio.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

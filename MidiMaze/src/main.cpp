@@ -17,16 +17,22 @@
 
 #include <assimp/scene.h>
 
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+#include <glut.h>
+
+#include <irrKlang/irrKlang.h>
+using namespace irrklang;
+
+ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
+void showFPS(int fps);
+
 // Initial settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-
-bool newBullet = false;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -34,10 +40,14 @@ float lastX = SCR_WIDTH / 2.0f; // Initial values in the middle of the screen
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
-// valores para normalizar el movimiento de la cámara
+Model tests;
+
+// valores para normalizar el movimiento de la cï¿½mara
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
+float lastFrameFPS = 0.0f;
+int countFrames = 0; // Para saber los frames que ha habido en 1s
 
 int main()
 {
@@ -68,8 +78,6 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
-
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -92,7 +100,7 @@ int main()
     Shader ourShader("shaders/1.model_loading.vs", "shaders/1.model_loading.fs");
 
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el ratón
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el ratï¿½n
     glfwSetCursorPosCallback(window, mouse_callback);
 
     Bullet myBullets("resources/objects/sphere.obj", 0.1);
@@ -105,11 +113,21 @@ int main()
     // =====================================================================================================================
     while (!glfwWindowShouldClose(window))
     {
+        tests = mapa;
         // Datos para gestionar los fps
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        
+		
+        countFrames++; // Actualizar los frames en el ï¿½ltimo segundo
+		// Datos para gestionar los fps
+        if (currentFrame - lastFrameFPS > 1.0f) {
+            cout << "FPS: " << countFrames << endl;
+            showFPS(countFrames);
+			countFrames = 0;
+			lastFrameFPS = currentFrame; // Actualizamos
+        }
+
         // input
         processInput(window);
 
@@ -131,10 +149,6 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("view", view);
 
-        if (newBullet) {
-            newBullet = false;
-            myBullets.newBullet(camera.Position,camera.Front);
-        }
 
         myBullets.DrawBullets(ourShader);
         
@@ -170,20 +184,34 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    bool moveF = true;
+    bool moveB = true;
+    bool moveL = true;
+    bool moveR = true;
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+        moveF = tests.checkCollisionsModel(camera.Position + (camera.Front * (camera.MovementSpeed * deltaTime)));
+        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime, moveF, moveB, moveL, moveR);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        moveB = tests.checkCollisionsModel(camera.Position - (camera.Front * (camera.MovementSpeed * deltaTime)));
+        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, moveF, moveB, moveL, moveR);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		moveL = tests.checkCollisionsModel(camera.Position - (camera.Right * (camera.MovementSpeed * deltaTime)));
+		camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime, moveF, moveB, moveL, moveR);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        moveR = tests.checkCollisionsModel(camera.Position + (camera.Right * (camera.MovementSpeed * deltaTime)));
+        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime, moveF, moveB, moveL, moveR);
+    }
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos){
-    if (firstMouse){ // initially set to true
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    if (firstMouse) { // initially set to true
         lastX = static_cast<float>(xpos); // To avoid warning messages
         lastY = static_cast<float>(ypos);
         firstMouse = false;
@@ -197,12 +225,17 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos){
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        cout << "Hola" << endl;
-        cout << camera.Position[0]<<","<< camera.Position[1] << "," << camera.Position[2] << endl;
-        cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
-
-        newBullet = true;
-    }
+void showFPS(int fps) {
+    /*char string[5];
+	sprintf_s(string, "%d", fps);
+    //unsigned char string[] = to_string(fps);
+    int w = glutBitmapLength(GLUT_BITMAP_8_BY_13, reinterpret_cast<unsigned char*>(string));
+    glRasterPos2f(0., 0.);
+    float x = .5;
+    glRasterPos2f(x - (float)SCR_WIDTH / 2, 0.);
+    //glColor(1., 0., 0.);
+    int len = strlen(string);
+    for (int i = 0; i < len; i++) {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
+    }*/
 }

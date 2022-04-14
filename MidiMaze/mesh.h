@@ -44,6 +44,14 @@ public:
     vector<unsigned int> indices;
     vector<Texture>      textures;
     unsigned int VAO;
+    float maxX = 0.0f;
+    float maxY = 0.0f;
+    float maxZ = 0.0f;
+    float minX = 100.0f;
+    float minY = 100.0f;
+    float minZ = 100.0f;
+
+
 
     // constructor
     Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
@@ -52,10 +60,89 @@ public:
         this->indices = indices;
         this->textures = textures;
 
+        for (Vertex& ver : this->vertices) {
+            if (ver.Position.x > maxX) {
+                maxX = ver.Position.x;
+            }
+            if (ver.Position.y > maxY) {
+                maxY = ver.Position.y;
+            }
+            if (ver.Position.z > maxZ) {
+                maxZ = ver.Position.z;
+            }
+            if (ver.Position.x < minX) {
+                minX = ver.Position.x;
+            }
+            if (ver.Position.y < minY) {
+                minY = ver.Position.y;
+            }
+            if (ver.Position.z < minZ) {
+                minZ = ver.Position.z;
+            }
+        }
+
+        //cout << "Values: " << maxX << " " << maxY << " " << maxZ << " " << minX << " " << minY << " " << minZ << endl;
         // now that we have all the required data, set the vertex buffers and its attribute pointers.
         setupMesh();
     }
 
+    //compara si a es mayor que b
+    bool compareNumbers(float a, float b) {
+        return a - b > 1e-14;
+    }
+
+    bool checkCollision(glm::vec3 cameraPosition){
+        // collision x-axis?
+        bool collisionX = cameraPosition.x >= minX &&
+            cameraPosition.x<= maxX;
+        // collision y-axis?
+        bool collisionY = cameraPosition.y >= minY &&
+            cameraPosition.y<= maxY;
+        // collision z-axis?
+        bool collisionZ = cameraPosition.z >= minZ &&
+            cameraPosition.z <= maxX;
+        // collision only if on all axes
+        if (collisionX && collisionY && collisionZ) {
+            cout << "Posicion camara: " << cameraPosition.x << " " << cameraPosition.y << " " << cameraPosition.z << endl;
+            cout << "Valores mapa: " << minX << " " << maxX << " " << minY << " " << maxY << " " << minZ << " " << maxZ << endl;
+        }
+        return collisionX && collisionY && collisionZ;
+
+        /*float sqDist = 0.0000f;
+        float limite = 0.0001f;
+        if (cameraPosition.x < minX) {
+            sqDist += (minX - cameraPosition.x) * (minX - cameraPosition.x);
+            cout << "Resultado intermedio: " << sqDist << endl;
+        }
+        else if (cameraPosition.x > minX) {
+            sqDist += (cameraPosition.x - maxX) * (cameraPosition.x - maxX) ;
+            cout << "Resultado intermedio: " << sqDist << endl;
+        }
+        if (cameraPosition.y < minY) {
+            sqDist += 1.0f * (minY - cameraPosition.y) * (minY - cameraPosition.y);
+            cout << "Resultado intermedio: " << sqDist << endl;
+        }
+        else if (cameraPosition.y > maxY) {
+            sqDist = sqDist + ((cameraPosition.y - maxY) * (cameraPosition.y - maxY));
+            cout << "Resultado intermedio: " << sqDist << endl;
+        }
+
+        if (cameraPosition.z < minZ) {
+            sqDist +=(minZ - cameraPosition.z) * (minZ - cameraPosition.z);
+            cout << "Resultado intermedio: " << sqDist << endl;
+        }
+        else if (cameraPosition.z > maxZ) {
+            sqDist += (cameraPosition.z - maxZ) * (cameraPosition.z - maxZ);
+            cout << "Resultado intermedio: " << sqDist << endl;
+        }
+
+        if (sqDist < limite) {
+            cout << "Posicion camara: " << cameraPosition.x << " " << cameraPosition.y << " " << cameraPosition.z << endl;
+            cout << "Valores mapa: " << minX << " " << maxX << " " << minY << " " << maxY << " " << minZ << " " << maxZ << endl;
+            cout << "Resultado: " << sqDist << endl;
+        }
+        return sqDist < limite;*/
+    }
     // render the mesh
     void Draw(Shader& shader)
     {
