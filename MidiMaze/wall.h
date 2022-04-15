@@ -48,6 +48,11 @@ public:
         setUpWall(ourShader);
     };
 
+    //TODO JESUS
+    bool intersect(float x, float z) {
+        return true;
+    }
+
     void draw(Shader& ourShader) {
         
         glActiveTexture(GL_TEXTURE0);

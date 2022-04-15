@@ -86,6 +86,10 @@ public:
         setupMesh();
     }
 
+    float getRadious() {
+        return maxX - minX;
+    }
+
     //compara si a es mayor que b
     bool compareNumbers(float a, float b) {
         return a - b > 1e-14;

@@ -9,6 +9,7 @@
 #include <Bullets.h>
 #include <map.h>
 #include <wall.h>
+#include <Enemies.h>
 
 #include <Camera.h>
 #include <model.h>
@@ -24,7 +25,7 @@ using namespace irrklang;
 
 bool newBullet = false;
 
-ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
+//ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -112,6 +113,8 @@ int main()
     Map pared("resources/maps/map1.txt", ourShader);
     //Wall pared(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), ourShader);
 
+
+    Enemy myEnemies("resources/objects/sphere.obj", 0.5, 40, pared.getLab(), pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
@@ -126,12 +129,12 @@ int main()
 		
         countFrames++; // Actualizar los frames en el �ltimo segundo
 		// Datos para gestionar los fps
-        if (currentFrame - lastFrameFPS > 1.0f) {
+        /*if (currentFrame - lastFrameFPS > 1.0f) {
             cout << "FPS: " << countFrames << endl;
             showFPS(countFrames);
 			countFrames = 0;
 			lastFrameFPS = currentFrame; // Actualizamos
-        }
+        }*/
 
         // input
         processInput(window);
@@ -159,9 +162,9 @@ int main()
             myBullets.newBullet(camera.Position, camera.Front);
         }
 
-        myBullets.DrawBullets(ourShader);
+        myBullets.DrawBullets(ourShader,myEnemies);
         
-		
+        myEnemies.DrawEnemies(ourShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -255,9 +258,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        cout << "Hola" << endl;
-        cout << camera.Position[0] << "," << camera.Position[1] << "," << camera.Position[2] << endl;
-        cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
+        //cout << camera.Position[0] << "," << camera.Position[1] << "," << camera.Position[2] << endl;
+        //cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
 
         newBullet = true;
         SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop

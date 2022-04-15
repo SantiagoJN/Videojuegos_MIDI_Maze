@@ -156,6 +156,7 @@
     <ClInclude Include="..\..\..\irrKlang-64bit-1.6.0\examples\common\conio.h" />
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Enemies.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="mesh.h" />

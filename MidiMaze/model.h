@@ -40,6 +40,16 @@ public:
 
     Model() {}
 
+    float getRadious() {
+        float maxRad = -1;
+        for (int i = 0; i < meshes.size(); i++) {
+            if (meshes[i].getRadious() > maxRad) {
+                maxRad = meshes[i].getRadious();
+            }
+        }
+        return maxRad;
+    }
+
     // draws the model, and thus all its meshes
     void Draw(Shader& shader)
     {
