@@ -1,19 +1,19 @@
 ﻿  main.cpp
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(38,19): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(153,30): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(171,36): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(179,62): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(38,19): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(153,30): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(171,36): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(179,62): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(179,50): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(179,50): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Bullets.h(37,36): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\map.h(24,24): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(145): warning C4715: 'Enemy::nextIndex': no todas las rutas de acceso de control devuelven un valor
+C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\Bullets.h(37,36): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\map.h(24,24): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(145): warning C4715: 'Enemy::nextIndex': no todas las rutas de acceso de control devuelven un valor
 LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
-  MidiMaze.vcxproj -> C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\x64\Debug\MidiMaze.exe
+  MidiMaze.vcxproj -> C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\x64\Debug\MidiMaze.exe

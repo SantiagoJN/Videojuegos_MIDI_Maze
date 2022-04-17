@@ -108,13 +108,14 @@ int main()
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el rat�n
     glfwSetCursorPosCallback(window, mouse_callback);
 
-    Bullet myBullets("resources/objects/sphere.obj", 0.1);
+
+    Bullet myBullets("resources/objects/bullet/bullet.obj", 0.1);
 
     Map pared("resources/maps/map1.txt", ourShader);
     //Wall pared(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), ourShader);
 
 
-    Enemy myEnemies("resources/objects/sphere.obj", 0.5, 40, pared.getLab(), pared.getDim());
+    Enemy myEnemies("resources/objects/bullet/bullet.obj", 0.5, 5, pared.getLab(), pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
