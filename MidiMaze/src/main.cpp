@@ -141,7 +141,8 @@ int main()
         processInput(window);
 
         // render
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
 
