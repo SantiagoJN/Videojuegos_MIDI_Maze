@@ -185,6 +185,8 @@ public:
 
                 model = glm::translate(model, positions[i]);
                 model = glm::scale(model, glm::vec3(scale, scale, scale));
+                //Model = glm::rotate(Model, angle_in_radians, glm::vec3(x, y, z)); // where x, y, z is axis of rotation (e.g. 0 1 0)				
+                model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1)); // Poner las caras bien
                 shader.setMat4("model", model);
                 enemy.Draw(shader);
             }
