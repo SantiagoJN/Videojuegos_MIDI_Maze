@@ -9,11 +9,16 @@ using namespace irrklang;
 
 ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
 
+string basePath = "resources/objects/smileys/";
+string colors[] = {"yellow", "blue", "orange", "green", "pink", "lightblue", "magenta", "white", 
+                   "yellow2", "blue2", "orange2", "green2", "pink2", "lightblue2", "magenta2", "white2"};
+
 class Enemy
 {
 public:
-    // model data 
-    Model enemy;
+    // model data
+    vector<Model> enemyArray;
+    //Model enemy;
     int numEnemies;
     vector<glm::vec3> positions;
     vector<glm::vec3> directions;
@@ -29,11 +34,15 @@ public:
     float dim;
 
     // constructor, expects a filepath to a 3D model.
-    Enemy(string const& path, float scale, int numEnemies, vector<vector<bool>> laberinto, float dim) : numEnemies(numEnemies), map(laberinto), dim(dim), scale(scale) {
-        Model a(path);
-        enemy = a;
+    Enemy(float scale, int numEnemies, vector<vector<bool>> laberinto, float dim) : numEnemies(numEnemies), map(laberinto), dim(dim), scale(scale) {
+        int numColors = sizeof(colors) / sizeof(colors[0]);
+        assert(numEnemies <= numColors);
 
-        radious = enemy.getRadious() * scale/2;
+        for (int i = 0; i < numEnemies; i++) {
+            enemyArray.push_back(Model(basePath + colors[i] + "/" + colors[i] + ".obj"));
+        }
+
+        radious = enemyArray[0].getRadious() * scale / 2;
 
         srand(time(NULL));
 
@@ -61,9 +70,11 @@ public:
                         glm::vec2 ind = nextIndex(i, j, dir);
                         destiny.push_back(glm::vec3(-start + ind.y * dim, 0, start - ind.x * dim));
                         index.push_back(ind);
-                        cout << x << " " << z << endl;
+                        //cout << "Enemigo " << i << endl;
+                        //cout << "\tPosicion: " << x << ", " << z << endl;
                         glm::vec3 position(x, 0, z);
                         positions.push_back(position);
+                        //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
                         vidas.push_back(1);
                         break;
@@ -186,9 +197,27 @@ public:
                 model = glm::translate(model, positions[i]);
                 model = glm::scale(model, glm::vec3(scale, scale, scale));
                 //Model = glm::rotate(Model, angle_in_radians, glm::vec3(x, y, z)); // where x, y, z is axis of rotation (e.g. 0 1 0)				
-                model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1)); // Poner las caras bien
+                model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1)); // Poner las caras bien (problema con textura)
+                
+                // Girar las caras para que siempre miren hacia el frente
+                if (directions[i][2] != 0.0) { // Se está moviendo en el eje Z
+                    if (directions[i][2] > 0.0) { // Se mueve hacia el NORTE
+                        model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0, 1, 0));
+                    }
+                    else { // Se mueve hacia el SUR
+                        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
+                    }
+                }
+                else { // Se mueve en el eje X
+                    if (directions[i][0] > 0.0) { // Se mueve hacia el ESTE
+                        model = glm::rotate(model, glm::radians(270.0f), glm::vec3(0, 1, 0));
+                    }
+                    else { // Se mueve hacia el OESTE
+                        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
+                    }
+                }
                 shader.setMat4("model", model);
-                enemy.Draw(shader);
+                enemyArray[i].Draw(shader);
             }
         }
     };
