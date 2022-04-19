@@ -28,6 +28,8 @@ public:
     float radious;
 
     vector<int> vidas;
+    vector<int> puntuaciones;
+    int puntuacionJugador;
 
     vector<vector<bool>> map;
     float scale;
@@ -35,17 +37,20 @@ public:
 
     // constructor, expects a filepath to a 3D model.
     Enemy(float scale, int numEnemies, vector<vector<bool>> laberinto, float dim) : numEnemies(numEnemies), map(laberinto), dim(dim), scale(scale) {
+        // Comprobamos que el número de enemigos es correcto
         int numColors = sizeof(colors) / sizeof(colors[0]);
         assert(numEnemies <= numColors);
 
+        // Cargamos los modelos de cada enemigo
         for (int i = 0; i < numEnemies; i++) {
             enemyArray.push_back(Model(basePath + colors[i] + "/" + colors[i] + ".obj"));
         }
 
-        radious = enemyArray[0].getRadious() * scale / 2;
+        radious = enemyArray[0].getRadious() * scale / 2; // Radio de los enemigos (para cálculos)
 
-        srand(time(NULL));
+        srand(static_cast<unsigned int>(time(NULL)));
 
+        // Print del mapa
         for (int i = 0; i < map.size(); i++) {
             for (int j = 0; j < map[i].size(); j++) {
                 cout << map[i][j]<<" ";
@@ -53,6 +58,7 @@ public:
             cout << endl;
         }
 
+        // Colocamos los enemigos en el mapa de forma random
         float start = map.size() * dim / 2;
         for (int i = 0; i < numEnemies; i++) {
             bool end = false;
@@ -60,7 +66,7 @@ public:
             float x, z;
             for (int i = random; i < map.size(); i++) {
                 for (int j = random; j < map[i].size(); j++) {
-                    if (!map[i][j]) {
+                    if (!map[i][j]) { // El enemigo se puede colocar en i,j
                         end = true;
                         cout << i << " " << j << endl;
                         x = -start + j * dim;
@@ -77,6 +83,7 @@ public:
                         //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
                         vidas.push_back(1);
+                        puntuaciones.push_back(0);
                         break;
                     }
                 }
@@ -90,12 +97,12 @@ public:
 
     glm::vec2 nextIndex(int i, int j, glm::vec3& dir) {
         int wh = rand() % 4;
-        bool chosen = false;
+        //bool chosen = false;
         bool one = false;
         bool two = false;
         bool three = false;
         bool four = false;
-        while (!chosen) {
+        while (1) {
             switch (wh) {
             case 0:
                 if (!map[i][j + 1]) {
@@ -153,6 +160,7 @@ public:
                 }
             }
         }
+        return glm::vec2(-1, -1); // Valor erróneo (se sale del while)
     }
 
 
@@ -161,13 +169,17 @@ public:
             if (vidas[i] > 0) {
                 glm::vec3 vec = positions[i] - positionBullet;
                 
-                float longit = sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
+                float longit = static_cast<float>(sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2)));
                 
 
                 if (longit < (radious + radiousBullet)) {
                     cout << vec.x << " " << vec.y << " " << vec.z << endl;
                     cout << longit << "  ----  " << radious << " " << radiousBullet << endl;
                     vidas[i]--;
+                    if (vidas[i] == 0) {
+                        puntuacionJugador++;
+                        cout << "PUNTO!" << endl;
+                    }
                     SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
                     return true;
                 }
@@ -176,10 +188,20 @@ public:
         return false;
     }
 
+    // Devuelve la puntuación del jugador seguida del resto de puntuaciones
+    vector<int> getScores() {
+        vector<int> retVal;
+        retVal.push_back(puntuacionJugador);
+        for (int p : puntuaciones) {
+            retVal.push_back(p);
+        }
+        return retVal;
+    }
+
 
     void DrawEnemies(Shader& shader) {
         float start = map.size() * dim / 2;
-        for (unsigned int i = 0; i < numEnemies; i++) {
+        for (int i = 0; i < numEnemies; i++) {
             if (vidas[i] > 0) {
                 glm::mat4 model = glm::mat4(1.0f);
 
@@ -187,7 +209,7 @@ public:
                 //cout << directions[i].x << " " << directions[i].z<<"   ------     "<< index[i].x<<","<< index[i].y << endl;
                 if ((positions[i].x == destiny[i].x) && (positions[i].z == destiny[i].z)) {
                     //cout << "hola\n\n\n\n" << endl;
-                    index[i] = nextIndex(index[i].x, index[i].y, directions[i]);
+                    index[i] = nextIndex(static_cast<int>(index[i].x), static_cast<int>(index[i].y), directions[i]);
                     destiny[i] = glm::vec3(-start + index[i].y * dim, 0, start - index[i].x * dim);
                 }
 

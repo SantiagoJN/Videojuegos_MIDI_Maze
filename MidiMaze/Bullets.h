@@ -34,7 +34,7 @@ public:
     }
 
     void DrawBullets(Shader& shader, Enemy& enemies) {
-        for (unsigned int i = 0; i < numBullets; i++) {
+        for (int i = 0; i < numBullets; i++) {
             if (!collided[i]) {
                 collided[i] = enemies.checkCollision(positions[i], radious);
                 if (!collided[i]) {
