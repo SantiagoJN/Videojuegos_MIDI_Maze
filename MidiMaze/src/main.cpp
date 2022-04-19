@@ -154,7 +154,6 @@ int main()
 
         pared.Draw(ourShader);
 
-        drawCenteredCircle();
 
         // create transformations
         glm::mat4 projection = glm::mat4(1.0f);
@@ -316,22 +315,4 @@ void showFPS(int fps) {
         glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
     }
     */
-}
-
-void drawCenteredCircle() {
-    // Create the circle in the coordinates origin
-    const int sides = 20;  // The amount of segment to create the circle
-    const double radius = 5; // The radius of the circle
-
-    glBegin(GL_LINE_LOOP);
-
-    for (int a = 0; a < 360; a += 360 / sides)
-    {
-        double heading = a * 3.1415926535897932384626433832795 / 180;
-        glVertex2d(cos(heading) * radius, sin(heading) * radius);
-    }
-
-    glEnd();
-
-    glFlush();
 }
