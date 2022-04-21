@@ -1,6 +1,7 @@
 #pragma once
 #include <model.h>
 #include <Enemies.h>
+#include <map.h>
 
 class Bullet
 {
@@ -33,17 +34,20 @@ public:
         collided.push_back(false);
     }
 
-    void DrawBullets(Shader& shader, Enemy& enemies) {
+    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa) {
         for (unsigned int i = 0; i < numBullets; i++) {
             if (!collided[i]) {
-                collided[i] = enemies.checkCollision(positions[i], radious);
+                collided[i] = mapa.checkCollisionBullets(positions[i], radious);
                 if (!collided[i]) {
-                    glm::mat4 model = glm::mat4(1.0f);
-                    positions[i] = positions[i] + directions[i];
-                    model = glm::translate(model, positions[i]);
-                    model = glm::scale(model, glm::vec3(scale, scale, scale));
-                    shader.setMat4("model", model);
-                    bullet.Draw(shader);
+                    collided[i] = enemies.checkCollision(positions[i], radious);
+                    if (!collided[i]) {
+                        glm::mat4 model = glm::mat4(1.0f);
+                        positions[i] = positions[i] + directions[i] / 50.0f;
+                        model = glm::translate(model, positions[i]);
+                        model = glm::scale(model, glm::vec3(scale, scale, scale));
+                        shader.setMat4("model", model);
+                        bullet.Draw(shader);
+                    }
                 }
             }
         }

@@ -4,10 +4,10 @@
 #include <time.h>
 
 
-#include <irrKlang/irrKlang.h>
-using namespace irrklang;
+//#include <irrKlang/irrKlang.h>
+//using namespace irrklang;
 
-ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
+//ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
 
 class Enemy
 {
@@ -157,7 +157,8 @@ public:
                     cout << vec.x << " " << vec.y << " " << vec.z << endl;
                     cout << longit << "  ----  " << radious << " " << radiousBullet << endl;
                     vidas[i]--;
-                    SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
+                    cout << "Colisiona con enemigo" << endl;
+                    //SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
                     return true;
                 }
             }

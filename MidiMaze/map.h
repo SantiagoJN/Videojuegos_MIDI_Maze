@@ -16,6 +16,8 @@ public:
         loadWalls(path, ourShader);
     };
 
+    Map() {};
+
     void loadWalls(string const& path, Shader& ourShader) {
         ifstream filein(path);
         if (filein.is_open()) {
@@ -101,6 +103,28 @@ public:
         return dim;
     }
     
+    bool checkIntersections(glm::vec3 camera, glm::vec3 newCamera) {
+        bool intersects = false;
+        for (unsigned int i = 0; i < map.size(); i++) {
+            intersects = map[i].intersect(camera.x, camera.z, newCamera.x, newCamera.z);
+            if (intersects) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool checkCollisionBullets(glm::vec3 bulletPos, float radius) {
+        bool intersects = false;
+        for (unsigned int i = 0; i < map.size(); i++) {
+            intersects = map[i].intersectsBullets(bulletPos, radius);
+            if (intersects) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void Draw(Shader& shader)
     {
         for (unsigned int i = 0; i < map.size(); i++)

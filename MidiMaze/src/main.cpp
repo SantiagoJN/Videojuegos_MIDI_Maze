@@ -18,10 +18,10 @@
 
 #include <assimp/scene.h>
 
-#include <glut/glut.h>
+//#include <glut/glut.h>
 
-#include <irrKlang/irrKlang.h>
-using namespace irrklang;
+//#include <irrKlang/irrKlang.h>
+//using namespace irrklang;
 
 bool newBullet = false;
 
@@ -51,6 +51,8 @@ float lastFrame = 0.0f; // Time of last frame
 
 float lastFrameFPS = 0.0f;
 int countFrames = 0; // Para saber los frames que ha habido en 1s
+
+Map temp;
 
 int main()
 {
@@ -108,19 +110,17 @@ int main()
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el rat�n
     glfwSetCursorPosCallback(window, mouse_callback);
 
-    Bullet myBullets("resources/objects/sphere.obj", 0.1);
+    Bullet myBullets("resources/objects/sphere/sphere.obj", 0.5);
 
     Map pared("resources/maps/map1.txt", ourShader);
-    //Wall pared(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), ourShader);
 
-
-    Enemy myEnemies("resources/objects/sphere.obj", 0.5, 40, pared.getLab(), pared.getDim());
+    Enemy myEnemies("resources/objects/sphere/sphere.obj", 0.5, 1, pared.getLab(), pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
     while (!glfwWindowShouldClose(window))
     {
-        //tests = mapa;
+        temp = pared;
 
         // Datos para gestionar los fps
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -129,12 +129,12 @@ int main()
 		
         countFrames++; // Actualizar los frames en el �ltimo segundo
 		// Datos para gestionar los fps
-        /*if (currentFrame - lastFrameFPS > 1.0f) {
-            cout << "FPS: " << countFrames << endl;
+        if (currentFrame - lastFrameFPS > 1.0f) {
+            //cout << "FPS: " << countFrames << endl;
             showFPS(countFrames);
 			countFrames = 0;
 			lastFrameFPS = currentFrame; // Actualizamos
-        }*/
+        }
 
         // input
         processInput(window);
@@ -162,7 +162,8 @@ int main()
             myBullets.newBullet(camera.Position, camera.Front);
         }
 
-        myBullets.DrawBullets(ourShader,myEnemies);
+
+        myBullets.DrawBullets(ourShader,myEnemies, pared);
         
         myEnemies.DrawEnemies(ourShader);
 
@@ -196,16 +197,34 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void processInput(GLFWwindow* window)
 {
+    bool up = false;
+    bool down = false;
+    bool left = false;
+    bool right = false;
+
+    float velocity = camera.MovementSpeed * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
+        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime,up,down,left,right);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
+        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, up, down, left, right);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        left = temp.checkIntersections(camera.Position, (camera.Position - (camera.Right * velocity)));
+        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime, up, down, left, right);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        right = temp.checkIntersections(camera.Position, (camera.Position + (camera.Right * velocity)));
+        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime, up, down, left, right);
+    }
+
 }
 
 
@@ -262,7 +281,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         //cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
 
         newBullet = true;
-        SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+        //SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
     }
 }
 

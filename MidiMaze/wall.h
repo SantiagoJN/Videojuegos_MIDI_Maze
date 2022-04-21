@@ -49,8 +49,52 @@ public:
     };
 
     //TODO JESUS
-    bool intersect(float x, float z) {
-        return true;
+    bool intersect(float x1, float z1, float x2, float z2) {
+        // collision x-axis?
+        float normalize = 0.5f;
+        float normalize2 = 0.1f;
+
+        /*/bool collisionX1 = ((x1 >= vertices[0] &&
+            x1 <= vertices[5]));
+        bool collisionX2 = (x1 >= vertices[5] &&
+            x1 <= vertices[0]);
+        bool collisionX3 = (x2 >= vertices[0] - normalize && x1 <= vertices[0] + normalize);
+        bool collisionX4 = (x1 >= vertices[0] - normalize && x2 <= vertices[0] + normalize);*/
+
+        // collision z-axis?
+        bool collisionX = ((x2 >= vertices[0] - normalize && x1 <= vertices[0] + normalize) || (x1 >= vertices[0] - normalize && x2 <= vertices[0] + normalize)) || ((x1 >= vertices[0] &&
+            x1 <= vertices[5]) || (x1 >= vertices[5] && x1 <= vertices[0]));
+        // collision z-axis?
+        bool collisionZ = ((z2 >= vertices[2] - normalize && z1 <= vertices[2] + normalize) || (z1 >= vertices[2] - normalize && z2 <= vertices[2] + normalize)) || ((z1 >= vertices[2]  &&
+            z1 <= vertices[7]) || (z1 >= vertices[7] && z1 <= vertices[2]));
+
+        if (collisionX && collisionZ) {
+            cout << vertices[0] << " " << vertices[5] << " " << vertices[2] << " " << vertices[7] << endl;
+            cout << x1 << " " << x2 << " " << z1 << " " << z2 << endl;
+            //cout << collisionX1 << collisionX2 << collisionX3 << collisionX4 << endl;
+        }
+        // collision only if on all axes
+        return collisionX && collisionZ;
+    }
+
+    bool intersectsBullets(glm::vec3 bulletPos, float radius) {
+        //glm::vec2 center(bulletPos + radius);
+        //glm::vec2 aabb_half_extents()
+
+        glm::vec3 vec (vertices[0] - bulletPos[0], 0, vertices[2] - bulletPos[2]);
+
+        float longit = sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
+
+        if (longit < (radius)) {
+            cout << vec.x << " " << vec.y << " " << vec.z << endl;
+            cout << longit << "  ----  " << radius  << endl;
+            cout << "Colisiona con muro" << endl;
+            //SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
+            return true;
+        }
+
+        return false;
+
     }
 
     void draw(Shader& ourShader) {
