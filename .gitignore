@@ -465,3 +465,4 @@ MidiMaze/MidiMaze.vcxproj
 MidiMaze/x64/Debug/MidiMaze.exe.recipe
 *.log
 *.vcxproj
+*.blend

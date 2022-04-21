@@ -34,8 +34,8 @@ public:
         collided.push_back(false);
     }
 
-    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa) {
-        for (unsigned int i = 0; i < numBullets; i++) {
+    void DrawBullets(Shader& shader, Enemy& enemies) {
+        for (int i = 0; i < numBullets; i++) {
             if (!collided[i]) {
                 collided[i] = mapa.checkCollisionBullets(positions[i], radious);
                 if (!collided[i]) {

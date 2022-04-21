@@ -23,7 +23,7 @@ public:
         if (filein.is_open()) {
             string line, lastLine;
             getline(filein, line);
-            size = stof(line);
+            size = static_cast<int>(stof(line));
             float start = size * dim / 2;
 
             int j = 0;
