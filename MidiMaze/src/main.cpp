@@ -18,10 +18,10 @@
 
 #include <assimp/scene.h>
 
-//#include <glut/glut.h>
+#include <glut/glut.h>
 
-//#include <irrKlang/irrKlang.h>
-//using namespace irrklang;
+#include <irrKlang/irrKlang.h>
+using namespace irrklang;
 
 bool newBullet = false;
 
@@ -31,7 +31,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void drawCenteredCircle();
+void drawHollowCircle(float cx, float cy, float r, int num_segments);
 
 void showFPS(int fps);
 
@@ -118,7 +118,7 @@ int main()
 
     Map pared("resources/maps/map1.txt", ourShader);
 
-    Enemy myEnemies(0.5, 5, pared.getLab(), pared.getDim());
+    Enemy myEnemies(0.5, 2, pared.getLab(), pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
@@ -154,8 +154,9 @@ int main()
         // activate shader
         ourShader.use();
 
+        //drawHollowCircle(SCR_WIDTH/2, SCR_HEIGHT/2, 100, 360);
+		
         pared.Draw(ourShader);
-
 
         // create transformations
         glm::mat4 projection = glm::mat4(1.0f);
@@ -175,10 +176,12 @@ int main()
         
         myEnemies.DrawEnemies(ourShader);
 
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
+
     }
 
 
@@ -198,6 +201,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
+	//cout << "width: " << width << " height: " << height << endl;
     glViewport(0, 0, width, height);
 }
 
@@ -263,37 +267,6 @@ void processInput(GLFWwindow* window)
     
 }
 
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-/*void processInput(GLFWwindow* window)                                                                                     MOVEMENT JESUS
-{   
-    bool moveF = true;
-    bool moveB = true;
-    bool moveL = true;
-    bool moveR = true;
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true);
-    }
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-       
-        moveF = tests.checkCollisionsModel(camera.Position + (camera.Front * (camera.MovementSpeed * deltaTime)));
-        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime, moveF, moveB, moveL, moveR);
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        moveB = tests.checkCollisionsModel(camera.Position - (camera.Front * (camera.MovementSpeed * deltaTime)));
-        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, moveF, moveB, moveL, moveR);
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		moveL = tests.checkCollisionsModel(camera.Position - (camera.Right * (camera.MovementSpeed * deltaTime)));
-		camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime, moveF, moveB, moveL, moveR);
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        moveR = tests.checkCollisionsModel(camera.Position + (camera.Right * (camera.MovementSpeed * deltaTime)));
-        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime, moveF, moveB, moveL, moveR);
-    }
-}*/
-
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     if (firstMouse) { // initially set to true
         lastX = static_cast<float>(xpos); // To avoid warning messages
@@ -339,4 +312,45 @@ void showFPS(int fps) {
         glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
     }
     */
+}
+
+bool primeravez = true;
+void drawHollowCircle(float cx, float cy, float r, int num_segments) {
+	
+    glColor3f(1.0, 1.0, 0.0);
+    float theta = 3.1415926 * 2 / float(num_segments);
+    float tangetial_factor = tanf(theta);//calculate the tangential factor 
+
+    float radial_factor = cosf(theta);//calculate the radial factor 
+
+    float x = r;//we start at angle = 0 
+
+    float y = 0;
+    glLineWidth(2000);
+    glBegin(GL_POLYGON);
+    for (int ii = 0; ii < num_segments; ii++)
+    {
+        glVertex2f(x + cx, y + cy);//output vertex 
+        if (primeravez) cout << "Punto en (" << x + cx << ", " << y + cy << ")" << endl;
+
+        //calculate the tangential vector 
+        //remember, the radial vector is (x, y) 
+        //to get the tangential vector we flip those coordinates and negate one of them 
+
+        float tx = -y;
+        float ty = x;
+
+        //add the tangential vector 
+
+        x += tx * tangetial_factor;
+        y += ty * tangetial_factor;
+
+        //correct using the radial factor 
+
+        x *= radial_factor;
+        y *= radial_factor;
+    }
+    primeravez = false;
+    glEnd();
+    glFlush();
 }

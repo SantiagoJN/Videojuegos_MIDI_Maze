@@ -4,20 +4,25 @@
 #include <time.h>
 
 
-//#include <irrKlang/irrKlang.h>
-//using namespace irrklang;
+#include <irrKlang/irrKlang.h>
+using namespace irrklang;
 
-//ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
+ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
 
 string basePath = "resources/objects/smileys/";
-string colors[] = {"yellow", "blue", "orange", "green", "pink", "lightblue", "magenta", "white", 
+string colors[] = {"blue", "orange", "green", "pink", "lightblue", "magenta", "white", 
                    "yellow2", "blue2", "orange2", "green2", "pink2", "lightblue2", "magenta2", "white2"};
+string yellowColor = "yellow";
+
+const int num_vidas = 3;
+const int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 
 class Enemy
 {
 public:
     // model data
     vector<Model> enemyArray;
+    Model yellowModel;
     //Model enemy;
     int numEnemies;
     vector<glm::vec3> positions;
@@ -29,6 +34,7 @@ public:
 
     vector<int> vidas;
     vector<int> puntuaciones;
+    vector<int> hit_timeout; // Vector para dibujar los enemigos 
     int puntuacionJugador;
 
     vector<vector<bool>> map;
@@ -44,19 +50,21 @@ public:
         // Cargamos los modelos de cada enemigo
         for (int i = 0; i < numEnemies; i++) {
             enemyArray.push_back(Model(basePath + colors[i] + "/" + colors[i] + ".obj"));
+            //cout << "Metiendo " << colors[i] << endl;
         }
+        yellowModel = Model(basePath + yellowColor + "/" + yellowColor + ".obj");
 
         radious = enemyArray[0].getRadious() * scale / 2; // Radio de los enemigos (para c�lculos)
 
         srand(static_cast<unsigned int>(time(NULL)));
 
         // Print del mapa
-        for (int i = 0; i < map.size(); i++) {
+        /*for (int i = 0; i < map.size(); i++) {
             for (int j = 0; j < map[i].size(); j++) {
                 cout << map[i][j]<<" ";
             }
             cout << endl;
-        }
+        }*/
 
         // Colocamos los enemigos en el mapa de forma random
         float start = map.size() * dim / 2;
@@ -82,8 +90,9 @@ public:
                         positions.push_back(position);
                         //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
-                        vidas.push_back(1);
+                        vidas.push_back(num_vidas);
                         puntuaciones.push_back(0);
+                        hit_timeout.push_back(0);
                         break;
                     }
                 }
@@ -181,6 +190,7 @@ public:
                         cout << "PUNTO!" << endl;
                     }
                     SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
+                    hit_timeout[i] = hit_time;
                     return true;
                 }
             }
@@ -239,7 +249,14 @@ public:
                     }
                 }
                 shader.setMat4("model", model);
-                enemyArray[i].Draw(shader);
+                if (hit_timeout[i] > 0) { // Dibujarlo amarillo un momento cuando se le golpea
+                    yellowModel.Draw(shader);
+                    hit_timeout[i]--; // Ya hemos dibujado un frame
+                }
+                else {
+                    enemyArray[i].Draw(shader);
+                }
+                
             }
         }
     };

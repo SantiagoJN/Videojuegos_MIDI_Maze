@@ -52,7 +52,7 @@ public:
 
 
             while (getline(filein, line)) {
-                cout << line << endl;
+                //cout << line << endl;
                 vector<bool> aux;
                 for (int i = 0; i < size; i++) {
                     if (line[i] == 'x') {
