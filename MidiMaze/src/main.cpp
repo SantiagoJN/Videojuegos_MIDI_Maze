@@ -114,7 +114,7 @@ int main()
     glfwSetCursorPosCallback(window, mouse_callback);
 
 
-    Bullet myBullets("resources/objects/bullet/bullet.obj", 0.1);
+    Bullet myBullets("resources/objects/bullets/pink/pink.obj", 0.1);
 
     Map pared("resources/maps/map1.txt", ourShader);
 

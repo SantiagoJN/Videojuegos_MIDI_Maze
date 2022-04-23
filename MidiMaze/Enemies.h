@@ -14,6 +14,17 @@ string colors[] = {"blue", "orange", "green", "pink", "lightblue", "magenta", "w
                    "yellow2", "blue2", "orange2", "green2", "pink2", "lightblue2", "magenta2", "white2"};
 string yellowColor = "yellow";
 
+/*  COLORES EN HEXA
+    Amarillo: e4f812
+	Azul: 4c3de3
+	Naranja: f58c11
+	Verde: 03d10a
+	Rosa: ef0ce5
+	Azul claro: 15aee7
+	Magenta: 8e0b5a
+	Blanco: f5f0f4
+*/
+
 const int num_vidas = 3;
 const int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 
