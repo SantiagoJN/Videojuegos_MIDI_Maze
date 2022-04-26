@@ -17,7 +17,8 @@ string yellowColor = "yellow";
 enum Estados{
     PARADO,
     GIRANDO,
-    ANDANDO
+    ANDANDO,
+	APUNTANDO
 };
 
 /*  COLORES EN HEXA
@@ -112,7 +113,7 @@ public:
                         //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
                         vidas.push_back(num_vidas); // Vidas de los enemigos
-                        states.push_back(ANDANDO);   //Estado inicial
+                        states.push_back(APUNTANDO);   //Estado inicial
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
                         puntuaciones.push_back(0);
                         hit_timeout.push_back(0);
@@ -276,29 +277,30 @@ public:
 
 	// Función para actualizar el valor de la rotación del enemigo enemyIndex
     void actualizarRotacion(int enemyIndex) {
+        //cout << "Current rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
 		if (currentRotation[enemyIndex] < goalRotation[enemyIndex]) {
 			currentRotation[enemyIndex] += 0.5f;
-            if (currentRotation[enemyIndex] >= goalRotation[enemyIndex]) {
+            if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
                 states[enemyIndex] = ANDANDO;
             }
 		}
 		else if (currentRotation[enemyIndex] > goalRotation[enemyIndex]) {
 			currentRotation[enemyIndex] -= 0.5f;
-            if (currentRotation[enemyIndex] <= goalRotation[enemyIndex]) {
+            if (currentRotation[enemyIndex] <= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
                 states[enemyIndex] = ANDANDO;
             }
 		}
     }
 
-	// Gestionar el movimiento cuando el enemigo está parado
-    void gestionarParado(int enemyIndex, Shader& shader) {
+    // Código común que se repite en las funciones de actualización de estado del enemigo
+    void pintarEnemigo(int enemyIndex, Shader& shader) {
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, positions[enemyIndex]);
         model = glm::scale(model, glm::vec3(scale, scale, scale));
         //Model = glm::rotate(Model, angle_in_radians, glm::vec3(x, y, z)); // where x, y, z is axis of rotation (e.g. 0 1 0)				
         model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1)); // Poner las caras bien (problema con textura)
         model = glm::rotate(model, glm::radians(currentRotation[enemyIndex]), glm::vec3(0, 1, 0)); // Rotamos en la dirección en la que está mirando
-        
+
         shader.setMat4("model", model);
         if (hit_timeout[enemyIndex] > 0) { // Dibujarlo amarillo un momento cuando se le golpea
             yellowModel.Draw(shader);
@@ -308,10 +310,15 @@ public:
             enemyArray[enemyIndex].Draw(shader);
         }
     }
+
+	// Gestionar el movimiento cuando el enemigo está parado
+    void gestionarParado(int enemyIndex, Shader& shader) {
+        pintarEnemigo(enemyIndex, shader); // Simplemente lo pintamos
+    }
 	
 	// Gestionar el movimiento cuando el enemigo está andando
     void gestionarAndando(int enemyIndex, Shader& shader) {
-        glm::mat4 model = glm::mat4(1.0f);
+		//Calculamos las actualizaciones necesarias
         float start = map.size() * dim / 2;
         if ((positions[enemyIndex].x == destiny[enemyIndex].x) && (positions[enemyIndex].z == destiny[enemyIndex].z)) {
             glm::vec3 prevDir = directions[enemyIndex];
@@ -328,43 +335,38 @@ public:
         }
         
         // Y al final dibujamos las caras :)
-        model = glm::translate(model, positions[enemyIndex]);
-        model = glm::scale(model, glm::vec3(scale, scale, scale));
-        //Model = glm::rotate(Model, angle_in_radians, glm::vec3(x, y, z)); // where x, y, z is axis of rotation (e.g. 0 1 0)				
-        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1)); // Poner las caras bien (problema con textura)
-        model = glm::rotate(model, glm::radians(currentRotation[enemyIndex]), glm::vec3(0, 1, 0)); // Rotamos en la dirección en la que está mirando
-
-        shader.setMat4("model", model);
-        if (hit_timeout[enemyIndex] > 0) { // Dibujarlo amarillo un momento cuando se le golpea
-            yellowModel.Draw(shader);
-            hit_timeout[enemyIndex]--; // Ya hemos dibujado un frame
-        }
-        else {
-            enemyArray[enemyIndex].Draw(shader);
-        }
+        pintarEnemigo(enemyIndex, shader);
     }
 
 	// Gestionar el movimiento cuando el enemigo está girando
 	void gestionarGirando(int enemyIndex, Shader& shader) {
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, positions[enemyIndex]);
-        model = glm::scale(model, glm::vec3(scale, scale, scale));
-        //Model = glm::rotate(Model, angle_in_radians, glm::vec3(x, y, z)); // where x, y, z is axis of rotation (e.g. 0 1 0)				
-        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1)); // Poner las caras bien (problema con textura)
-        actualizarRotacion(enemyIndex);
-        model = glm::rotate(model, glm::radians(currentRotation[enemyIndex]), glm::vec3(0, 1, 0)); // Rotamos en la dirección en la que está mirando
-
-        shader.setMat4("model", model);
-        if (hit_timeout[enemyIndex] > 0) { // Dibujarlo amarillo un momento cuando se le golpea
-            yellowModel.Draw(shader);
-            hit_timeout[enemyIndex]--; // Ya hemos dibujado un frame
-        }
-        else {
-            enemyArray[enemyIndex].Draw(shader);
-        }
+        actualizarRotacion(enemyIndex); // Rotar lo que sea necesario
+        pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
+		
 	}
+
+    int cont = 0;
+    // Gestionar el movimiento cuando el enemigo está girando
+    void gestionarApuntando(int enemyIndex, Shader& shader, glm::vec3 playerPosition) {
+        // Vector que va desde el enemigo al jugador
+		glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex]; 
+        float deg = atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180 / 3.1415;
+        if (deg < 0.0) deg = 360.0 + deg;
+        
+        cont++;
+        if (cont == 200) {
+			cout << "Jugador: " << playerPosition.x << ", " << playerPosition.z << 
+                ". Enemigo: " << positions[enemyIndex].x << ", " << positions[enemyIndex].z << ". Angulo: " << deg << endl;
+            cont = 0;
+        }
+		
+        goalRotation[enemyIndex] = deg;
+        actualizarRotacion(enemyIndex); // Rotar lo que sea necesario
+        pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
+
+    }
 	
-    void DrawEnemies(Shader& shader) {
+    void DrawEnemies(Shader& shader, glm::vec3 playerPosition) {
         for (int i = 0; i < numEnemies; i++) {
             if (vidas[i] > 0) {
 				//cout << "Enemigo " << i << ": " << states[i] << endl;
@@ -372,6 +374,7 @@ public:
                 case PARADO: {gestionarParado(i, shader); break;}
                 case ANDANDO: {gestionarAndando(i, shader); break;}
                 case GIRANDO: {gestionarGirando(i, shader); break;}
+                case APUNTANDO: {gestionarApuntando(i, shader, playerPosition); break;}
                 default: {cerr << "Error en el estado del enemigo " << i << endl; break;}
                 }
                 

@@ -114,11 +114,11 @@ int main()
     glfwSetCursorPosCallback(window, mouse_callback);
 
 
-    Bullet myBullets("resources/objects/bullets/pink/pink.obj", 0.1);
+    Bullet myBullets("resources/objects/bullets/yellow/yellow.obj", 0.1);
 
     Map pared("resources/maps/map1.txt", ourShader);
 
-    Enemy myEnemies(0.5, 2, pared.getLab(), pared.getDim());
+    Enemy myEnemies(0.5, 1, pared.getLab(), pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
@@ -171,10 +171,10 @@ int main()
             myBullets.newBullet(camera.Position, camera.Front);
         }
 
-
-        myBullets.DrawBullets(ourShader,myEnemies, pared);
+        //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
+        myBullets.DrawBullets(ourShader, myEnemies, pared);
         
-        myEnemies.DrawEnemies(ourShader);
+        myEnemies.DrawEnemies(ourShader, camera.Position);
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
