@@ -33,6 +33,7 @@ enum Estados{
 
 const int num_vidas = 3;
 const int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
+const double rotation_speed = 0.1f;
 
 class Enemy
 {
@@ -44,7 +45,9 @@ public:
     int numEnemies;
     vector<glm::vec3> positions;
     vector<glm::vec3> directions;
-    vector<Estados> states;
+    vector<float> currentRotation; // Angulo actual de rotacion
+    vector<float> goalRotation; // Hasta qué ángulo se quiere rotar
+    vector<Estados> states; // Estado del enemigo i: {ANDANDO, GIRANDO, PARADO}
     vector<glm::vec2> index;
     vector<glm::vec3> destiny;
 
@@ -108,8 +111,9 @@ public:
                         positions.push_back(position);
                         //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
-                        vidas.push_back(num_vidas);
-                        states.push_back(PARADO);
+                        vidas.push_back(num_vidas); // Vidas de los enemigos
+                        states.push_back(ANDANDO);   //Estado inicial
+                        currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
                         puntuaciones.push_back(0);
                         hit_timeout.push_back(0);
                         break;
@@ -119,9 +123,52 @@ public:
                 else if (i == map.size() - 2) i = 1;
             }
         }
+        for (int i = 0; i < numEnemies; i++) {
+            rotacionInicial(i); // Poner la rotación inicial de los enemigos
+            goalRotation.push_back(0.0f); // Inicializar el vector para modificarlo más adelante
+        }
 
     };
 
+    void rotacionInicial(int enemyIndex) {
+        // Girar las caras para que siempre miren hacia el frente
+        if (directions[enemyIndex][2] != 0.0) { // Se est� moviendo en el eje Z
+            if (directions[enemyIndex][2] > 0.0) { // Se mueve hacia el NORTE
+                currentRotation[enemyIndex] = 0.0f;
+            }
+            else { // Se mueve hacia el SUR
+                currentRotation[enemyIndex] = 180.0f;
+            }
+        }
+        else { // Se mueve en el eje X
+            if (directions[enemyIndex][0] > 0.0) { // Se mueve hacia el ESTE
+                currentRotation[enemyIndex] = 270.0f;
+            }
+            else { // Se mueve hacia el OESTE
+                currentRotation[enemyIndex] = 90.0f;
+            }
+        }
+    }
+	
+    void updateGoalRotation(int enemyIndex) {
+		// Actualizar el ángulo de rotación hasta el que queremos que se mueva
+		if (directions[enemyIndex][2] != 0.0) { // Se est� moviendo en el eje Z
+			if (directions[enemyIndex][2] > 0.0) { // Se mueve hacia el NORTE
+				goalRotation[enemyIndex] = 0.0f;
+			}
+			else { // Se mueve hacia el SUR
+				goalRotation[enemyIndex] = 180.0f;
+			}
+		}
+		else { // Se mueve en el eje X
+			if (directions[enemyIndex][0] > 0.0) { // Se mueve hacia el ESTE
+				goalRotation[enemyIndex] = 270.0f;
+			}
+			else { // Se mueve hacia el OESTE
+				goalRotation[enemyIndex] = 90.0f;
+			}
+		}
+    }
 
     glm::vec2 nextIndex(int i, int j, glm::vec3& dir) {
         int wh = rand() % 4;
@@ -227,6 +274,22 @@ public:
         return retVal;
     }
 
+	// Función para actualizar el valor de la rotación del enemigo enemyIndex
+    void actualizarRotacion(int enemyIndex) {
+		if (currentRotation[enemyIndex] < goalRotation[enemyIndex]) {
+			currentRotation[enemyIndex] += 0.5f;
+            if (currentRotation[enemyIndex] >= goalRotation[enemyIndex]) {
+                states[enemyIndex] = ANDANDO;
+            }
+		}
+		else if (currentRotation[enemyIndex] > goalRotation[enemyIndex]) {
+			currentRotation[enemyIndex] -= 0.5f;
+            if (currentRotation[enemyIndex] <= goalRotation[enemyIndex]) {
+                states[enemyIndex] = ANDANDO;
+            }
+		}
+    }
+
 	// Gestionar el movimiento cuando el enemigo está parado
     void gestionarParado(int enemyIndex, Shader& shader) {
         glm::mat4 model = glm::mat4(1.0f);
@@ -234,24 +297,8 @@ public:
         model = glm::scale(model, glm::vec3(scale, scale, scale));
         //Model = glm::rotate(Model, angle_in_radians, glm::vec3(x, y, z)); // where x, y, z is axis of rotation (e.g. 0 1 0)				
         model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1)); // Poner las caras bien (problema con textura)
-
-        // Girar las caras para que siempre miren hacia el frente
-        if (directions[enemyIndex][2] != 0.0) { // Se est� moviendo en el eje Z
-            if (directions[enemyIndex][2] > 0.0) { // Se mueve hacia el NORTE
-                model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0, 1, 0));
-            }
-            else { // Se mueve hacia el SUR
-                model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
-            }
-        }
-        else { // Se mueve en el eje X
-            if (directions[enemyIndex][0] > 0.0) { // Se mueve hacia el ESTE
-                model = glm::rotate(model, glm::radians(270.0f), glm::vec3(0, 1, 0));
-            }
-            else { // Se mueve hacia el OESTE
-                model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
-            }
-        }
+        model = glm::rotate(model, glm::radians(currentRotation[enemyIndex]), glm::vec3(0, 1, 0)); // Rotamos en la dirección en la que está mirando
+        
         shader.setMat4("model", model);
         if (hit_timeout[enemyIndex] > 0) { // Dibujarlo amarillo un momento cuando se le golpea
             yellowModel.Draw(shader);
@@ -266,38 +313,27 @@ public:
     void gestionarAndando(int enemyIndex, Shader& shader) {
         glm::mat4 model = glm::mat4(1.0f);
         float start = map.size() * dim / 2;
-        //cout << positions[enemyIndex].x<< "," << positions[enemyIndex].z << " -> " << destiny[enemyIndex].x << "," << destiny[enemyIndex].z << endl;
-        //cout << directions[enemyIndex].x << " " << directions[enemyIndex].z<<"   ------     "<< index[enemyIndex].x<<","<< index[enemyIndex].y << endl;
         if ((positions[enemyIndex].x == destiny[enemyIndex].x) && (positions[enemyIndex].z == destiny[enemyIndex].z)) {
+            glm::vec3 prevDir = directions[enemyIndex];
             index[enemyIndex] = nextIndex(static_cast<int>(index[enemyIndex].x), static_cast<int>(index[enemyIndex].y), directions[enemyIndex]);
-            destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
+            if (prevDir != directions[enemyIndex]) {
+                updateGoalRotation(enemyIndex);
+                states[enemyIndex] = GIRANDO;
+            }            
         }
-
-        positions[enemyIndex].x = roundf((positions[enemyIndex].x + directions[enemyIndex].x) * 100) / 100;
-        positions[enemyIndex].z = roundf((positions[enemyIndex].z + directions[enemyIndex].z) * 100) / 100;
-
+        destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
+        if (states[enemyIndex] == ANDANDO) { // Si seguimos moviéndonos
+            positions[enemyIndex].x = roundf((positions[enemyIndex].x + directions[enemyIndex].x) * 100) / 100;
+            positions[enemyIndex].z = roundf((positions[enemyIndex].z + directions[enemyIndex].z) * 100) / 100;
+        }
+        
+        // Y al final dibujamos las caras :)
         model = glm::translate(model, positions[enemyIndex]);
         model = glm::scale(model, glm::vec3(scale, scale, scale));
         //Model = glm::rotate(Model, angle_in_radians, glm::vec3(x, y, z)); // where x, y, z is axis of rotation (e.g. 0 1 0)				
         model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1)); // Poner las caras bien (problema con textura)
+        model = glm::rotate(model, glm::radians(currentRotation[enemyIndex]), glm::vec3(0, 1, 0)); // Rotamos en la dirección en la que está mirando
 
-        // Girar las caras para que siempre miren hacia el frente
-        if (directions[enemyIndex][2] != 0.0) { // Se est� moviendo en el eje Z
-            if (directions[enemyIndex][2] > 0.0) { // Se mueve hacia el NORTE
-                model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0, 1, 0));
-            }
-            else { // Se mueve hacia el SUR
-                model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
-            }
-        }
-        else { // Se mueve en el eje X
-            if (directions[enemyIndex][0] > 0.0) { // Se mueve hacia el ESTE
-                model = glm::rotate(model, glm::radians(270.0f), glm::vec3(0, 1, 0));
-            }
-            else { // Se mueve hacia el OESTE
-                model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
-            }
-        }
         shader.setMat4("model", model);
         if (hit_timeout[enemyIndex] > 0) { // Dibujarlo amarillo un momento cuando se le golpea
             yellowModel.Draw(shader);
@@ -310,12 +346,28 @@ public:
 
 	// Gestionar el movimiento cuando el enemigo está girando
 	void gestionarGirando(int enemyIndex, Shader& shader) {
-		
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, positions[enemyIndex]);
+        model = glm::scale(model, glm::vec3(scale, scale, scale));
+        //Model = glm::rotate(Model, angle_in_radians, glm::vec3(x, y, z)); // where x, y, z is axis of rotation (e.g. 0 1 0)				
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1)); // Poner las caras bien (problema con textura)
+        actualizarRotacion(enemyIndex);
+        model = glm::rotate(model, glm::radians(currentRotation[enemyIndex]), glm::vec3(0, 1, 0)); // Rotamos en la dirección en la que está mirando
+
+        shader.setMat4("model", model);
+        if (hit_timeout[enemyIndex] > 0) { // Dibujarlo amarillo un momento cuando se le golpea
+            yellowModel.Draw(shader);
+            hit_timeout[enemyIndex]--; // Ya hemos dibujado un frame
+        }
+        else {
+            enemyArray[enemyIndex].Draw(shader);
+        }
 	}
 	
     void DrawEnemies(Shader& shader) {
         for (int i = 0; i < numEnemies; i++) {
             if (vidas[i] > 0) {
+				//cout << "Enemigo " << i << ": " << states[i] << endl;
                 switch (states[i]) {
                 case PARADO: {gestionarParado(i, shader); break;}
                 case ANDANDO: {gestionarAndando(i, shader); break;}
