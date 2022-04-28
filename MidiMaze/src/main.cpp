@@ -118,7 +118,7 @@ int main()
 
     Map pared("resources/maps/map1.txt", ourShader);
 
-    Enemy myEnemies(0.5, 1, pared.getLab(), pared.getDim());
+    Enemy myEnemies(0.5, 3, pared.getLab(), pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
@@ -172,9 +172,9 @@ int main()
         }
 
         //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
-        myBullets.DrawBullets(ourShader, myEnemies, pared);
+        myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime);
         
-        myEnemies.DrawEnemies(ourShader, camera.Position);
+        myEnemies.DrawEnemies(ourShader, camera.Position, deltaTime);
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

@@ -33,8 +33,7 @@ enum Estados{
 */
 
 const int num_vidas = 3;
-const int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
-const double rotation_speed = 0.1f;
+int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 
 class Enemy
 {
@@ -58,6 +57,8 @@ public:
     vector<int> puntuaciones;
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
     int puntuacionJugador;
+    float enemySpeed = 0.05f;
+    float rotationSpeed = 120.0f;
 
     vector<vector<bool>> map;
     float scale;
@@ -113,7 +114,7 @@ public:
                         //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
                         vidas.push_back(num_vidas); // Vidas de los enemigos
-                        states.push_back(APUNTANDO);   //Estado inicial
+                        states.push_back(ANDANDO);   //Estado inicial
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
                         puntuaciones.push_back(0);
                         hit_timeout.push_back(0);
@@ -182,8 +183,8 @@ public:
             switch (wh) {
             case 0:
                 if (!map[i][j + 1]) {
-                    if (dir.x != -0.05f || (four && two && three)) {
-                        dir = glm::vec3(0.05, 0, 0);
+                    if (dir.x != -enemySpeed || (four && two && three)) {
+                        dir = glm::vec3(enemySpeed, 0, 0);
                         map[i][j] = false;
                         map[i][j+1] = true;
                         return glm::vec2(i, j + 1);
@@ -194,8 +195,8 @@ public:
                 }
             case 1:
                 if (!map[i][j - 1]) {
-                    if (dir.x != 0.05f || (one && four && three)) {
-                        dir = glm::vec3(-0.05, 0, 0);
+                    if (dir.x != enemySpeed || (one && four && three)) {
+                        dir = glm::vec3(-enemySpeed, 0, 0);
                         map[i][j] = false;
                         map[i][j - 1] = true;
                         return glm::vec2(i, j - 1);
@@ -206,8 +207,8 @@ public:
                 }
             case 2:
                 if (!map[i + 1][j]) {
-                    if ((dir.z != 0.05f) || (one && two && four)) {
-                        dir = glm::vec3(0, 0, -0.05);
+                    if ((dir.z != enemySpeed) || (one && two && four)) {
+                        dir = glm::vec3(0, 0, -enemySpeed);
                         map[i][j] = false;
                         map[i+1][j] = true;
                         return glm::vec2(i + 1, j);
@@ -218,8 +219,8 @@ public:
                 }
             case 3:
                 if (!map[i - 1][j]) {
-                    if ((dir.z != -0.05f) || (one && two && three)) {
-                        dir = glm::vec3(0, 0, 0.05);
+                    if ((dir.z != -enemySpeed) || (one && two && three)) {
+                        dir = glm::vec3(0, 0, enemySpeed);
                         map[i][j] = false;
                         map[i-1][j] = true;
                         return glm::vec2(i - 1, j);
@@ -276,16 +277,16 @@ public:
     }
 
 	// Función para actualizar el valor de la rotación del enemigo enemyIndex
-    void actualizarRotacion(int enemyIndex) {
+    void actualizarRotacion(int enemyIndex, float deltaTime) {
         //cout << "Current rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
 		if (currentRotation[enemyIndex] < goalRotation[enemyIndex]) {
-			currentRotation[enemyIndex] += 0.5f;
+			currentRotation[enemyIndex] += rotationSpeed * deltaTime;
             if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
                 states[enemyIndex] = ANDANDO;
             }
 		}
 		else if (currentRotation[enemyIndex] > goalRotation[enemyIndex]) {
-			currentRotation[enemyIndex] -= 0.5f;
+			currentRotation[enemyIndex] -= rotationSpeed * deltaTime;
             if (currentRotation[enemyIndex] <= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
                 states[enemyIndex] = ANDANDO;
             }
@@ -317,7 +318,7 @@ public:
     }
 	
 	// Gestionar el movimiento cuando el enemigo está andando
-    void gestionarAndando(int enemyIndex, Shader& shader) {
+    void gestionarAndando(int enemyIndex, Shader& shader, float deltaTime) {
 		//Calculamos las actualizaciones necesarias
         float start = map.size() * dim / 2;
         if ((positions[enemyIndex].x == destiny[enemyIndex].x) && (positions[enemyIndex].z == destiny[enemyIndex].z)) {
@@ -330,8 +331,10 @@ public:
         }
         destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
         if (states[enemyIndex] == ANDANDO) { // Si seguimos moviéndonos
-            positions[enemyIndex].x = roundf((positions[enemyIndex].x + directions[enemyIndex].x) * 100) / 100;
-            positions[enemyIndex].z = roundf((positions[enemyIndex].z + directions[enemyIndex].z) * 100) / 100;
+			//cout << "directions: " << directions[enemyIndex].x << " " << directions[enemyIndex].y << " " << directions[enemyIndex].z << endl;
+            positions[enemyIndex].x = roundf((positions[enemyIndex].x + directions[enemyIndex].x)/* * deltaTime */ * 100) / 100;
+            positions[enemyIndex].z = roundf((positions[enemyIndex].z + directions[enemyIndex].z)/* * deltaTime */ * 100) / 100;
+            //cout << "positions = " << positions[enemyIndex].x << ", " << positions[enemyIndex].z << endl;
         }
         
         // Y al final dibujamos las caras :)
@@ -339,15 +342,15 @@ public:
     }
 
 	// Gestionar el movimiento cuando el enemigo está girando
-	void gestionarGirando(int enemyIndex, Shader& shader) {
-        actualizarRotacion(enemyIndex); // Rotar lo que sea necesario
+	void gestionarGirando(int enemyIndex, Shader& shader, float deltaTime) {
+        actualizarRotacion(enemyIndex, deltaTime); // Rotar lo que sea necesario
         pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
 		
 	}
 
     int cont = 0;
     // Gestionar el movimiento cuando el enemigo está girando
-    void gestionarApuntando(int enemyIndex, Shader& shader, glm::vec3 playerPosition) {
+    void gestionarApuntando(int enemyIndex, Shader& shader, glm::vec3 playerPosition, float deltaTime) {
         // Vector que va desde el enemigo al jugador
 		glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex]; 
         float deg = atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180 / 3.1415;
@@ -361,20 +364,21 @@ public:
         }
 		
         goalRotation[enemyIndex] = deg;
-        actualizarRotacion(enemyIndex); // Rotar lo que sea necesario
+        actualizarRotacion(enemyIndex, deltaTime); // Rotar lo que sea necesario
         pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
 
     }
 	
-    void DrawEnemies(Shader& shader, glm::vec3 playerPosition) {
+    void DrawEnemies(Shader& shader, glm::vec3 playerPosition, float deltaTime) {
+        hit_time = static_cast<int>(30000 * deltaTime);
         for (int i = 0; i < numEnemies; i++) {
             if (vidas[i] > 0) {
 				//cout << "Enemigo " << i << ": " << states[i] << endl;
                 switch (states[i]) {
                 case PARADO: {gestionarParado(i, shader); break;}
-                case ANDANDO: {gestionarAndando(i, shader); break;}
-                case GIRANDO: {gestionarGirando(i, shader); break;}
-                case APUNTANDO: {gestionarApuntando(i, shader, playerPosition); break;}
+                case ANDANDO: {gestionarAndando(i, shader, deltaTime); break;}
+                case GIRANDO: {gestionarGirando(i, shader, deltaTime); break;}
+                case APUNTANDO: {gestionarApuntando(i, shader, playerPosition, deltaTime); break;}
                 default: {cerr << "Error en el estado del enemigo " << i << endl; break;}
                 }
                 
