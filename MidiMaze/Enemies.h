@@ -114,7 +114,7 @@ public:
                         //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
                         vidas.push_back(num_vidas); // Vidas de los enemigos
-                        states.push_back(ANDANDO);   //Estado inicial
+                        states.push_back(APUNTANDO);   //Estado inicial
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
                         puntuaciones.push_back(0);
                         hit_timeout.push_back(0);
@@ -278,7 +278,7 @@ public:
 
 	// Función para actualizar el valor de la rotación del enemigo enemyIndex
     void actualizarRotacion(int enemyIndex, float deltaTime) {
-        //cout << "Current rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
+        cout << "Current rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
 		if (currentRotation[enemyIndex] < goalRotation[enemyIndex]) {
 			currentRotation[enemyIndex] += rotationSpeed * deltaTime;
             if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
@@ -291,6 +291,43 @@ public:
                 states[enemyIndex] = ANDANDO;
             }
 		}
+        /*if (currentRotation[enemyIndex] > 180.0) {
+            if (goalRotation[enemyIndex] > currentRotation[enemyIndex] - 180.0
+                && goalRotation[enemyIndex] < currentRotation[enemyIndex]) { // Giro a la izquierda
+				currentRotation[enemyIndex] += rotationSpeed * deltaTime;
+                cout << "a" << endl;
+                if (currentRotation[enemyIndex] <= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
+                    states[enemyIndex] = ANDANDO;
+                }
+			}
+			else { // Giro a la derecha
+				currentRotation[enemyIndex] -= rotationSpeed * deltaTime;
+				cout << "b" << endl;
+                if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
+                    states[enemyIndex] = ANDANDO;
+                }
+            }
+        }
+        else {
+            if (goalRotation[enemyIndex] > currentRotation[enemyIndex]
+                && goalRotation[enemyIndex] < currentRotation[enemyIndex] + 180.0) { // Giro a la izquierda
+                currentRotation[enemyIndex] += rotationSpeed * deltaTime;
+                cout << "c " << endl;
+                if (currentRotation[enemyIndex] <= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
+                    states[enemyIndex] = ANDANDO;
+                }
+            }
+            else { // Giro a la derecha
+				currentRotation[enemyIndex] -= rotationSpeed * deltaTime;
+                cout << "d" << endl;
+                if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
+                    states[enemyIndex] = ANDANDO;
+                }
+            }
+        }
+		// Modulo pocho
+        if (currentRotation[enemyIndex] < 0.0f) currentRotation[enemyIndex] += 360.0f;
+        if (currentRotation[enemyIndex] > 361.0f) currentRotation[enemyIndex] -= 360.0f;*/
     }
 
     // Código común que se repite en las funciones de actualización de estado del enemigo
@@ -353,8 +390,12 @@ public:
     void gestionarApuntando(int enemyIndex, Shader& shader, glm::vec3 playerPosition, float deltaTime) {
         // Vector que va desde el enemigo al jugador
 		glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex]; 
-        float deg = atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180 / 3.1415;
-        if (deg < 0.0) deg = 360.0 + deg;
+        float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
+        //if (deg < 0.0) deg = 180.0f - deg;
+        if (playerPosition.z < positions[enemyIndex].z) {
+			deg = 180.0f + deg;
+        }
+		if (deg < 0.0) deg = 360.0f + deg;
         
         cont++;
         if (cont == 200) {

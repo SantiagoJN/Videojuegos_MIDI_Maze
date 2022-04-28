@@ -83,7 +83,7 @@ public:
 
         glm::vec3 vec (vertices[0] - bulletPos[0], 0, vertices[2] - bulletPos[2]);
 
-        float longit = sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
+        float longit = static_cast<float>(sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2)));
 
         if (longit < (radius)) {
             cout << vec.x << " " << vec.y << " " << vec.z << endl;
