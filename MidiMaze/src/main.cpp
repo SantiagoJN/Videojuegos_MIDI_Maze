@@ -52,6 +52,10 @@ float lastFrame = 0.0f; // Time of last frame
 float lastFrameFPS = 0.0f;
 int countFrames = 0; // Para saber los frames que ha habido en 1s
 
+int reloadTime[] = { 700000, 2100000 }; // Delays para representar la cadencia de disparo. Cuanto más delay, menos cadencia
+unsigned int currentDelay = 0; // Delay inicializado a 0. Cuando se dispare, se pondrá un contador u otro dependiendo de la cadencia
+enum cadencia { CAD_RAPIDA, CAD_LENTA}; // Rapida = 1s, lenta = 3s
+
 Map temp;
 
 // ###Constantes varias###
@@ -141,6 +145,7 @@ int main()
 			countFrames = 0;
 			lastFrameFPS = currentFrame; // Actualizamos
         }
+        if (currentDelay > 0) currentDelay--; // Decrementar el contador de delay para el disparo del jugador
 
         // input
         processInput(window);
@@ -150,11 +155,10 @@ int main()
         glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
+        //drawHollowCircle(SCR_WIDTH / 2, SCR_HEIGHT / 2, 100, 360);
 
         // activate shader
-        ourShader.use();
-
-        //drawHollowCircle(SCR_WIDTH/2, SCR_HEIGHT/2, 100, 360);
+        ourShader.use();		
 		
         pared.Draw(ourShader);
 
@@ -288,11 +292,15 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (versionModerna) {
         if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+            if (currentDelay == 0) { // Puedo disparar
+                newBullet = true;
+                SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+                currentDelay = static_cast<unsigned int>(reloadTime[CAD_LENTA] * deltaTime);
+            }
             //cout << camera.Position[0] << "," << camera.Position[1] << "," << camera.Position[2] << endl;
             //cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
 
-            newBullet = true;
-            SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+            
         }
     }
 }
@@ -316,7 +324,21 @@ void showFPS(int fps) {
 
 bool primeravez = true;
 void drawHollowCircle(float cx, float cy, float r, int num_segments) {
-	
+    cout << "Dibujando circulo" << endl;
+    glLoadIdentity();
+
+    glColor3f(1.0, 1.0, 0.0);
+    glPointSize(100.0);
+
+    glBegin(GL_POINTS);
+
+    glVertex2f(0, 0);
+    glVertex2f(-5, -5);
+
+    glEnd();
+
+    glFlush();
+	/*
     glColor3f(1.0, 1.0, 0.0);
     float theta = 3.1415926 * 2 / float(num_segments);
     float tangetial_factor = tanf(theta);//calculate the tangential factor 
@@ -353,4 +375,5 @@ void drawHollowCircle(float cx, float cy, float r, int num_segments) {
     primeravez = false;
     glEnd();
     glFlush();
+    */
 }

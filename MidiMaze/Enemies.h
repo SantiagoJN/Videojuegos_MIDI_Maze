@@ -278,7 +278,7 @@ public:
 
 	// Función para actualizar el valor de la rotación del enemigo enemyIndex
     void actualizarRotacion(int enemyIndex, float deltaTime) {
-        cout << "Current rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
+        //cout << "Current rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
 		if (currentRotation[enemyIndex] < goalRotation[enemyIndex]) {
 			currentRotation[enemyIndex] += rotationSpeed * deltaTime;
             if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
