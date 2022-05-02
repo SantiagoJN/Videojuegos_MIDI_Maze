@@ -65,6 +65,15 @@ public:
     float scale;
     float dim;
 
+    
+
+    vector<glm::vec3> returnPositions() {
+        return positions;
+    }
+
+
+
+
     // constructor, expects a filepath to a 3D model.
     Enemy(float scale, int numEnemies, vector<vector<bool>> laberinto, float dim) : numEnemies(numEnemies), map(laberinto), dim(dim), scale(scale) {
         // Comprobamos que el n�mero de enemigos es correcto
