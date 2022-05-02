@@ -7,6 +7,7 @@ public:
     unsigned int indices[6];
     unsigned int VBO, VAO, EBO;
     unsigned int texture1;
+    bool suelo = false;
 
     // constructor, expects a filepath to a 3D model.
     Wall(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
@@ -47,6 +48,50 @@ public:
 
         setUpWall(ourShader);
     };
+
+
+    // constructor, expects a filepath to a 3D model.
+    Wall(float size, float dim, Shader& ourShader) {
+        suelo = true;
+        vertices[0] = size * dim/2;
+        vertices[1] = -0.5;
+        vertices[2] = size * dim/2;
+
+        vertices[3] = 0.0f;
+        vertices[4] = 0.0f;
+
+        vertices[5] = size * dim/2;
+        vertices[6] = -0.5;
+        vertices[7] = size * -dim/2;
+
+        vertices[8] = 1.0f;
+        vertices[9] = 0.0f;
+
+        vertices[10] = size * -dim/2;
+        vertices[11] = -0.5;
+        vertices[12] = size * dim/2;
+
+        vertices[13] = 0.0f;
+        vertices[14] = 1.0f;
+
+        vertices[15] = size * -dim/2;
+        vertices[16] = -0.5;
+        vertices[17] = size * -dim/2;
+
+        vertices[18] = 1.0f;
+        vertices[19] = 1.0f;
+
+        indices[0] = 0;
+        indices[1] = 1;
+        indices[2] = 2;
+        indices[3] = 1;
+        indices[4] = 2;
+        indices[5] = 3;
+
+        setUpWall(ourShader);
+    };
+
+    Wall() {};
 
     //TODO JESUS
     bool intersect(float x1, float z1, float x2, float z2,bool isBullet,float radius) {
@@ -121,7 +166,9 @@ private:
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-        unsigned char* data = stbi_load("resources/textures/wall.jpg", &width, &height, &nrChannels, 0);
+        unsigned char* data;
+        if(!suelo) data = stbi_load("resources/textures/wall.jpg", &width, &height, &nrChannels, 0);
+        else data = stbi_load("resources/textures/floor.jpg", &width, &height, &nrChannels, 0);
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
