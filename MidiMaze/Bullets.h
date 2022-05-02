@@ -36,15 +36,16 @@ public:
         collided.push_back(false);
     }
 
-    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa, float deltaTime) {
-        for (int i = 0; i < numBullets; i++) {
+    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa) {
+        float speed = 50.0f;
+        for (unsigned int i = 0; i < numBullets; i++) {
             if (!collided[i]) {
-                collided[i] = mapa.checkCollisionBullets(positions[i], radious);
+                collided[i] = mapa.checkCollisionBullets(positions[i], positions[i] + directions[i] / speed,radious);
                 if (!collided[i]) {
                     collided[i] = enemies.checkCollision(positions[i], radious);
                     if (!collided[i]) {
                         glm::mat4 model = glm::mat4(1.0f);
-                        positions[i] = positions[i] + (directions[i] * bulletSpeed * deltaTime);
+                        positions[i] = positions[i] + directions[i] / speed;
                         model = glm::translate(model, positions[i]);
                         model = glm::scale(model, glm::vec3(scale, scale, scale));
                         shader.setMat4("model", model);

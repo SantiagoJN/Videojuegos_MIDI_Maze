@@ -49,24 +49,19 @@ public:
     };
 
     //TODO JESUS
-    bool intersect(float x1, float z1, float x2, float z2) {
+    bool intersect(float x1, float z1, float x2, float z2,bool isBullet,float radius) {
         // collision x-axis?
         float normalize = 0.5f;
-        float normalize2 = 0.1f;
-
-        /*/bool collisionX1 = ((x1 >= vertices[0] &&
-            x1 <= vertices[5]));
-        bool collisionX2 = (x1 >= vertices[5] &&
-            x1 <= vertices[0]);
-        bool collisionX3 = (x2 >= vertices[0] - normalize && x1 <= vertices[0] + normalize);
-        bool collisionX4 = (x1 >= vertices[0] - normalize && x2 <= vertices[0] + normalize);*/
-
+        float normalize2 = 0.0f;
+        if (isBullet) {
+            normalize = radius;
+        }
         // collision z-axis?
         bool collisionX = ((x2 >= vertices[0] - normalize && x1 <= vertices[0] + normalize) || (x1 >= vertices[0] - normalize && x2 <= vertices[0] + normalize)) || ((x1 >= vertices[0] &&
-            x1 <= vertices[5]) || (x1 >= vertices[5] && x1 <= vertices[0]));
+            x1 <= vertices[5]) || (x1 >= vertices[5] && x1 <= vertices[0])) || ((x2 >= vertices[5] - normalize && x1 <= vertices[5] + normalize) || (x1 >= vertices[5] - normalize && x2 <= vertices[5] + normalize));
         // collision z-axis?
-        bool collisionZ = ((z2 >= vertices[2] - normalize && z1 <= vertices[2] + normalize) || (z1 >= vertices[2] - normalize && z2 <= vertices[2] + normalize)) || ((z1 >= vertices[2]  &&
-            z1 <= vertices[7]) || (z1 >= vertices[7] && z1 <= vertices[2]));
+        bool collisionZ = ((z2 >= vertices[2] - normalize && z1 <= vertices[2] + normalize) || (z1 >= vertices[2] - normalize && z2 <= vertices[2] + normalize)) || ((z1 >= vertices[2] &&
+            z1 <= vertices[7]) || (z1 >= vertices[7] && z1 <= vertices[2])) || ((z2 >= vertices[7] - normalize && z1 <= vertices[7] + normalize) || (z1 >= vertices[7] - normalize && z2 <= vertices[7] + normalize));
 
         if (collisionX && collisionZ) {
             //cout << vertices[0] << " " << vertices[5] << " " << vertices[2] << " " << vertices[7] << endl;
@@ -75,26 +70,6 @@ public:
         }
         // collision only if on all axes
         return collisionX && collisionZ;
-    }
-
-    bool intersectsBullets(glm::vec3 bulletPos, float radius) {
-        //glm::vec2 center(bulletPos + radius);
-        //glm::vec2 aabb_half_extents()
-
-        glm::vec3 vec (vertices[0] - bulletPos[0], 0, vertices[2] - bulletPos[2]);
-
-        float longit = static_cast<float>(sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2)));
-
-        if (longit < (radius)) {
-            //cout << vec.x << " " << vec.y << " " << vec.z << endl;
-            //cout << longit << "  ----  " << radius  << endl;
-            cout << "Colisiona con muro" << endl;
-            //SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
-            return true;
-        }
-
-        return false;
-
     }
 
     void draw(Shader& ourShader) {
@@ -146,7 +121,7 @@ private:
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-        unsigned char* data = stbi_load("resources/textures/wall.jpg", &width, &height, &nrChannels, 0);
+        unsigned char* data = stbi_load("resources/textures/container.jpg", &width, &height, &nrChannels, 0);
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);

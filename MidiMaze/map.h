@@ -23,7 +23,7 @@ public:
         if (filein.is_open()) {
             string line, lastLine;
             getline(filein, line);
-            size = static_cast<int>(stof(line));
+            size = stof(line);
             float start = size * dim / 2;
 
             int j = 0;
@@ -106,7 +106,7 @@ public:
     bool checkIntersections(glm::vec3 camera, glm::vec3 newCamera) {
         bool intersects = false;
         for (unsigned int i = 0; i < map.size(); i++) {
-            intersects = map[i].intersect(camera.x, camera.z, newCamera.x, newCamera.z);
+            intersects = map[i].intersect(camera.x, camera.z, newCamera.x, newCamera.z,false,0.0f);
             if (intersects) {
                 return true;
             }
@@ -114,10 +114,10 @@ public:
         return false;
     }
 
-    bool checkCollisionBullets(glm::vec3 bulletPos, float radius) {
+    bool checkCollisionBullets(glm::vec3 bulletPos, glm::vec3 newBulletPos,float radius) {
         bool intersects = false;
         for (unsigned int i = 0; i < map.size(); i++) {
-            intersects = map[i].intersectsBullets(bulletPos, radius);
+            intersects = map[i].intersect(bulletPos.x, bulletPos.z, newBulletPos.x, newBulletPos.z,true,radius);
             if (intersects) {
                 return true;
             }
