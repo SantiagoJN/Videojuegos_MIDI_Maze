@@ -69,8 +69,8 @@ public:
             z1 <= vertices[7]) || (z1 >= vertices[7] && z1 <= vertices[2]));
 
         if (collisionX && collisionZ) {
-            cout << vertices[0] << " " << vertices[5] << " " << vertices[2] << " " << vertices[7] << endl;
-            cout << x1 << " " << x2 << " " << z1 << " " << z2 << endl;
+            //cout << vertices[0] << " " << vertices[5] << " " << vertices[2] << " " << vertices[7] << endl;
+            //cout << x1 << " " << x2 << " " << z1 << " " << z2 << endl;
             //cout << collisionX1 << collisionX2 << collisionX3 << collisionX4 << endl;
         }
         // collision only if on all axes
@@ -86,8 +86,8 @@ public:
         float longit = static_cast<float>(sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2)));
 
         if (longit < (radius)) {
-            cout << vec.x << " " << vec.y << " " << vec.z << endl;
-            cout << longit << "  ----  " << radius  << endl;
+            //cout << vec.x << " " << vec.y << " " << vec.z << endl;
+            //cout << longit << "  ----  " << radius  << endl;
             cout << "Colisiona con muro" << endl;
             //SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
             return true;

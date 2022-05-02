@@ -122,7 +122,7 @@ int main()
 
     Map pared("resources/maps/map1.txt", ourShader);
 
-    Enemy myEnemies(0.5, 1, pared.getLab(), pared.getDim());
+    Enemy myEnemies(0.5, 10, pared.getLab(), pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
@@ -292,11 +292,12 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (versionModerna) {
         if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-            if (currentDelay == 0) { // Puedo disparar
+            cout << currentDelay << endl;
+            //if (currentDelay == 0) { // Puedo disparar
                 newBullet = true;
                 SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
                 currentDelay = static_cast<unsigned int>(reloadTime[CAD_LENTA] * deltaTime);
-            }
+            //}
             //cout << camera.Position[0] << "," << camera.Position[1] << "," << camera.Position[2] << endl;
             //cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
 
@@ -323,57 +324,3 @@ void showFPS(int fps) {
 }
 
 bool primeravez = true;
-void drawHollowCircle(float cx, float cy, float r, int num_segments) {
-    cout << "Dibujando circulo" << endl;
-    glLoadIdentity();
-
-    glColor3f(1.0, 1.0, 0.0);
-    glPointSize(100.0);
-
-    glBegin(GL_POINTS);
-
-    glVertex2f(0, 0);
-    glVertex2f(-5, -5);
-
-    glEnd();
-
-    glFlush();
-	/*
-    glColor3f(1.0, 1.0, 0.0);
-    float theta = 3.1415926 * 2 / float(num_segments);
-    float tangetial_factor = tanf(theta);//calculate the tangential factor 
-
-    float radial_factor = cosf(theta);//calculate the radial factor 
-
-    float x = r;//we start at angle = 0 
-
-    float y = 0;
-    glLineWidth(2000);
-    glBegin(GL_POLYGON);
-    for (int ii = 0; ii < num_segments; ii++)
-    {
-        glVertex2f(x + cx, y + cy);//output vertex 
-        if (primeravez) cout << "Punto en (" << x + cx << ", " << y + cy << ")" << endl;
-
-        //calculate the tangential vector 
-        //remember, the radial vector is (x, y) 
-        //to get the tangential vector we flip those coordinates and negate one of them 
-
-        float tx = -y;
-        float ty = x;
-
-        //add the tangential vector 
-
-        x += tx * tangetial_factor;
-        y += ty * tangetial_factor;
-
-        //correct using the radial factor 
-
-        x *= radial_factor;
-        y *= radial_factor;
-    }
-    primeravez = false;
-    glEnd();
-    glFlush();
-    */
-}

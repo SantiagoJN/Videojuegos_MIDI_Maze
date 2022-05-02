@@ -48,6 +48,7 @@ public:
     vector<float> currentRotation; // Angulo actual de rotacion
     vector<float> goalRotation; // Hasta qué ángulo se quiere rotar
     vector<Estados> states; // Estado del enemigo i: {ANDANDO, GIRANDO, PARADO}
+    vector<glm::vec2> prevIndex;
     vector<glm::vec2> index;
     vector<glm::vec3> destiny;
 
@@ -91,19 +92,21 @@ public:
 
         // Colocamos los enemigos en el mapa de forma random
         float start = map.size() * dim / 2;
+        vector<vector<bool>> spawn(map);
         for (int i = 0; i < numEnemies; i++) {
             bool end = false;
-            int random = rand() % (map.size()-2) +1;
+            int random = rand() % (spawn.size()-2) +1;
             float x, z;
-            for (int i = random; i < map.size(); i++) {
-                for (int j = random; j < map[i].size(); j++) {
-                    if (!map[i][j]) { // El enemigo se puede colocar en i,j
+            for (int i = random; i < spawn.size(); i++) {
+                for (int j = random; j < spawn[i].size(); j++) {
+                    if (!spawn[i][j]) { // El enemigo se puede colocar en i,j
                         end = true;
                         cout << i << " " << j << endl;
                         x = -start + j * dim;
                         z = start - i * dim;
                         glm::vec3 dir(1,1,1);
-                        map[i][j] = true;
+                        spawn[i][j] = true;
+                        prevIndex.push_back(glm::vec2(i, j));
                         glm::vec2 ind = nextIndex(i, j, dir);
                         destiny.push_back(glm::vec3(-start + ind.y * dim, 0, start - ind.x * dim));
                         index.push_back(ind);
@@ -114,7 +117,7 @@ public:
                         //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
                         vidas.push_back(num_vidas); // Vidas de los enemigos
-                        states.push_back(APUNTANDO);   //Estado inicial
+                        states.push_back(ANDANDO);   //Estado inicial
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
                         puntuaciones.push_back(0);
                         hit_timeout.push_back(0);
@@ -122,7 +125,7 @@ public:
                     }
                 }
                 if (end) break;
-                else if (i == map.size() - 2) i = 1;
+                else if (i == spawn.size() - 2) i = 1;
             }
         }
         for (int i = 0; i < numEnemies; i++) {
@@ -185,7 +188,7 @@ public:
                 if (!map[i][j + 1]) {
                     if (dir.x != -enemySpeed || (four && two && three)) {
                         dir = glm::vec3(enemySpeed, 0, 0);
-                        map[i][j] = false;
+                        //map[i][j] = false;
                         map[i][j+1] = true;
                         return glm::vec2(i, j + 1);
                     }
@@ -197,7 +200,7 @@ public:
                 if (!map[i][j - 1]) {
                     if (dir.x != enemySpeed || (one && four && three)) {
                         dir = glm::vec3(-enemySpeed, 0, 0);
-                        map[i][j] = false;
+                        //map[i][j] = false;
                         map[i][j - 1] = true;
                         return glm::vec2(i, j - 1);
                     }
@@ -209,7 +212,7 @@ public:
                 if (!map[i + 1][j]) {
                     if ((dir.z != enemySpeed) || (one && two && four)) {
                         dir = glm::vec3(0, 0, -enemySpeed);
-                        map[i][j] = false;
+                        //map[i][j] = false;
                         map[i+1][j] = true;
                         return glm::vec2(i + 1, j);
                     }
@@ -221,7 +224,7 @@ public:
                 if (!map[i - 1][j]) {
                     if ((dir.z != -enemySpeed) || (one && two && three)) {
                         dir = glm::vec3(0, 0, enemySpeed);
-                        map[i][j] = false;
+                        //map[i][j] = false;
                         map[i-1][j] = true;
                         return glm::vec2(i - 1, j);
                     }
@@ -232,6 +235,12 @@ public:
             default:
                 wh = 0;
                 if (one && two && three && four) {
+                    /*for (auto f : map) {
+                        for (auto i : f) cout << i << " ";
+                        cout << endl;
+                    }
+                    cout << "-----------------" << endl;*/
+                    //cout << "No sense" << endl;
                     dir = glm::vec3(0, 0, 0);
                     return glm::vec2(i, j);
                 }
@@ -250,8 +259,8 @@ public:
                 
 
                 if (longit < (radious + radiousBullet)) {
-                    cout << vec.x << " " << vec.y << " " << vec.z << endl;
-                    cout << longit << "  ----  " << radious << " " << radiousBullet << endl;
+                    //cout << vec.x << " " << vec.y << " " << vec.z << endl;
+                    //cout << longit << "  ----  " << radious << " " << radiousBullet << endl;
                     vidas[i]--;
                     if (vidas[i] == 0) {
                         puntuacionJugador++;
@@ -282,52 +291,19 @@ public:
 		if (currentRotation[enemyIndex] < goalRotation[enemyIndex]) {
 			currentRotation[enemyIndex] += rotationSpeed * deltaTime;
             if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
+                cout << prevIndex[enemyIndex].x << " " << prevIndex[enemyIndex].y << "false" << endl;
+                map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
                 states[enemyIndex] = ANDANDO;
             }
 		}
 		else if (currentRotation[enemyIndex] > goalRotation[enemyIndex]) {
 			currentRotation[enemyIndex] -= rotationSpeed * deltaTime;
             if (currentRotation[enemyIndex] <= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
+                cout << prevIndex[enemyIndex].x << " " << prevIndex[enemyIndex].y << "false" << endl;
+                map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
                 states[enemyIndex] = ANDANDO;
             }
 		}
-        /*if (currentRotation[enemyIndex] > 180.0) {
-            if (goalRotation[enemyIndex] > currentRotation[enemyIndex] - 180.0
-                && goalRotation[enemyIndex] < currentRotation[enemyIndex]) { // Giro a la izquierda
-				currentRotation[enemyIndex] += rotationSpeed * deltaTime;
-                cout << "a" << endl;
-                if (currentRotation[enemyIndex] <= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
-                    states[enemyIndex] = ANDANDO;
-                }
-			}
-			else { // Giro a la derecha
-				currentRotation[enemyIndex] -= rotationSpeed * deltaTime;
-				cout << "b" << endl;
-                if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
-                    states[enemyIndex] = ANDANDO;
-                }
-            }
-        }
-        else {
-            if (goalRotation[enemyIndex] > currentRotation[enemyIndex]
-                && goalRotation[enemyIndex] < currentRotation[enemyIndex] + 180.0) { // Giro a la izquierda
-                currentRotation[enemyIndex] += rotationSpeed * deltaTime;
-                cout << "c " << endl;
-                if (currentRotation[enemyIndex] <= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
-                    states[enemyIndex] = ANDANDO;
-                }
-            }
-            else { // Giro a la derecha
-				currentRotation[enemyIndex] -= rotationSpeed * deltaTime;
-                cout << "d" << endl;
-                if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
-                    states[enemyIndex] = ANDANDO;
-                }
-            }
-        }
-		// Modulo pocho
-        if (currentRotation[enemyIndex] < 0.0f) currentRotation[enemyIndex] += 360.0f;
-        if (currentRotation[enemyIndex] > 361.0f) currentRotation[enemyIndex] -= 360.0f;*/
     }
 
     // Código común que se repite en las funciones de actualización de estado del enemigo
@@ -360,11 +336,15 @@ public:
         float start = map.size() * dim / 2;
         if ((positions[enemyIndex].x == destiny[enemyIndex].x) && (positions[enemyIndex].z == destiny[enemyIndex].z)) {
             glm::vec3 prevDir = directions[enemyIndex];
+            prevIndex[enemyIndex] = index[enemyIndex];
             index[enemyIndex] = nextIndex(static_cast<int>(index[enemyIndex].x), static_cast<int>(index[enemyIndex].y), directions[enemyIndex]);
             if (prevDir != directions[enemyIndex]) {
                 updateGoalRotation(enemyIndex);
                 states[enemyIndex] = GIRANDO;
-            }            
+            }
+            else {
+                map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
+            }
         }
         destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
         if (states[enemyIndex] == ANDANDO) { // Si seguimos moviéndonos
