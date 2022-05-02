@@ -58,7 +58,7 @@ public:
     vector<int> puntuaciones;
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
     int puntuacionJugador;
-    float enemySpeed = 0.05f;
+    float enemySpeed = 0.082f;
     float rotationSpeed = 120.0f;
 
     vector<vector<bool>> map;
@@ -329,12 +329,33 @@ public:
     void gestionarParado(int enemyIndex, Shader& shader) {
         pintarEnemigo(enemyIndex, shader); // Simplemente lo pintamos
     }
+
+
+    bool pararAndar(int enemyIndex) {
+        float x = roundf((positions[enemyIndex].x + directions[enemyIndex].x)/* * deltaTime */ * 100) / 100;
+        float z = roundf((positions[enemyIndex].z + directions[enemyIndex].z)/* * deltaTime */ * 100) / 100;
+        if (directions[enemyIndex].x < 0) {
+            return x < destiny[enemyIndex].x;
+        }
+        else if (directions[enemyIndex].x > 0) {
+            return x > destiny[enemyIndex].x;
+        }
+        else if (directions[enemyIndex].z < 0) {
+            return z < destiny[enemyIndex].z;
+        }
+        else if (directions[enemyIndex].z > 0) {
+            return z > destiny[enemyIndex].z;
+        }
+    }
+
 	
 	// Gestionar el movimiento cuando el enemigo está andando
     void gestionarAndando(int enemyIndex, Shader& shader, float deltaTime) {
 		//Calculamos las actualizaciones necesarias
         float start = map.size() * dim / 2;
-        if ((positions[enemyIndex].x == destiny[enemyIndex].x) && (positions[enemyIndex].z == destiny[enemyIndex].z)) {
+        //if ((positions[enemyIndex].x == destiny[enemyIndex].x) && (positions[enemyIndex].z == destiny[enemyIndex].z)) {
+        if(pararAndar(enemyIndex)){
+            positions[enemyIndex] = destiny[enemyIndex];
             glm::vec3 prevDir = directions[enemyIndex];
             prevIndex[enemyIndex] = index[enemyIndex];
             index[enemyIndex] = nextIndex(static_cast<int>(index[enemyIndex].x), static_cast<int>(index[enemyIndex].y), directions[enemyIndex]);
@@ -345,8 +366,8 @@ public:
             else {
                 map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
             }
+            destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
         }
-        destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
         if (states[enemyIndex] == ANDANDO) { // Si seguimos moviéndonos
 			//cout << "directions: " << directions[enemyIndex].x << " " << directions[enemyIndex].y << " " << directions[enemyIndex].z << endl;
             positions[enemyIndex].x = roundf((positions[enemyIndex].x + directions[enemyIndex].x)/* * deltaTime */ * 100) / 100;

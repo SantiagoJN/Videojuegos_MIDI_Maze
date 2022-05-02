@@ -120,9 +120,9 @@ int main()
 
     Bullet myBullets("resources/objects/bullets/yellow/yellow.obj", 0.1);
 
-    Map pared("resources/maps/map1.txt", ourShader);
+    Map pared("resources/maps/map2.txt", ourShader);
 
-    Enemy myEnemies(0.5, 10, pared.getLab(), pared.getDim());
+    Enemy myEnemies(0.5, 1, pared.getLab(), pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
