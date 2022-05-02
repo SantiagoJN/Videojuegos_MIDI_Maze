@@ -58,7 +58,7 @@ public:
     vector<int> puntuaciones;
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
     int puntuacionJugador;
-    float enemySpeed = 0.082f;
+    float enemySpeed = 0.052f;
     float rotationSpeed = 120.0f;
 
     vector<vector<bool>> map;
@@ -117,7 +117,7 @@ public:
                         //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
                         vidas.push_back(num_vidas); // Vidas de los enemigos
-                        states.push_back(ANDANDO);   //Estado inicial
+                        states.push_back(APUNTANDO);   //Estado inicial
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
                         puntuaciones.push_back(0);
                         hit_timeout.push_back(0);
@@ -285,24 +285,49 @@ public:
         return retVal;
     }
 
+
+
 	// Función para actualizar el valor de la rotación del enemigo enemyIndex
     void actualizarRotacion(int enemyIndex, float deltaTime) {
-        //cout << "Current rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
-		if (currentRotation[enemyIndex] < goalRotation[enemyIndex]) {
+        // Si está apuntando el ángulo es similar al objetivo, no hacer nada
+        if (states[enemyIndex] == APUNTANDO) {
+            float angle = currentRotation[enemyIndex] - goalRotation[enemyIndex];
+            if (angle < 0) angle += 360.0f; // Hacemos el módulo
+            if (angle < rotationSpeed * deltaTime || angle > 360.0f - rotationSpeed * deltaTime) return;
+        }
+        cout << "Current rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
+        float diff = currentRotation[enemyIndex] - goalRotation[enemyIndex];
+		if (diff>180.0f || (-180<diff && diff<0)) {
 			currentRotation[enemyIndex] += rotationSpeed * deltaTime;
-            if (currentRotation[enemyIndex] >= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
-                cout << prevIndex[enemyIndex].x << " " << prevIndex[enemyIndex].y << "false" << endl;
+            float aux = currentRotation[enemyIndex];
+            if (currentRotation[enemyIndex] > 360.0f) currentRotation[enemyIndex] -= 360.0f;
+            cout << "girando antihorario" << endl;
+            cout << "next rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
+            bool andar = false;
+
+            if (360.0f - currentRotation[enemyIndex] < rotationSpeed * deltaTime) currentRotation[enemyIndex] = 0.0f;
+            
+            if (aux < goalRotation[enemyIndex]) andar = currentRotation[enemyIndex] >= goalRotation[enemyIndex];
+            else andar = currentRotation[enemyIndex] < 10;
+
+            // Si la rotación actual es cercana a 360º, se pone a 0
+            if ( andar && states[enemyIndex] == GIRANDO) {
+                //cout << prevIndex[enemyIndex].x << " " << prevIndex[enemyIndex].y << "false" << endl;
                 map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
                 states[enemyIndex] = ANDANDO;
             }
 		}
-		else if (currentRotation[enemyIndex] > goalRotation[enemyIndex]) {
+		else{
+            cout << "girando horario" << endl;
 			currentRotation[enemyIndex] -= rotationSpeed * deltaTime;
+            
+            if (currentRotation[enemyIndex] < 0.0f) currentRotation[enemyIndex] += 360.0f;
             if (currentRotation[enemyIndex] <= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
-                cout << prevIndex[enemyIndex].x << " " << prevIndex[enemyIndex].y << "false" << endl;
+                //cout << prevIndex[enemyIndex].x << " " << prevIndex[enemyIndex].y << "false" << endl;
                 map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
                 states[enemyIndex] = ANDANDO;
             }
+            //cout << "next rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
 		}
     }
 
@@ -346,6 +371,7 @@ public:
         else if (directions[enemyIndex].z > 0) {
             return z > destiny[enemyIndex].z;
         }
+        else return true;
     }
 
 	
@@ -360,6 +386,7 @@ public:
             prevIndex[enemyIndex] = index[enemyIndex];
             index[enemyIndex] = nextIndex(static_cast<int>(index[enemyIndex].x), static_cast<int>(index[enemyIndex].y), directions[enemyIndex]);
             if (prevDir != directions[enemyIndex]) {
+                cout << "Cambiando dir" << prevDir.x<< " " << prevDir.z << " --> " << directions[enemyIndex].x << " " << directions[enemyIndex].z << endl;
                 updateGoalRotation(enemyIndex);
                 states[enemyIndex] = GIRANDO;
             }
