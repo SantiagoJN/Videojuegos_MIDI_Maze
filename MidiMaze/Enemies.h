@@ -362,8 +362,8 @@ public:
 
 
     bool pararAndar(int enemyIndex, float deltaTime) {
-        float x = roundf((positions[enemyIndex].x + directions[enemyIndex].x * deltaTime * enemySpeed)/* * deltaTime */ * 100) / 100;
-        float z = roundf((positions[enemyIndex].z + directions[enemyIndex].z * deltaTime * enemySpeed)/* * deltaTime */ * 100) / 100;
+        float x = (positions[enemyIndex].x + directions[enemyIndex].x * deltaTime * enemySpeed);
+        float z = (positions[enemyIndex].z + directions[enemyIndex].z * deltaTime * enemySpeed);
         if (directions[enemyIndex].x < 0) {
             return x < destiny[enemyIndex].x;
         }
@@ -402,8 +402,8 @@ public:
         }
         if (states[enemyIndex] == ANDANDO) { // Si seguimos moviéndonos
 			//cout << "directions: " << directions[enemyIndex].x << " " << directions[enemyIndex].y << " " << directions[enemyIndex].z << endl;
-            positions[enemyIndex].x = roundf((positions[enemyIndex].x + directions[enemyIndex].x * deltaTime*enemySpeed)/* * deltaTime */ * 100) / 100;
-            positions[enemyIndex].z = roundf((positions[enemyIndex].z + directions[enemyIndex].z * deltaTime*enemySpeed)/* * deltaTime */ * 100) / 100;
+            positions[enemyIndex].x = (positions[enemyIndex].x + directions[enemyIndex].x * deltaTime * enemySpeed);
+            positions[enemyIndex].z = (positions[enemyIndex].z + directions[enemyIndex].z * deltaTime * enemySpeed);
             //cout << "positions = " << positions[enemyIndex].x << ", " << positions[enemyIndex].z << endl;
         }
         
@@ -444,7 +444,7 @@ public:
     }
 	
     void DrawEnemies(Shader& shader, glm::vec3 playerPosition, float deltaTime) {
-        hit_time = static_cast<int>(30000 * deltaTime);
+        hit_time = static_cast<int>(0.1 / deltaTime);
         for (int i = 0; i < numEnemies; i++) {
             if (vidas[i] > 0) {
 				//cout << "Enemigo " << i << ": " << states[i] << endl;
