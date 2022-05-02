@@ -292,12 +292,12 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (versionModerna) {
         if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-            cout << currentDelay << endl;
-            //if (currentDelay == 0) { // Puedo disparar
+            cout << currentDelay<<" "<<deltaTime<<" "<< reloadTime[CAD_LENTA] << endl;
+            if (currentDelay == 0) { // Puedo disparar
                 newBullet = true;
                 SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
                 currentDelay = static_cast<unsigned int>(reloadTime[CAD_LENTA] * deltaTime);
-            //}
+            }
             //cout << camera.Position[0] << "," << camera.Position[1] << "," << camera.Position[2] << endl;
             //cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
 

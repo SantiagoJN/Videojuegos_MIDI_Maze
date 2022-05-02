@@ -58,7 +58,7 @@ public:
     vector<int> puntuaciones;
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
     int puntuacionJugador;
-    float enemySpeed = 0.052f;
+    float enemySpeed = 2.0f;
     float rotationSpeed = 120.0f;
 
     vector<vector<bool>> map;
@@ -126,7 +126,7 @@ public:
                         //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
                         directions.push_back(dir);
                         vidas.push_back(num_vidas); // Vidas de los enemigos
-                        states.push_back(APUNTANDO);   //Estado inicial
+                        states.push_back(ANDANDO);   //Estado inicial
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
                         puntuaciones.push_back(0);
                         hit_timeout.push_back(0);
@@ -195,8 +195,8 @@ public:
             switch (wh) {
             case 0:
                 if (!map[i][j + 1]) {
-                    if (dir.x != -enemySpeed || (four && two && three)) {
-                        dir = glm::vec3(enemySpeed, 0, 0);
+                    if (dir.x != -1.0 || (four && two && three)) {
+                        dir = glm::vec3(1.0, 0, 0);
                         //map[i][j] = false;
                         map[i][j+1] = true;
                         return glm::vec2(i, j + 1);
@@ -207,8 +207,8 @@ public:
                 }
             case 1:
                 if (!map[i][j - 1]) {
-                    if (dir.x != enemySpeed || (one && four && three)) {
-                        dir = glm::vec3(-enemySpeed, 0, 0);
+                    if (dir.x != 1.0 || (one && four && three)) {
+                        dir = glm::vec3(-1.0, 0, 0);
                         //map[i][j] = false;
                         map[i][j - 1] = true;
                         return glm::vec2(i, j - 1);
@@ -219,8 +219,8 @@ public:
                 }
             case 2:
                 if (!map[i + 1][j]) {
-                    if ((dir.z != enemySpeed) || (one && two && four)) {
-                        dir = glm::vec3(0, 0, -enemySpeed);
+                    if ((dir.z != 1.0) || (one && two && four)) {
+                        dir = glm::vec3(0, 0, -1.0);
                         //map[i][j] = false;
                         map[i+1][j] = true;
                         return glm::vec2(i + 1, j);
@@ -231,8 +231,8 @@ public:
                 }
             case 3:
                 if (!map[i - 1][j]) {
-                    if ((dir.z != -enemySpeed) || (one && two && three)) {
-                        dir = glm::vec3(0, 0, enemySpeed);
+                    if ((dir.z != -1.0) || (one && two && three)) {
+                        dir = glm::vec3(0, 0, 1.0);
                         //map[i][j] = false;
                         map[i-1][j] = true;
                         return glm::vec2(i - 1, j);
@@ -304,14 +304,11 @@ public:
             if (angle < 0) angle += 360.0f; // Hacemos el módulo
             if (angle < rotationSpeed * deltaTime || angle > 360.0f - rotationSpeed * deltaTime) return;
         }
-        cout << "Current rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
         float diff = currentRotation[enemyIndex] - goalRotation[enemyIndex];
 		if (diff>180.0f || (-180<diff && diff<0)) {
 			currentRotation[enemyIndex] += rotationSpeed * deltaTime;
             float aux = currentRotation[enemyIndex];
             if (currentRotation[enemyIndex] > 360.0f) currentRotation[enemyIndex] -= 360.0f;
-            cout << "girando antihorario" << endl;
-            cout << "next rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
             bool andar = false;
 
             if (360.0f - currentRotation[enemyIndex] < rotationSpeed * deltaTime) currentRotation[enemyIndex] = 0.0f;
@@ -327,7 +324,6 @@ public:
             }
 		}
 		else{
-            cout << "girando horario" << endl;
 			currentRotation[enemyIndex] -= rotationSpeed * deltaTime;
             
             if (currentRotation[enemyIndex] < 0.0f) currentRotation[enemyIndex] += 360.0f;
@@ -365,9 +361,9 @@ public:
     }
 
 
-    bool pararAndar(int enemyIndex) {
-        float x = roundf((positions[enemyIndex].x + directions[enemyIndex].x)/* * deltaTime */ * 100) / 100;
-        float z = roundf((positions[enemyIndex].z + directions[enemyIndex].z)/* * deltaTime */ * 100) / 100;
+    bool pararAndar(int enemyIndex, float deltaTime) {
+        float x = roundf((positions[enemyIndex].x + directions[enemyIndex].x * deltaTime * enemySpeed)/* * deltaTime */ * 100) / 100;
+        float z = roundf((positions[enemyIndex].z + directions[enemyIndex].z * deltaTime * enemySpeed)/* * deltaTime */ * 100) / 100;
         if (directions[enemyIndex].x < 0) {
             return x < destiny[enemyIndex].x;
         }
@@ -389,7 +385,7 @@ public:
 		//Calculamos las actualizaciones necesarias
         float start = map.size() * dim / 2;
         //if ((positions[enemyIndex].x == destiny[enemyIndex].x) && (positions[enemyIndex].z == destiny[enemyIndex].z)) {
-        if(pararAndar(enemyIndex)){
+        if(pararAndar(enemyIndex, deltaTime)){
             positions[enemyIndex] = destiny[enemyIndex];
             glm::vec3 prevDir = directions[enemyIndex];
             prevIndex[enemyIndex] = index[enemyIndex];
@@ -406,8 +402,8 @@ public:
         }
         if (states[enemyIndex] == ANDANDO) { // Si seguimos moviéndonos
 			//cout << "directions: " << directions[enemyIndex].x << " " << directions[enemyIndex].y << " " << directions[enemyIndex].z << endl;
-            positions[enemyIndex].x = roundf((positions[enemyIndex].x + directions[enemyIndex].x)/* * deltaTime */ * 100) / 100;
-            positions[enemyIndex].z = roundf((positions[enemyIndex].z + directions[enemyIndex].z)/* * deltaTime */ * 100) / 100;
+            positions[enemyIndex].x = roundf((positions[enemyIndex].x + directions[enemyIndex].x * deltaTime*enemySpeed)/* * deltaTime */ * 100) / 100;
+            positions[enemyIndex].z = roundf((positions[enemyIndex].z + directions[enemyIndex].z * deltaTime*enemySpeed)/* * deltaTime */ * 100) / 100;
             //cout << "positions = " << positions[enemyIndex].x << ", " << positions[enemyIndex].z << endl;
         }
         
