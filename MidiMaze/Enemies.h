@@ -32,6 +32,10 @@ enum Estados{
 	Blanco: f5f0f4
 */
 
+enum cadencia { CAD_RAPIDA, CAD_LENTA }; // Rapida = 1s, lenta = 3s
+int reloadTime[] = { 1,3 }; // Delays para representar la cadencia de disparo. Cuanto más delay, menos cadencia
+
+
 const int num_vidas = 3;
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 float angulo_vision = 45.0f; // 90 grados en total
@@ -50,6 +54,8 @@ public:
     vector<float> goalRotation; // Hasta qué ángulo se quiere rotar
     vector<float> prevGoalRotation; // Para no perder el ángulo al girar
     vector<Estados> prevState; // Estado anterior al apuntar
+    vector<unsigned int> currentDelays;
+    vector<cadencia> cadencias; // Cadencias de los enemigos
     vector<bool> viendo; // Si está viendo al jugador o no
     vector<Estados> states; // Estado del enemigo i: {ANDANDO, GIRANDO, PARADO}
     vector<glm::vec2> prevIndex;
@@ -74,9 +80,6 @@ public:
     vector<glm::vec3> returnPositions() {
         return positions;
     }
-
-
-
 
     // constructor, expects a filepath to a 3D model.
     Enemy(float scale, int numEnemies, vector<vector<bool>> laberinto, float dim) : numEnemies(numEnemies), map(laberinto), dim(dim), scale(scale) {
@@ -132,6 +135,8 @@ public:
                         vidas.push_back(num_vidas); // Vidas de los enemigos
                         states.push_back(ANDANDO);   //Estado inicial
                         prevState.push_back(ANDANDO); // Valor por defecto~~
+                        currentDelays.push_back(0); // Delays de los disparos
+                        cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia rápida a todos
                         viendo.push_back(false);   
                         prevGoalRotation.push_back(0.0f); 
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
@@ -426,6 +431,14 @@ public:
 		
 	}
 
+    void disparaEnemigo(int enemyIndex, float deltaTime) {
+        if (currentDelays[enemyIndex] == 0) {
+            cout << enemyIndex << "piu!" << endl;
+            currentDelays[enemyIndex] = static_cast<unsigned int>(reloadTime[cadencias[enemyIndex]] / deltaTime);
+            cout << currentDelays[enemyIndex] << endl;
+        }
+    }
+
     int cont = 0;
     // Gestionar el movimiento cuando el enemigo está girando
     void gestionarApuntando(int enemyIndex, Shader& shader, glm::vec3 playerPosition, float deltaTime) {
@@ -448,6 +461,10 @@ public:
 		
         goalRotation[enemyIndex] = deg;
         actualizarRotacion(enemyIndex, deltaTime); // Rotar lo que sea necesario
+        if (abs(currentRotation[enemyIndex] - goalRotation[enemyIndex]) < rotationSpeed * deltaTime) { 
+            //Si forma un ángulo lo suficientemente pequeño, es que ya le está apuntando
+            disparaEnemigo(enemyIndex, deltaTime); 
+        }
         pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
 
     }
@@ -468,7 +485,6 @@ public:
                 prevGoalRotation[enemyIndex] = goalRotation[enemyIndex];
                 states[enemyIndex] = APUNTANDO;
             }
-            //cout << "TE VEO" << endl;
         }
         else { // No le está viendo
 			if (states[enemyIndex] == APUNTANDO) { // Si antes le estaba apuntando, hay que recuperar el estado
@@ -480,10 +496,13 @@ public:
                     updateGoalRotation(enemyIndex);
                 }
                 states[enemyIndex] = GIRANDO;
-				//states[enemyIndex] = prevState[enemyIndex]; // Recuperamos el estado
 			}		
         }
 
+    }
+
+    void actualizarDelay(int enemyIndex) {
+        if (currentDelays[enemyIndex] > 0) currentDelays[enemyIndex]--;
     }
 	
     void DrawEnemies(Shader& shader, glm::vec3 playerPosition, float deltaTime) {
@@ -491,6 +510,7 @@ public:
         for (int i = 0; i < numEnemies; i++) {
             if (vidas[i] > 0) {
                 actualizarViendo(i, playerPosition); // Actualizar si el enemigo i me está viendo o no
+                actualizarDelay(i); // Actualizamos el contador del enemigo
                 //cout << "Enemigo " << i << ": " << states[i] << endl;
                 switch (states[i]) {
                 case PARADO: {gestionarParado(i, shader); break;}

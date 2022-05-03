@@ -52,9 +52,7 @@ float lastFrame = 0.0f; // Time of last frame
 float lastFrameFPS = 0.0f;
 int countFrames = 0; // Para saber los frames que ha habido en 1s
 
-int reloadTime[] = { 1,1 }; // Delays para representar la cadencia de disparo. Cuanto más delay, menos cadencia
 unsigned int currentDelay = 0; // Delay inicializado a 0. Cuando se dispare, se pondrá un contador u otro dependiendo de la cadencia
-enum cadencia { CAD_RAPIDA, CAD_LENTA}; // Rapida = 1s, lenta = 3s
 
 Map temp;
 
@@ -292,11 +290,11 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (versionModerna) {
         if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-            cout << currentDelay<<" "<<deltaTime<<" "<< reloadTime[CAD_LENTA] << endl;
+            cout << currentDelay<<" "<<deltaTime<<" "<< reloadTime[CAD_RAPIDA] << endl;
             if (currentDelay == 0) { // Puedo disparar
                 newBullet = true;
                 SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
-                currentDelay = static_cast<unsigned int>(reloadTime[CAD_LENTA] / deltaTime);
+                currentDelay = static_cast<unsigned int>(reloadTime[CAD_RAPIDA] / deltaTime);
             }
             //cout << camera.Position[0] << "," << camera.Position[1] << "," << camera.Position[2] << endl;
             //cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;
