@@ -37,7 +37,7 @@ public:
     }
 
     void DrawBullets(Shader& shader, Enemy& enemies, Map mapa, float deltaTime) {
-        for (unsigned int i = 0; i < numBullets; i++) {
+        for (int i = 0; i < numBullets; i++) {
             if (!collided[i]) {
                 collided[i] = mapa.checkCollisionBullets(positions[i], positions[i] + directions[i] * bulletSpeed*deltaTime,radious);
                 if (!collided[i]) {

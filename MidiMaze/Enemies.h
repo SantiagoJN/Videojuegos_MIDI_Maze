@@ -34,6 +34,7 @@ enum Estados{
 
 const int num_vidas = 3;
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
+float angulo_vision = 45.0f; // 90 grados en total
 
 class Enemy
 {
@@ -47,6 +48,9 @@ public:
     vector<glm::vec3> directions;
     vector<float> currentRotation; // Angulo actual de rotacion
     vector<float> goalRotation; // Hasta qué ángulo se quiere rotar
+    vector<float> prevGoalRotation; // Para no perder el ángulo al girar
+    vector<Estados> prevState; // Estado anterior al apuntar
+    vector<bool> viendo; // Si está viendo al jugador o no
     vector<Estados> states; // Estado del enemigo i: {ANDANDO, GIRANDO, PARADO}
     vector<glm::vec2> prevIndex;
     vector<glm::vec2> index;
@@ -127,6 +131,9 @@ public:
                         directions.push_back(dir);
                         vidas.push_back(num_vidas); // Vidas de los enemigos
                         states.push_back(ANDANDO);   //Estado inicial
+                        prevState.push_back(ANDANDO); // Valor por defecto~~
+                        viendo.push_back(false);   
+                        prevGoalRotation.push_back(0.0f); 
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
                         puntuaciones.push_back(0);
                         hit_timeout.push_back(0);
@@ -319,7 +326,7 @@ public:
             // Si la rotación actual es cercana a 360º, se pone a 0
             if ( andar && states[enemyIndex] == GIRANDO) {
                 //cout << prevIndex[enemyIndex].x << " " << prevIndex[enemyIndex].y << "false" << endl;
-                map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
+                map[static_cast<unsigned int>(prevIndex[enemyIndex].x)][static_cast<unsigned int>(prevIndex[enemyIndex].y)] = false;
                 states[enemyIndex] = ANDANDO;
             }
 		}
@@ -329,7 +336,7 @@ public:
             if (currentRotation[enemyIndex] < 0.0f) currentRotation[enemyIndex] += 360.0f;
             if (currentRotation[enemyIndex] <= goalRotation[enemyIndex] && states[enemyIndex] == GIRANDO) {
                 //cout << prevIndex[enemyIndex].x << " " << prevIndex[enemyIndex].y << "false" << endl;
-                map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
+                map[static_cast<unsigned int>(prevIndex[enemyIndex].x)][static_cast<unsigned int>(prevIndex[enemyIndex].y)] = false;
                 states[enemyIndex] = ANDANDO;
             }
             //cout << "next rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
@@ -391,12 +398,13 @@ public:
             prevIndex[enemyIndex] = index[enemyIndex];
             index[enemyIndex] = nextIndex(static_cast<int>(index[enemyIndex].x), static_cast<int>(index[enemyIndex].y), directions[enemyIndex]);
             if (prevDir != directions[enemyIndex]) {
-                cout << "Cambiando dir" << prevDir.x<< " " << prevDir.z << " --> " << directions[enemyIndex].x << " " << directions[enemyIndex].z << endl;
+                //cout << "Cambiando dir" << prevDir.x<< " " << prevDir.z << " --> " << directions[enemyIndex].x << " " << directions[enemyIndex].z << endl;
                 updateGoalRotation(enemyIndex);
                 states[enemyIndex] = GIRANDO;
+                cout << states[enemyIndex] << endl;
             }
             else {
-                map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
+                map[static_cast<unsigned int>(prevIndex[enemyIndex].x)][static_cast<unsigned int>(prevIndex[enemyIndex].y)] = false;
             }
             destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
         }
@@ -430,12 +438,13 @@ public:
         }
 		if (deg < 0.0) deg = 360.0f + deg;
         
+        /*
         cont++;
         if (cont == 200) {
 			cout << "Jugador: " << playerPosition.x << ", " << playerPosition.z << 
                 ". Enemigo: " << positions[enemyIndex].x << ", " << positions[enemyIndex].z << ". Angulo: " << deg << endl;
             cont = 0;
-        }
+        }*/
 		
         goalRotation[enemyIndex] = deg;
         actualizarRotacion(enemyIndex, deltaTime); // Rotar lo que sea necesario
@@ -443,11 +452,46 @@ public:
 
     }
 	
+    void actualizarViendo(int enemyIndex, glm::vec3 playerPosition) {
+        // Sacamos el ángulo que forman
+        glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex];
+        float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
+        if (playerPosition.z < positions[enemyIndex].z) deg = 180.0f + deg;
+        if (deg < 0.0) deg = 360.0f + deg;
+		
+		float diferencia = abs(deg - currentRotation[enemyIndex]);
+        //cout << "diferencia: " << diferencia << "; deg: " << deg << ", curr: " << currentRotation[enemyIndex] << endl;
+        if (diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) { // Le está viendo
+            if (states[enemyIndex] != APUNTANDO) {
+                //cout << "Guardando... Estado actual: " << states[enemyIndex] << ", rotación actual: " << goalRotation[enemyIndex] << endl;
+				prevState[enemyIndex] = states[enemyIndex];
+                prevGoalRotation[enemyIndex] = goalRotation[enemyIndex];
+                states[enemyIndex] = APUNTANDO;
+            }
+            //cout << "TE VEO" << endl;
+        }
+        else { // No le está viendo
+			if (states[enemyIndex] == APUNTANDO) { // Si antes le estaba apuntando, hay que recuperar el estado
+                if (prevState[enemyIndex] == GIRANDO) { // Si antes estaba girando, recuperamos el giro
+                    //updateGoalRotation(enemyIndex);
+                    goalRotation[enemyIndex] = prevGoalRotation[enemyIndex];
+                }
+                else if (prevState[enemyIndex] == ANDANDO) { // Si antes estaba andando, tendrá que corregir el giro
+                    updateGoalRotation(enemyIndex);
+                }
+                states[enemyIndex] = GIRANDO;
+				//states[enemyIndex] = prevState[enemyIndex]; // Recuperamos el estado
+			}		
+        }
+
+    }
+	
     void DrawEnemies(Shader& shader, glm::vec3 playerPosition, float deltaTime) {
         hit_time = static_cast<int>(0.1 / deltaTime);
         for (int i = 0; i < numEnemies; i++) {
             if (vidas[i] > 0) {
-				//cout << "Enemigo " << i << ": " << states[i] << endl;
+                actualizarViendo(i, playerPosition); // Actualizar si el enemigo i me está viendo o no
+                //cout << "Enemigo " << i << ": " << states[i] << endl;
                 switch (states[i]) {
                 case PARADO: {gestionarParado(i, shader); break;}
                 case ANDANDO: {gestionarAndando(i, shader, deltaTime); break;}

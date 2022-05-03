@@ -8,7 +8,7 @@ public:
     // model data 
     vector<Wall> map;
     Wall suelo;
-    int size;
+    float size;
     float dim = 1.5;
     vector<vector<bool>> laberinto;
 
