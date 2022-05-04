@@ -39,7 +39,7 @@ public:
     bool checkCollisionWithPlayer(int bulletIndex, glm::vec3 playerPosition) {
 		//Simplemente se comprueba si está lo suficientemente cerca del jugador
 		float distance = glm::distance(positions[bulletIndex], playerPosition);
-		if (distance < radious) {
+		if (distance < 0.2f) {
 			return true;
         }
         else {

@@ -121,7 +121,7 @@ int main()
     Bullet myBullets("resources/objects/bullets/yellow/yellow.obj", 0.1);
 	vector<EnemBullet> enemyBullets;
 
-    Map pared("resources/maps/map1.txt", ourShader);
+    Map pared("resources/maps/originalMap.txt", ourShader);
 
     Enemy myEnemies(0.5, 10, pared.getLab(), pared, pared.getDim());
     // =====================================================================================================================
