@@ -72,6 +72,8 @@ private:
 
     float radious;
 
+    Map mapa;
+
     vector<int> vidas;
     vector<int> puntuaciones;
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
@@ -91,7 +93,7 @@ public:
     }
 
     // constructor, expects a filepath to a 3D model.
-    Enemy(float scale, int numEnemies, vector<vector<bool>> laberinto, float dim) : numEnemies(numEnemies), map(laberinto), dim(dim), scale(scale) {
+    Enemy(float scale, int numEnemies, vector<vector<bool>> laberinto, Map mapa, float dim) : mapa(mapa), numEnemies(numEnemies), map(laberinto), dim(dim), scale(scale) {
         // Comprobamos que el n�mero de enemigos es correcto
         int numColors = sizeof(colors) / sizeof(colors[0]);
         assert(numEnemies <= numColors);
@@ -442,9 +444,9 @@ public:
 		
 	}
 
-    void disparaEnemigo(int enemyIndex, float deltaTime, glm::vec3 position) {
+    void disparaEnemigo(int enemyIndex, float deltaTime, glm::vec3 playerPosition) {
         if (currentDelays[enemyIndex] == 0) {
-            glm::vec3 dirDisparo = glm::normalize(position - positions[enemyIndex]);
+            glm::vec3 dirDisparo = glm::normalize(playerPosition - positions[enemyIndex]);
 			//glm::vec3 dirDisparo = glm::vec3(cos(currentRotation[enemyIndex]), 0, sin(currentRotation[enemyIndex]));
             cout << currentRotation[enemyIndex] << " -> " << dirDisparo.x << ", " << dirDisparo.z << endl;
             bullets[enemyIndex].newBullet(positions[enemyIndex], dirDisparo);
@@ -492,7 +494,11 @@ public:
 		
 		float diferencia = abs(deg - currentRotation[enemyIndex]);
         //cout << "diferencia: " << diferencia << "; deg: " << deg << ", curr: " << currentRotation[enemyIndex] << endl;
-        if (diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) { // Le está viendo
+        float distance = glm::length(playerPosition - positions[enemyIndex]);
+        bool wallInBetween = mapa.wallBetween(positions[enemyIndex], playerPosition);
+        if ((diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) && !wallInBetween) { // Le está viendo
+			// Si le está viendo, calculamos si hay alguna pared en medio
+			
             if (states[enemyIndex] != APUNTANDO) {
                 //cout << "Guardando... Estado actual: " << states[enemyIndex] << ", rotación actual: " << goalRotation[enemyIndex] << endl;
 				prevState[enemyIndex] = states[enemyIndex];

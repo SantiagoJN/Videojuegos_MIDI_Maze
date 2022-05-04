@@ -103,6 +103,19 @@ public:
     float getDim() {
         return dim;
     }
+
+
+    bool wallBetween(glm::vec3 enemyPos, glm::vec3 playerPos) {
+        bool intersects = false;
+        for (unsigned int i = 0; i < map.size(); i++) {
+            intersects = map[i].intersect(enemyPos.x, enemyPos.z, playerPos.x, playerPos.z, true, 0.0);
+            if (intersects) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     
     bool checkIntersections(glm::vec3 camera, glm::vec3 newCamera) {
         bool intersects = false;
