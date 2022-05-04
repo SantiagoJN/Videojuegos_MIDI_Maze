@@ -54,6 +54,7 @@ float lastFrameFPS = 0.0f;
 int countFrames = 0; // Para saber los frames que ha habido en 1s
 
 unsigned int currentDelay = 0; // Delay inicializado a 0. Cuando se dispare, se pondrá un contador u otro dependiendo de la cadencia
+int vidas = 3;
 
 Map temp;
 
@@ -178,8 +179,12 @@ int main()
         //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
         myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime);
         
-        myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime);
-
+        int balasRecibidas = 0;
+        myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas);
+        if (balasRecibidas > 0) {
+			vidas -= balasRecibidas;
+			cout << "Vidas: " << vidas << endl;
+        }
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

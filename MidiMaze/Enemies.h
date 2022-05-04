@@ -525,11 +525,12 @@ public:
         if (currentDelays[enemyIndex] > 0) currentDelays[enemyIndex]--;
     }
 	
-    void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime) {
+    void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime, int& balasRecibidas) {
         hit_time = static_cast<int>(0.1 / deltaTime);
         int balasAcertadas = 0;
+        int balasEnemigo = 0;
         for (int i = 0; i < numEnemies; i++) {
-            balasAcertadas += bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition);
+            balasEnemigo = bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition);
             if (vidas[i] > 0) {
                 actualizarViendo(i, playerPosition); // Actualizar si el enemigo i me está viendo o no
                 actualizarDelay(i); // Actualizamos el contador del enemigo
@@ -543,9 +544,14 @@ public:
                 }
                 
             }
+            if (balasEnemigo > 0) {
+                puntuaciones[i]++;
+                balasAcertadas += balasEnemigo;
+            }
         }
         
         if (balasAcertadas > 0) SoundEngine->play2D("resources/effects/hitmarker.mp3", false);
+        balasRecibidas = balasAcertadas;
     };
 
 };
