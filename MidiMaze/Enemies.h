@@ -40,6 +40,7 @@ enum Estados{
 enum cadencia { CAD_RAPIDA, CAD_LENTA }; // Rapida = 1s, lenta = 3s
 int reloadTime[] = { 1,3 }; // Delays para representar la cadencia de disparo. Cuanto más delay, menos cadencia
 
+enum nivelesDificultad { VERY_DUMB, PLAIN_DUMB, NOT_SO_DUMB};
 
 const int num_vidas = 3;
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
@@ -66,6 +67,7 @@ private:
     vector<EnemBullet> bullets; // Modelos para las balas de los enemigos
     vector<bool> viendo; // Si está viendo al jugador o no
     vector<Estados> states; // Estado del enemigo i: {ANDANDO, GIRANDO, PARADO}
+    vector<nivelesDificultad> dificultades; // Dificultad de cada enemigo
     vector<glm::vec2> prevIndex;
     vector<glm::vec2> index;
     vector<glm::vec3> destiny;
@@ -149,6 +151,7 @@ public:
                         prevState.push_back(ANDANDO); // Valor por defecto~~
                         currentDelays.push_back(0); // Delays de los disparos
                         cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia rápida a todos
+                        dificultades.push_back(VERY_DUMB); // Dificultad del enemigo
                         bullets.push_back(EnemBullet("resources/objects/bullets/" + bulletColors[enemy] + "/" + bulletColors[enemy] + ".obj", 0.1));
                         viendo.push_back(false);   
                         prevGoalRotation.push_back(0.0f); 
@@ -448,6 +451,18 @@ public:
             glm::vec3 dirDisparo = glm::normalize(playerPosition - positions[enemyIndex]);
 			//glm::vec3 dirDisparo = glm::vec3(cos(currentRotation[enemyIndex]), 0, sin(currentRotation[enemyIndex]));
             //cout << currentRotation[enemyIndex] << " -> " << dirDisparo.x << ", " << dirDisparo.z << endl;
+            // Miramos si hay que desviar el disparo
+            float random = (rand() - (RAND_MAX/2)) / (float)(RAND_MAX*15); // Generamos un número entre {-1, 1}
+            float random2 = (rand() - (RAND_MAX / 2)) / (float)(RAND_MAX*15); // Generamos otro
+            if (dificultades[enemyIndex] == VERY_DUMB) {
+                dirDisparo.x += 2 * random; // Lo movemos bastante
+                dirDisparo.z += 2 * random2;
+            }
+            else if (dificultades[enemyIndex] == PLAIN_DUMB) {
+                dirDisparo.x += random; // Lo movemos un poco menos
+                dirDisparo.z += random2; 
+            }
+			// Si es NOT_SO_DUMB, no se desvía nada
             bullets[enemyIndex].newBullet(positions[enemyIndex], dirDisparo);
             currentDelays[enemyIndex] = static_cast<unsigned int>(reloadTime[cadencias[enemyIndex]] / deltaTime);
             SoundEngine->play2D("resources/effects/disparo.mp3", false);			
