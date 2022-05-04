@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <Bullets.h>
+#include <EnemyBullets.h>
 #include <map.h>
 #include <wall.h>
 #include <Enemies.h>
@@ -117,6 +118,7 @@ int main()
 
 
     Bullet myBullets("resources/objects/bullets/yellow/yellow.obj", 0.1);
+	vector<EnemBullet> enemyBullets;
 
     Map pared("resources/maps/map1.txt", ourShader);
 
@@ -176,7 +178,7 @@ int main()
         //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
         myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime);
         
-        myEnemies.DrawEnemies(ourShader, camera.Position, deltaTime);
+        myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime);
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

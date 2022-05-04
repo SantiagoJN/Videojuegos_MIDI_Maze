@@ -157,6 +157,7 @@
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Enemies.h" />
+    <ClInclude Include="EnemyBullets.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="mesh.h" />

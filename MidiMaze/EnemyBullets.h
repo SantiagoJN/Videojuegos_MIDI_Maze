@@ -1,9 +1,8 @@
 #pragma once
 #include <model.h>
-#include <Enemies.h>
 #include <map.h>
 
-class Bullet
+class EnemBullet
 {
 public:
     // model data 
@@ -19,8 +18,12 @@ public:
     vector<bool> collided;
     float scale;
 
+    EnemBullet() {
+        cout << "ok xd" << endl;
+    }
+	
     // constructor, expects a filepath to a 3D model.
-    Bullet(string const& path, float scale) : scale(scale) {
+    EnemBullet(string const& path, float scale) : scale(scale) {
         Model a(path);
         bullet = a;
 
@@ -29,7 +32,6 @@ public:
         numBullets = 0;
     };
 
-    Bullet() {}
 
     void newBullet(glm::vec3 position, glm::vec3 direction) {
         numBullets++;
@@ -38,12 +40,12 @@ public:
         collided.push_back(false);
     }
 
-    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa, float deltaTime) {
+    void DrawBullets(Shader& shader, Map mapa, float deltaTime) {
         for (int i = 0; i < numBullets; i++) {
             if (!collided[i]) {
                 collided[i] = mapa.checkCollisionBullets(positions[i], positions[i] + directions[i] * bulletSpeed*deltaTime,radious);
                 if (!collided[i]) {
-                    collided[i] = enemies.checkCollision(positions[i], radious);
+                    //collided[i] = enemies.checkCollision(positions[i], radious);
                     if (!collided[i]) {
                         glm::mat4 model = glm::mat4(1.0f);
                         positions[i] = positions[i] + directions[i] * bulletSpeed * deltaTime;

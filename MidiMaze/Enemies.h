@@ -1,7 +1,10 @@
 #pragma once
+#include <EnemyBullets.h>
 #include <model.h>
 #include <stdlib.h>
 #include <time.h>
+#include <map.h>
+#include <iostream>
 
 
 #include <irrKlang/irrKlang.h>
@@ -12,6 +15,8 @@ ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effec
 string basePath = "resources/objects/smileys/";
 string colors[] = {"blue", "orange", "green", "pink", "lightblue", "magenta", "white", 
                    "yellow2", "blue2", "orange2", "green2", "pink2", "lightblue2", "magenta2", "white2"};
+string bulletColors[] = { "blue", "orange", "green", "pink", "lightblue", "magenta", "white",
+                   "yellow", "blue", "orange", "green", "pink", "lightblue", "magenta", "white" };
 string yellowColor = "yellow";
 
 enum Estados{
@@ -42,7 +47,7 @@ float angulo_vision = 45.0f; // 90 grados en total
 
 class Enemy
 {
-public:
+private:
     // model data
     vector<Model> enemyArray;
     Model yellowModel;
@@ -56,6 +61,9 @@ public:
     vector<Estados> prevState; // Estado anterior al apuntar
     vector<unsigned int> currentDelays;
     vector<cadencia> cadencias; // Cadencias de los enemigos
+    //EnemBullet bala("resources/objects/bullets/yellow/yellow.obj", 0.1);
+    //EnemBullet myBullets("resources/objects/bullets/yellow/yellow.obj", 0.1);
+    vector<EnemBullet> bullets; // Modelos para las balas de los enemigos
     vector<bool> viendo; // Si está viendo al jugador o no
     vector<Estados> states; // Estado del enemigo i: {ANDANDO, GIRANDO, PARADO}
     vector<glm::vec2> prevIndex;
@@ -75,6 +83,7 @@ public:
     float scale;
     float dim;
 
+public:
     
 
     vector<glm::vec3> returnPositions() {
@@ -109,7 +118,8 @@ public:
         // Colocamos los enemigos en el mapa de forma random
         float start = map.size() * dim / 2;
         vector<vector<bool>> spawn(map);
-        for (int i = 0; i < numEnemies; i++) {
+//        bullets.reserve(numEnemies);
+        for (int enemy = 0; enemy < numEnemies; enemy++) {
             bool end = false;
             int random = rand() % (spawn.size()-2) +1;
             float x, z;
@@ -137,6 +147,7 @@ public:
                         prevState.push_back(ANDANDO); // Valor por defecto~~
                         currentDelays.push_back(0); // Delays de los disparos
                         cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia rápida a todos
+                        bullets.push_back(EnemBullet("resources/objects/bullets/" + bulletColors[enemy] + "/" + bulletColors[enemy] + ".obj", 0.1));
                         viendo.push_back(false);   
                         prevGoalRotation.push_back(0.0f); 
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
@@ -431,11 +442,14 @@ public:
 		
 	}
 
-    void disparaEnemigo(int enemyIndex, float deltaTime) {
+    void disparaEnemigo(int enemyIndex, float deltaTime, glm::vec3 position) {
         if (currentDelays[enemyIndex] == 0) {
-            cout << enemyIndex << "piu!" << endl;
+            glm::vec3 dirDisparo = glm::normalize(position - positions[enemyIndex]);
+			//glm::vec3 dirDisparo = glm::vec3(cos(currentRotation[enemyIndex]), 0, sin(currentRotation[enemyIndex]));
+            cout << currentRotation[enemyIndex] << " -> " << dirDisparo.x << ", " << dirDisparo.z << endl;
+            bullets[enemyIndex].newBullet(positions[enemyIndex], dirDisparo);
             currentDelays[enemyIndex] = static_cast<unsigned int>(reloadTime[cadencias[enemyIndex]] / deltaTime);
-            cout << currentDelays[enemyIndex] << endl;
+            //cout << currentDelays[enemyIndex] << endl;
         }
     }
 
@@ -463,7 +477,7 @@ public:
         actualizarRotacion(enemyIndex, deltaTime); // Rotar lo que sea necesario
         if (abs(currentRotation[enemyIndex] - goalRotation[enemyIndex]) < rotationSpeed * deltaTime) { 
             //Si forma un ángulo lo suficientemente pequeño, es que ya le está apuntando
-            disparaEnemigo(enemyIndex, deltaTime); 
+            disparaEnemigo(enemyIndex, deltaTime, playerPosition); 
         }
         pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
 
@@ -505,9 +519,10 @@ public:
         if (currentDelays[enemyIndex] > 0) currentDelays[enemyIndex]--;
     }
 	
-    void DrawEnemies(Shader& shader, glm::vec3 playerPosition, float deltaTime) {
+    void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime) {
         hit_time = static_cast<int>(0.1 / deltaTime);
         for (int i = 0; i < numEnemies; i++) {
+            bullets[i].DrawBullets(shader, mapa, deltaTime);
             if (vidas[i] > 0) {
                 actualizarViendo(i, playerPosition); // Actualizar si el enemigo i me está viendo o no
                 actualizarDelay(i); // Actualizamos el contador del enemigo
