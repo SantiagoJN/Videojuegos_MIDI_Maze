@@ -419,7 +419,6 @@ public:
                 //cout << "Cambiando dir" << prevDir.x<< " " << prevDir.z << " --> " << directions[enemyIndex].x << " " << directions[enemyIndex].z << endl;
                 updateGoalRotation(enemyIndex);
                 states[enemyIndex] = GIRANDO;
-                cout << states[enemyIndex] << endl;
             }
             else {
                 map[static_cast<unsigned int>(prevIndex[enemyIndex].x)][static_cast<unsigned int>(prevIndex[enemyIndex].y)] = false;
@@ -448,9 +447,10 @@ public:
         if (currentDelays[enemyIndex] == 0) {
             glm::vec3 dirDisparo = glm::normalize(playerPosition - positions[enemyIndex]);
 			//glm::vec3 dirDisparo = glm::vec3(cos(currentRotation[enemyIndex]), 0, sin(currentRotation[enemyIndex]));
-            cout << currentRotation[enemyIndex] << " -> " << dirDisparo.x << ", " << dirDisparo.z << endl;
+            //cout << currentRotation[enemyIndex] << " -> " << dirDisparo.x << ", " << dirDisparo.z << endl;
             bullets[enemyIndex].newBullet(positions[enemyIndex], dirDisparo);
             currentDelays[enemyIndex] = static_cast<unsigned int>(reloadTime[cadencias[enemyIndex]] / deltaTime);
+            SoundEngine->play2D("resources/effects/disparo.mp3", false);			
             //cout << currentDelays[enemyIndex] << endl;
         }
     }
@@ -527,8 +527,9 @@ public:
 	
     void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime) {
         hit_time = static_cast<int>(0.1 / deltaTime);
+        int balasAcertadas = 0;
         for (int i = 0; i < numEnemies; i++) {
-            bullets[i].DrawBullets(shader, mapa, deltaTime);
+            balasAcertadas += bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition);
             if (vidas[i] > 0) {
                 actualizarViendo(i, playerPosition); // Actualizar si el enemigo i me está viendo o no
                 actualizarDelay(i); // Actualizamos el contador del enemigo
@@ -543,6 +544,8 @@ public:
                 
             }
         }
+        
+        if (balasAcertadas > 0) SoundEngine->play2D("resources/effects/hitmarker.mp3", false);
     };
 
 };
