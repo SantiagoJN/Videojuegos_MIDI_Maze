@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
+#include <string.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,6 +12,8 @@
 #include <map.h>
 #include <wall.h>
 #include <Enemies.h>
+#include <Hud.h>
+#include <sprite_renderer.h>
 
 #include <Camera.h>
 #include <model.h>
@@ -20,8 +23,9 @@
 #include <assimp/scene.h>
 
 #include <glut/glut.h>
-
+#include <DevIL/il.h>
 #include <irrKlang/irrKlang.h>
+
 using namespace irrklang;
 
 bool newBullet = false;
@@ -61,8 +65,14 @@ Map temp;
 // ###Constantes varias###
 const bool versionModerna = true;
 
+SpriteRenderer* Renderer;
+
+
+
+
 int main()
 {
+    
     // =====================================================================================================================
     // =================================== INITIALIZATION AND CONFIGURATION OF LIBRARIES ===================================
     // =====================================================================================================================
@@ -114,6 +124,30 @@ int main()
     Shader ourShader("shaders/1.model_loading.vs", "shaders/1.model_loading.fs");
 
 
+    Shader spriteShader("shaders/sprite.vs", "shaders/sprite.vs");
+
+    glm::mat4 projectionSprite = glm::ortho(0.0f, static_cast<float>(SCR_WIDTH),
+        static_cast<float>(SCR_HEIGHT), 0.0f, -1.0f, 1.0f);
+
+    spriteShader.use();
+    spriteShader.setMat4("projection", projectionSprite);
+
+   
+    Renderer = new SpriteRenderer();
+    Renderer->setShader(&spriteShader);
+
+    int texSprite = TextureFromFile("awesomeface.png", "resources/textures");
+
+    glLoadIdentity();
+    gluPerspective(60, (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 1.0, 100.0);
+
+    glBegin(GL_QUADS);
+    glVertex2d(400.0, 100.0);
+    glVertex2d(400.0, 500.0);
+    glVertex2d(700.0, 500.0);
+    glVertex2d(700.0, 100.0);
+    glEnd();
+
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el rat�n
     glfwSetCursorPosCallback(window, mouse_callback);
 
@@ -123,7 +157,12 @@ int main()
 
     Map pared("resources/maps/originalMap.txt", ourShader);
 
+<<<<<<< Updated upstream
     Enemy myEnemies(0.5, 10, pared.getLab(), pared, pared.getDim());
+=======
+    Enemy myEnemies(0.5, 1, pared.getLab(), pared.getDim());
+
+>>>>>>> Stashed changes
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
@@ -159,9 +198,19 @@ int main()
         //drawHollowCircle(SCR_WIDTH / 2, SCR_HEIGHT / 2, 100, 360);
 
         // activate shader
+<<<<<<< Updated upstream
         ourShader.use();		
+=======
+        ourShader.use();
+
+        
+>>>>>>> Stashed changes
 		
         pared.Draw(ourShader);
+
+
+        Renderer->DrawSprite(texSprite, glm::vec2(200.0f, 200.0f), glm::vec2(300.0f, 400.0f), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+
 
         // create transformations
         glm::mat4 projection = glm::mat4(1.0f);
@@ -176,15 +225,29 @@ int main()
             myBullets.newBullet(camera.Position, camera.Front);
         }
 
+
+        
+
         //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
         myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime);
         
+<<<<<<< Updated upstream
         int balasRecibidas = 0;
         myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas);
         if (balasRecibidas > 0) {
 			vidas -= balasRecibidas;
 			cout << "Vidas: " << vidas << endl;
         }
+=======
+        myEnemies.DrawEnemies(ourShader, camera.Position);
+
+        // HERE we need to show the HUD
+        glBegin(GL_TRIANGLES);                      // Drawing Using Triangles
+        glVertex3f(0.0f, 1.0f, 0.0f);              // Top
+        glVertex3f(-1.0f, -1.0f, 0.0f);              // Bottom Left
+        glVertex3f(1.0f, -1.0f, 0.0f);              // Bottom Right
+        glEnd();                            // Finished Drawing The Triangle
+>>>>>>> Stashed changes
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

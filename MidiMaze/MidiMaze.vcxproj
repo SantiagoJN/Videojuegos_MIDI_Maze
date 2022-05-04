@@ -78,7 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\Users\HOME\Documents\midiMazeArch\lib;C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Universidad\Videojuegos\Opengl\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Universidad\Videojuegos\Opengl\include;</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -118,7 +119,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\HOME\Documents\midiMazeArch\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\HOME\Documents\midiMazeArch\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Universidad\Videojuegos\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Universidad\Videojuegos\Videojuegos_MIDI_Maze\MidiMaze;C:\Universidad\Videojuegos\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\glad\src\glad.c" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="sprite_renderer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
@@ -157,7 +160,11 @@
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Enemies.h" />
+<<<<<<< Updated upstream
     <ClInclude Include="EnemyBullets.h" />
+=======
+    <ClInclude Include="sprite_renderer.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="wall.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="mesh.h" />
