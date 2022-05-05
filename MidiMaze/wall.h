@@ -4,6 +4,7 @@ class Wall
 public:
     // model data 
     float vertices[20];
+    glm::vec2 normal;
     unsigned int indices[6];
     unsigned int VBO, VAO, EBO;
     unsigned int texture1;
@@ -47,6 +48,9 @@ public:
         indices[5] = 3;
 
         setUpWall(ourShader);
+
+        if (v1.x != v2.x) normal = glm::vec2(0, 1);
+        else normal = glm::vec2(1, 0);
     };
 
 
@@ -119,26 +123,76 @@ public:
         return collisionX && collisionZ;
     }
 
+    
+    bool between(glm::vec2 A, glm::vec2 B, int i) {
 
-    bool intersectEnemy(float x1, float z1, float x2, float z2, bool isBullet, float radius) {
-        // collision x-axis?
-        float normalize = 0.5f;
-        float normalize2 = 0.0f;
-        if (isBullet) {
-            normalize = radius;
+        glm::vec2 dir = glm::normalize(B-A);
+        float denom = dir.x * normal.x + dir.y * normal.y;
+        if (denom < 1e-10 && denom >= 0.0) {
+            //If the dot product is very small, the vectors are almost parallel, 
+            // so it doesn't intersect
+            return false;
         }
-        // collision z-axis?
-        bool collisionX = ((x2 >= vertices[0] - normalize && x1 <= vertices[0] + normalize) || (x1 >= vertices[0] - normalize && x2 <= vertices[0] + normalize)) || ((x2 >= vertices[5] - normalize && x1 <= vertices[5] + normalize) || (x1 >= vertices[5] - normalize && x2 <= vertices[5] + normalize));
-        // collision z-axis?
-        bool collisionZ = ((z2 >= vertices[2] - normalize && z1 <= vertices[2] + normalize) || (z1 >= vertices[2] - normalize && z2 <= vertices[2] + normalize)) || ((z2 >= vertices[7] - normalize && z1 <= vertices[7] + normalize) || (z1 >= vertices[7] - normalize && z2 <= vertices[7] + normalize));
+        glm::vec2 n = glm::vec2(vertices[0], vertices[2]) - A;
+        float num = n.x * normal.x + n.y * normal.y;
+        float t = num / denom;
+        float distance = t;
+        //cout << "distMuroA " << t << endl;
+        if (t > 0.0f) { //Ray intersects with plane, let's see if it intersects with square
+            //cout << "distMuro " << t << endl;
+            glm::vec2 intersectPoint = A + distance * dir;
+            float x = intersectPoint.x;
+            float y = intersectPoint.y;
+            bool inside = ((x >= vertices[0] && x <= vertices[5]) || (x <= vertices[0] && x >= vertices[5])) && ((y >= vertices[2] && y <= vertices[7]) || (y <= vertices[2] && y >= vertices[7]));
+            //cout << "length " << glm::length(A - B) << endl;
+            if (inside) {
+                float l = glm::length(A - B);
+                return l > distance;
+            }
+        }
+        else return false;
+        /*
+        // Line AB represented as a1x + b1y = c1
+        double a1 = B.y - A.y;
+        double b1 = A.x - B.x;
+        double c1 = a1 * (A.x) + b1 * (A.y);
 
-        if (collisionX && collisionZ) {
-            //cout << vertices[0] << " " << vertices[5] << " " << vertices[2] << " " << vertices[7] << endl;
-            //cout << x1 << " " << x2 << " " << z1 << " " << z2 << endl;
-            //cout << collisionX1 << collisionX2 << collisionX3 << collisionX4 << endl;
+        // Line CD represented as a2x + b2y = c2
+        double a2 = vertices[7] - vertices[2];
+        double b2 = vertices[0] - vertices[5];
+        double c2 = a2 * (vertices[0]) + b2 * (vertices[2]);
+
+        double determinant = a1 * b2 - a2 * b1;
+
+        if (determinant == 0)
+        {
+            // The lines are parallel. This is simplified
+            // by returning a pair of FLT_MAX
+            return false;
         }
-        // collision only if on all axes
-        return collisionX && collisionZ;
+        else
+        {
+            double x = (b2 * c1 - b1 * c2) / determinant;
+            double y = (a1 * c2 - a2 * c1) / determinant;
+            
+            bool inside = ( (x >= vertices[0] && x <= vertices[5]) || (x <= vertices[0] && x >= vertices[5]) ) && ((y >= vertices[2] && y <= vertices[7]) || (y <= vertices[2] && y >= vertices[7]));
+            if (vertices[0] > -5 && vertices[0] < 5 && vertices[2] > -5 && vertices[2] < 5) {
+                cout << x << "->x1: " << vertices[0] << "->x2: " << vertices[5] << endl;
+                cout << y << "->y1: " << vertices[2] << "->y2: " << vertices[7] << endl;
+                cout << i << endl;
+            }
+            
+            if (inside) {
+                float l = glm::length(A - B);
+                float lMuro = glm::length(A - glm::vec2(x, y));
+                cout << l << " " << lMuro << endl;
+                return l > lMuro;
+            }
+            else return false;
+            
+        }
+        */
+
     }
 
 

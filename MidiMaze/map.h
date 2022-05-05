@@ -108,9 +108,9 @@ public:
     bool wallBetween(glm::vec3 enemyPos, glm::vec3 playerPos) {
         bool intersects = false;
         for (unsigned int i = 0; i < map.size(); i++) {
-            intersects = map[i].intersectEnemy( playerPos.x, playerPos.z, enemyPos.x, enemyPos.z, true, 0.0);
+            intersects = map[i].between( glm::vec2(enemyPos.x, enemyPos.z), glm::vec2(playerPos.x, playerPos.z),i);
             if (intersects) {
-                cout << "Muro " << i << endl;
+                //cout << "Muro " << i << endl;
                 return true;
             }
         }
