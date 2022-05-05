@@ -409,7 +409,7 @@ public:
 
 	
 	// Gestionar el movimiento cuando el enemigo está andando
-    void gestionarAndando(int enemyIndex, Shader& shader, float deltaTime) {
+    void gestionarAndando(int enemyIndex, Shader& shader, float deltaTime, glm::vec3 playerPosition) {
 		//Calculamos las actualizaciones necesarias
         float start = map.size() * dim / 2;
         //if ((positions[enemyIndex].x == destiny[enemyIndex].x) && (positions[enemyIndex].z == destiny[enemyIndex].z)) {
@@ -427,6 +427,7 @@ public:
                 map[static_cast<unsigned int>(prevIndex[enemyIndex].x)][static_cast<unsigned int>(prevIndex[enemyIndex].y)] = false;
             }
             destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
+            //actualizarViendo(enemyIndex, playerPosition, true);
         }
         if (states[enemyIndex] == ANDANDO) { // Si seguimos moviéndonos
 			//cout << "directions: " << directions[enemyIndex].x << " " << directions[enemyIndex].y << " " << directions[enemyIndex].z << endl;
@@ -500,7 +501,7 @@ public:
 
     }
 	
-    void actualizarViendo(int enemyIndex, glm::vec3 playerPosition) {
+    void actualizarViendo(int enemyIndex, glm::vec3 playerPosition, bool quieto) {
         // Sacamos el ángulo que forman
         glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex];
         float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
@@ -514,7 +515,7 @@ public:
         if ((diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) && !wallInBetween) { // Le está viendo
 			// Si le está viendo, calculamos si hay alguna pared en medio
 			
-            if (states[enemyIndex] != APUNTANDO) {
+            if (states[enemyIndex] != APUNTANDO && quieto) {
                 //cout << "Guardando... Estado actual: " << states[enemyIndex] << ", rotación actual: " << goalRotation[enemyIndex] << endl;
 				prevState[enemyIndex] = states[enemyIndex];
                 prevGoalRotation[enemyIndex] = goalRotation[enemyIndex];
@@ -547,12 +548,12 @@ public:
         for (int i = 0; i < numEnemies; i++) {
             balasEnemigo = bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition);
             if (vidas[i] > 0) {
-                actualizarViendo(i, playerPosition); // Actualizar si el enemigo i me está viendo o no
+                actualizarViendo(i, playerPosition, true); // Actualizar si el enemigo i me está viendo o no
                 actualizarDelay(i); // Actualizamos el contador del enemigo
                 //cout << "Enemigo " << i << ": " << states[i] << endl;
                 switch (states[i]) {
                 case PARADO: {gestionarParado(i, shader); break;}
-                case ANDANDO: {gestionarAndando(i, shader, deltaTime); break;}
+                case ANDANDO: {gestionarAndando(i, shader, deltaTime, playerPosition); break;}
                 case GIRANDO: {gestionarGirando(i, shader, deltaTime); break;}
                 case APUNTANDO: {gestionarApuntando(i, shader, playerPosition, deltaTime); break;}
                 default: {cerr << "Error en el estado del enemigo " << i << endl; break;}

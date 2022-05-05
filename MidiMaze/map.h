@@ -108,8 +108,9 @@ public:
     bool wallBetween(glm::vec3 enemyPos, glm::vec3 playerPos) {
         bool intersects = false;
         for (unsigned int i = 0; i < map.size(); i++) {
-            intersects = map[i].intersect(enemyPos.x, enemyPos.z, playerPos.x, playerPos.z, true, 0.0);
+            intersects = map[i].intersectEnemy( playerPos.x, playerPos.z, enemyPos.x, enemyPos.z, true, 0.0);
             if (intersects) {
+                cout << "Muro " << i << endl;
                 return true;
             }
         }
@@ -120,7 +121,7 @@ public:
     bool checkIntersections(glm::vec3 camera, glm::vec3 newCamera) {
         bool intersects = false;
         for (unsigned int i = 0; i < map.size(); i++) {
-            intersects = map[i].intersect(camera.x, camera.z, newCamera.x, newCamera.z,false,0.0f);
+            intersects = map[i].intersect(camera.x, camera.z, newCamera.x, newCamera.z,true,0.1f);
             if (intersects) {
                 return true;
             }

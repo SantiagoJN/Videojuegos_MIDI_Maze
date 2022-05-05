@@ -96,7 +96,6 @@ public:
     
 
 	
-    //TODO JESUS
     bool intersect(float x1, float z1, float x2, float z2,bool isBullet,float radius) {
         // collision x-axis?
         float normalize = 0.5f;
@@ -119,6 +118,29 @@ public:
         // collision only if on all axes
         return collisionX && collisionZ;
     }
+
+
+    bool intersectEnemy(float x1, float z1, float x2, float z2, bool isBullet, float radius) {
+        // collision x-axis?
+        float normalize = 0.5f;
+        float normalize2 = 0.0f;
+        if (isBullet) {
+            normalize = radius;
+        }
+        // collision z-axis?
+        bool collisionX = ((x2 >= vertices[0] - normalize && x1 <= vertices[0] + normalize) || (x1 >= vertices[0] - normalize && x2 <= vertices[0] + normalize)) || ((x2 >= vertices[5] - normalize && x1 <= vertices[5] + normalize) || (x1 >= vertices[5] - normalize && x2 <= vertices[5] + normalize));
+        // collision z-axis?
+        bool collisionZ = ((z2 >= vertices[2] - normalize && z1 <= vertices[2] + normalize) || (z1 >= vertices[2] - normalize && z2 <= vertices[2] + normalize)) || ((z2 >= vertices[7] - normalize && z1 <= vertices[7] + normalize) || (z1 >= vertices[7] - normalize && z2 <= vertices[7] + normalize));
+
+        if (collisionX && collisionZ) {
+            //cout << vertices[0] << " " << vertices[5] << " " << vertices[2] << " " << vertices[7] << endl;
+            //cout << x1 << " " << x2 << " " << z1 << " " << z2 << endl;
+            //cout << collisionX1 << collisionX2 << collisionX3 << collisionX4 << endl;
+        }
+        // collision only if on all axes
+        return collisionX && collisionZ;
+    }
+
 
     void draw(Shader& ourShader) {
         
