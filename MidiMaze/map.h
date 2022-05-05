@@ -21,7 +21,9 @@ public:
 
     void loadWalls(string const& path, Shader& ourShader) {
         ifstream filein(path);
+        int k = 1;
         if (filein.is_open()) {
+            
             string line, lastLine;
             getline(filein, line);
             size = stof(line);
@@ -53,6 +55,7 @@ public:
 
 
             while (getline(filein, line)) {
+                k++;
                 //cout << line << endl;
                 vector<bool> aux;
                 for (int i = 0; i < size; i++) {
@@ -78,7 +81,7 @@ public:
                 laberinto.push_back(aux);
             }
             if (j < size || j>size) {
-                cout << "ERROR: Map dimensions might be wrong.";
+                cout << "ERROR: Map column dimensions might be wrong\n\tColumn number: " << j << "\n\tColumns expected: " << size << endl;
                 exit(0);
             }
 
@@ -95,6 +98,10 @@ public:
         else {
             cerr << "Error abriendo el archivo" << endl;
         }
+        if (k < size || k>size) {
+            cout << "ERROR: Map row dimensions might be wrong.\n\tRow number: "<<k<<"\n\tRows expected: "<<size<<endl;
+            exit(0);
+        }
     }
     vector<vector<bool>> getLab() {
         return laberinto;
@@ -107,8 +114,8 @@ public:
 
     bool wallBetween(glm::vec3 enemyPos, glm::vec3 playerPos) {
         bool intersects = false;
-        for (unsigned int i = 0; i < map.size(); i++) {
-            intersects = map[i].between( glm::vec2(enemyPos.x, enemyPos.z), glm::vec2(playerPos.x, playerPos.z),i);
+        for (unsigned int i = laberinto.size(); i < map.size()-laberinto.size(); i++) {
+            intersects = map[i].between( glm::vec2(enemyPos.x, enemyPos.z), glm::vec2(playerPos.x, playerPos.z));
             if (intersects) {
                 //cout << "Muro " << i << endl;
                 return true;
@@ -121,7 +128,7 @@ public:
     bool checkIntersections(glm::vec3 camera, glm::vec3 newCamera) {
         bool intersects = false;
         for (unsigned int i = 0; i < map.size(); i++) {
-            intersects = map[i].intersect(camera.x, camera.z, newCamera.x, newCamera.z,true,0.1f);
+            intersects = map[i].intersect(camera.x, camera.z, newCamera.x, newCamera.z,true,0.2f);
             if (intersects) {
                 return true;
             }

@@ -124,7 +124,7 @@ public:
     }
 
     
-    bool between(glm::vec2 A, glm::vec2 B, int i) {
+    bool between(glm::vec2 A, glm::vec2 B) {
 
         glm::vec2 dir = glm::normalize(B-A);
         float denom = dir.x * normal.x + dir.y * normal.y;

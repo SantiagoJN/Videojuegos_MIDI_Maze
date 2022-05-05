@@ -64,7 +64,9 @@ private:
     vector<cadencia> cadencias; // Cadencias de los enemigos
     //EnemBullet bala("resources/objects/bullets/yellow/yellow.obj", 0.1);
     //EnemBullet myBullets("resources/objects/bullets/yellow/yellow.obj", 0.1);
+
     vector<EnemBullet> bullets; // Modelos para las balas de los enemigos
+
     vector<bool> viendo; // Si está viendo al jugador o no
     vector<Estados> states; // Estado del enemigo i: {ANDANDO, GIRANDO, PARADO}
     vector<nivelesDificultad> dificultades; // Dificultad de cada enemigo
@@ -323,6 +325,48 @@ public:
     }
 
 
+    bool between(int enemyIndex, glm::vec3 A, glm::vec3 B) {
+        glm::vec3 dir = glm::normalize(B - A);
+        //if (enemyIndex == 0) cout << "call" << endl;
+        for (int i = 0; i < numEnemies; i++) {
+            if (enemyIndex != i) {
+                glm::vec3 og_cent = A - positions[i];
+                double b = 2.0 * dir.x * og_cent.x + 2.0 * dir.y * og_cent.y + 2.0 * dir.z * og_cent.z;
+                double l = glm::length(og_cent);
+                double c = l * l - pow(radious, 2);
+
+                double intersect = b * b - 4 * c;
+
+                double distance = 0;
+                //cout << intersect << endl;
+                if (intersect >= 0) {
+                    double intA = (-b + sqrt(intersect)) / 2.0;
+                    double intB = (-b - sqrt(intersect)) / 2.0;
+
+                    /* if(intA < intB && intA>0.03) distance = intA;
+                     else distance = intB;*/
+                     //cout << intA << " " << intB << endl;
+                    if (intA > 0.03 && intB > 0.03) {          //Podemos devolver A
+                        if (intA < intB) distance = intA;
+                        else distance = intB;
+                    }
+                    else if (intA > 0.03 && intB < 0.03) {
+                        distance = intA;
+                    }
+                    else if (intA < 0.03 && intB>0.03) {
+                        distance = intB;
+                    }
+                    else distance = intB;
+                    //if(enemyIndex==0)cout <<"from"<< enemyIndex <<"to "<< i<< "\t" << distance << "\t\t" << glm::length(B - A) << endl;
+                }
+
+                if (intersect >= 0 && distance > 0 && distance < glm::length(B - A)) return true;
+            }
+        }
+        return false;
+    }
+
+
 
 	// Función para actualizar el valor de la rotación del enemigo enemyIndex
     void actualizarRotacion(int enemyIndex, float deltaTime, glm::vec3 playerPosition) {
@@ -333,7 +377,7 @@ public:
             if (angle < rotationSpeed * deltaTime || angle > 360.0f - rotationSpeed * deltaTime) return;
         }
         float diff = currentRotation[enemyIndex] - goalRotation[enemyIndex];
-		if (diff>180.0f || (-180<diff && diff<0)) {
+		if (diff>220.0f || (-220<diff && diff<0)) {
 			currentRotation[enemyIndex] += rotationSpeed * deltaTime;
             float aux = currentRotation[enemyIndex];
             if (currentRotation[enemyIndex] > 360.0f) currentRotation[enemyIndex] -= 360.0f;
@@ -512,8 +556,8 @@ public:
 		float diferencia = abs(deg - currentRotation[enemyIndex]);
         //cout << "diferencia: " << diferencia << "; deg: " << deg << ", curr: " << currentRotation[enemyIndex] << endl;
         float distance = glm::length(playerPosition - positions[enemyIndex]);
-        bool wallInBetween = mapa.wallBetween(positions[enemyIndex], playerPosition);
-        if ((diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) && !wallInBetween) { // Le está viendo
+        bool somethingBetween = mapa.wallBetween(positions[enemyIndex], playerPosition) || between(enemyIndex, positions[enemyIndex], playerPosition);
+        if ((diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) && !somethingBetween) { // Le está viendo
 			// Si le está viendo, calculamos si hay alguna pared en medio
 			
             if (states[enemyIndex] != APUNTANDO && quieto) {
@@ -547,7 +591,7 @@ public:
         int balasAcertadas = 0;
         int balasEnemigo = 0;
         for (int i = 0; i < numEnemies; i++) {
-            balasEnemigo = bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition);
+            balasEnemigo = bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition, radious, &positions, i);
             if (vidas[i] > 0) {
                 if (dificultades[i] != VERY_DUMB) actualizarViendo(i, playerPosition, true); // Actualizar si el enemigo i me está viendo o no
                 actualizarDelay(i); // Actualizamos el contador del enemigo
