@@ -456,13 +456,13 @@ public:
             // Miramos si hay que desviar el disparo
             float random = (rand() - (RAND_MAX/2)) / (float)(RAND_MAX*15); // Generamos un número entre {-1, 1}
             float random2 = (rand() - (RAND_MAX / 2)) / (float)(RAND_MAX*15); // Generamos otro
-            if (dificultades[enemyIndex] == VERY_DUMB) {
+            /*if (dificultades[enemyIndex] == VERY_DUMB) {
                 dirDisparo.x += 2 * random; // Lo movemos bastante
                 dirDisparo.z += 2 * random2;
             }
-            else if (dificultades[enemyIndex] == PLAIN_DUMB) {
-                dirDisparo.x += random; // Lo movemos un poco menos
-                dirDisparo.z += random2; 
+            else */if (dificultades[enemyIndex] == PLAIN_DUMB) {
+                dirDisparo.x += 2 * random; // Lo movemos un poco menos
+                dirDisparo.z += 2 * random2; 
             }
 			// Si es NOT_SO_DUMB, no se desvía nada
             bullets[enemyIndex].newBullet(positions[enemyIndex], dirDisparo);
@@ -549,7 +549,7 @@ public:
         for (int i = 0; i < numEnemies; i++) {
             balasEnemigo = bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition);
             if (vidas[i] > 0) {
-                actualizarViendo(i, playerPosition, false); // Actualizar si el enemigo i me está viendo o no
+                if (dificultades[i] != VERY_DUMB) actualizarViendo(i, playerPosition, true); // Actualizar si el enemigo i me está viendo o no
                 actualizarDelay(i); // Actualizamos el contador del enemigo
                 //cout << "Enemigo " << i << ": " << states[i] << endl;
                 switch (states[i]) {
