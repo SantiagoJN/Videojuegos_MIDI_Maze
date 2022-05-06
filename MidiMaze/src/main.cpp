@@ -24,6 +24,7 @@
 #include <irrKlang/irrKlang.h>
 using namespace irrklang;
 
+
 bool newBullet = false;
 
 //ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
@@ -32,9 +33,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void drawHollowCircle(float cx, float cy, float r, int num_segments);
 
-void showFPS(int fps);
 
 // Initial settings
 const unsigned int SCR_WIDTH = 800;
@@ -61,6 +60,7 @@ Map temp;
 // ###Constantes varias###
 const bool versionModerna = true;
 
+
 int main()
 {
     // =====================================================================================================================
@@ -72,6 +72,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 
     // If in an Apple environment, declare this thing below
 #ifdef __APPLE__
@@ -123,7 +124,7 @@ int main()
 
     Map pared("resources/maps/originalMap.txt", ourShader);
 
-    Enemy myEnemies(0.5, 15, pared.getLab(), pared, pared.getDim());
+    Enemy myEnemies(0.5, 1, pared.getLab(), pared, pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
@@ -139,10 +140,7 @@ int main()
         countFrames++; // Actualizar los frames en el �ltimo segundo
 		// Datos para gestionar los fps
         if (currentFrame - lastFrameFPS > 1.0f) {
-            //cout << "FPS: " << countFrames << endl;
-            showFPS(countFrames);
             cout << "FPS: " << countFrames << endl;
-            //showFPS(countFrames);
 			countFrames = 0;
 			lastFrameFPS = currentFrame; // Actualizamos
         }
@@ -156,7 +154,6 @@ int main()
         glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
-        //drawHollowCircle(SCR_WIDTH / 2, SCR_HEIGHT / 2, 100, 360);
 
         // activate shader
         ourShader.use();		
@@ -180,10 +177,10 @@ int main()
         myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime);
         
         int balasRecibidas = 0;
-        myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas);
-        if (balasRecibidas > 0) {
-			vidas -= balasRecibidas;
-			cout << "Vidas: " << vidas << endl;
+        myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas);
+        if (vidas <= 0) {
+            camera.updatePosition(glm::vec3(0.0, 0.0, 0.0));
+            vidas = 3;
         }
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -309,23 +306,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
             
         }
     }
-}
-
-void showFPS(int fps) {
-    /*
-    char string[5];
-	sprintf_s(string, "%d", fps);
-    //unsigned char string[] = to_string(fps);
-    int w = glutBitmapLength(GLUT_BITMAP_8_BY_13, reinterpret_cast<unsigned char*>(string));
-    glRasterPos2f(0., 0.);
-    float x = .5;
-    glRasterPos2f(x - (float)SCR_WIDTH / 2, 0.);
-    //glColor(1., 0., 0.);
-    int len = strlen(string);
-    for (int i = 0; i < len; i++) {
-        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
-    }
-    */
 }
 
 bool primeravez = true;

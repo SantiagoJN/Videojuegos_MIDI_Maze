@@ -86,6 +86,7 @@ private:
     float rotationSpeed = 120.0f;
 
     vector<vector<bool>> map;
+	vector<vector<bool>> spawnmap;
     float scale;
     float dim;
 
@@ -124,6 +125,7 @@ public:
         // Colocamos los enemigos en el mapa de forma random
         float start = map.size() * dim / 2;
         vector<vector<bool>> spawn(map);
+        spawnmap = vector<vector<bool>>(map);
 //        bullets.reserve(numEnemies);
         for (int enemy = 0; enemy < numEnemies; enemy++) {
             bool end = false;
@@ -133,7 +135,7 @@ public:
                 for (int j = random; j < spawn[i].size(); j++) {
                     if (!spawn[i][j]) { // El enemigo se puede colocar en i,j
                         end = true;
-                        cout << i << " " << j << endl;
+                        //cout << i << " " << j << endl;
                         x = -start + j * dim;
                         z = start - i * dim;
                         glm::vec3 dir(1,1,1);
@@ -303,7 +305,23 @@ public:
                     vidas[i]--;
                     if (vidas[i] == 0) {
                         puntuacionJugador++;
+                        if (puntuacionJugador == 10) {
+                            cout << "*******Jugador gana!!******" << endl;
+                        }
                         cout << "PUNTO!" << endl;
+						// Reiniciamos el enemigo
+                        vidas[i] = num_vidas;
+                        bool spawned = false;
+                        while (!spawned) {
+							int x = rand() % (spawnmap.size() - 2) + 1;
+							int z = rand() % (spawnmap.size() - 2) + 1;
+							if (spawnmap[x][z]) { // puede spawnear en ese sitio
+                                positions[i] = glm::vec3(x, 0, z);
+                                states[i] = GIRANDO;
+								spawned = true;
+							}
+                        }
+						
                     }
                     SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
                     hit_timeout[i] = hit_time;
@@ -586,7 +604,7 @@ public:
         if (currentDelays[enemyIndex] > 0) currentDelays[enemyIndex]--;
     }
 	
-    void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime, int& balasRecibidas) {
+    void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime, int& balasRecibidas, int& vidasJugador) {
         hit_time = static_cast<int>(0.1 / deltaTime);
         int balasAcertadas = 0;
         int balasEnemigo = 0;
@@ -606,8 +624,15 @@ public:
                 
             }
             if (balasEnemigo > 0) {
-                puntuaciones[i]++;
                 balasAcertadas += balasEnemigo;
+                vidasJugador -= balasEnemigo;
+                cout << "Vidas: " << vidasJugador << endl;
+                if (vidasJugador <= 0) {
+                    puntuaciones[i]++;
+                    if (puntuaciones[i] == 10) {
+                        cout << "******GANA ENEMIGO " << i << "******" << endl;
+                    }
+                }
             }
         }
         
