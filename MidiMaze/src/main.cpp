@@ -14,6 +14,9 @@
 
 #include <Camera.h>
 #include <model.h>
+#include <screen.h>
+#include <scr_Princ.h>
+#include <menu.h>
 
 #include <iostream>
 
@@ -30,6 +33,7 @@ bool newBullet = false;
 //ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void menu_mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -44,6 +48,11 @@ Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f; // Initial values in the middle of the screen
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+
+
+double lastButtonX = 0.0f;
+double lastButtonY = 0.0f;
+
 
 // valores para normalizar el movimiento de la c�mara
 float deltaTime = 0.0f;	// Time between current frame and last frame
@@ -91,10 +100,9 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))                //Initial
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
@@ -104,15 +112,79 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
+
+    // build and compile our shader zprogram
+    // ------------------------------------
+    Shader ourShader("shaders/1.model_loading.vs", "shaders/1.model_loading.fs");
+
+    
+    //Screen menu(glm::vec3(-4, -3, 10), glm::vec3(4, -3, 10), ourShader);
+    Princip menu(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+
+    glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
+
+    double prevx = 0;
+    double prevy = 0;
+    while (!glfwWindowShouldClose(window))
+    {
+        // input
+        if (prevx != lastButtonX || prevy != lastButtonY) {
+            prevx = lastButtonX;
+            prevy = lastButtonY;
+            menu.checkButton(prevx, prevy);
+        }
+
+        // render
+        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
+
+
+        // activate shader
+        ourShader.use();
+
+        menu.draw(ourShader);
+        // create transformations
+        glm::mat4 projection = glm::mat4(1.0f);
+        projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        ourShader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+
+
+        glm::mat4 view = camera.GetViewMatrix();
+        
+        ourShader.setMat4("view", view);
+
+
+
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+
+    }
+
+
+
+
+
+
+
+
+
+
+    //GAME
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+
+
+
     //Model tests;
 
     // =====================================================================================================================
     // ================================== CONFIGURATION OF SHADERS, SHAPES AND TEXTURES ====================================
     // =====================================================================================================================
 
-    // build and compile our shader zprogram
-    // ------------------------------------
-    Shader ourShader("shaders/1.model_loading.vs", "shaders/1.model_loading.fs");
+
 
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el rat�n
@@ -229,11 +301,13 @@ void processInput(GLFWwindow* window)
     if (versionModerna) {
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
+        cout << camera.Position.x<<","<<camera.Position.y<<","<<camera.Position.z << endl;
         camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime,up,down,left,right);
         }
 
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
+            cout << camera.Position.x << "," << camera.Position.y << "," << camera.Position.z << endl;
             camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, up, down, left, right);
         }
 
@@ -305,6 +379,20 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
             
         }
+    }
+}
+
+void menu_mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        cout << xpos << "," << ypos << endl;
+        int width, height;
+        glfwGetWindowSize(window, &width, &height);
+        cout << width << "," << height << endl;
+        cout << xpos/width << "," << ypos/height << endl;
+        lastButtonX = xpos / width;
+        lastButtonY = ypos / height;
     }
 }
 

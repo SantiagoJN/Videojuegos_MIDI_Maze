@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
+#include <iostream>
 
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum Camera_Movement {
@@ -51,6 +52,10 @@ public:
 
     void updatePosition(glm::vec3 position) {
         Position = position;
+    }
+
+    glm::vec3 getPosition() {
+        return Position;
     }
 
     // constructor with scalar values
