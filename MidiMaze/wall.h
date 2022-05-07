@@ -151,47 +151,6 @@ public:
             }
         }
         else return false;
-        /*
-        // Line AB represented as a1x + b1y = c1
-        double a1 = B.y - A.y;
-        double b1 = A.x - B.x;
-        double c1 = a1 * (A.x) + b1 * (A.y);
-
-        // Line CD represented as a2x + b2y = c2
-        double a2 = vertices[7] - vertices[2];
-        double b2 = vertices[0] - vertices[5];
-        double c2 = a2 * (vertices[0]) + b2 * (vertices[2]);
-
-        double determinant = a1 * b2 - a2 * b1;
-
-        if (determinant == 0)
-        {
-            // The lines are parallel. This is simplified
-            // by returning a pair of FLT_MAX
-            return false;
-        }
-        else
-        {
-            double x = (b2 * c1 - b1 * c2) / determinant;
-            double y = (a1 * c2 - a2 * c1) / determinant;
-            
-            bool inside = ( (x >= vertices[0] && x <= vertices[5]) || (x <= vertices[0] && x >= vertices[5]) ) && ((y >= vertices[2] && y <= vertices[7]) || (y <= vertices[2] && y >= vertices[7]));
-            if (vertices[0] > -5 && vertices[0] < 5 && vertices[2] > -5 && vertices[2] < 5) {
-                cout << x << "->x1: " << vertices[0] << "->x2: " << vertices[5] << endl;
-                cout << y << "->y1: " << vertices[2] << "->y2: " << vertices[7] << endl;
-                cout << i << endl;
-            }
-            
-            if (inside) {
-                float l = glm::length(A - B);
-                float lMuro = glm::length(A - glm::vec2(x, y));
-                cout << l << " " << lMuro << endl;
-                return l > lMuro;
-            }
-            else return false;
-            
-        }
-        */
 
     }
 

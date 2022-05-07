@@ -6,7 +6,7 @@ class Princip {
 
 public: 
         
-        //Despleg desplegable;
+        Despleg desplegable;
         vector<glm::vec4> buttons;
 
         // constructor, expects a filepath to a 3D model.
@@ -47,7 +47,7 @@ public:
             indices[5] = 3;
 
             setUpWall(ourShader);
-            //setUpDespleg(v1,v2,ourShader);
+            setUpDespleg(v1,v2,ourShader);
 
             buttons.push_back(glm::vec4(0.177, 0.273, 0, 0.05));
 
@@ -59,20 +59,32 @@ public:
         Princip() {};
 
 
-        /*void setUpDespleg(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
+        void setUpDespleg(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
             double totalx = v2.x - v1.x;
             double totaly = 3 - v1.y;
-            Despleg(glm::vec3(v1.x + 0.175 * totalx, v1.y + 0.7 * totaly, v1.z), glm::vec3(v1.x + 0.46 * totalx, v1.y + 0.7 * totaly, v1.z),ourShader);
+            desplegable = Despleg(glm::vec3(v1.x + 0.175 * totalx, v1.y + 0.7 * totaly, v1.z+0.01), glm::vec3(v1.x + 0.46 * totalx, v1.y + 0.7 * totaly, v1.z+0.01), v1.y + 0.94 * totaly, ourShader, v1,v2);
         }
-        */
-        void checkButton(double xPos, double yPos) {
+
+        bool checkButton(double xPos, double yPos, Shader& ourShader) {
             cout << buttons.size() << endl;
-            for (int i = 0; i < buttons.size(); i++) {
-                if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
-                    cout << "BOTON PULSADO" << endl;
-                    //desplegable.buttonCalled();
+            if (xPos >= buttons[0].x && xPos <= buttons[0].y && yPos >= buttons[0].z && yPos <= buttons[0].w) {
+                cout << "BOTON PULSADO" << endl;
+                SoundEngine->play2D("resources/effects/plik.mp3", false);
+                desplegable.buttonCalled();
+            }
+            if (desplegable.getShown()) desplegable.checkButton(xPos,yPos,ourShader);
+            if (desplegable.start.getShown()) {
+                int which = desplegable.start.checkButton(xPos, yPos);
+                if (which == 1) return true;
+                else if (which == 2) {
+                    desplegable.start.buttonCalled();
+                    desplegable.settings.buttonCalled();
                 }
             }
+            if (desplegable.settings.getShown()) {
+                desplegable.settings.checkButton(xPos, yPos, ourShader);
+            }
+            return false;
         };
 
 
@@ -86,7 +98,7 @@ public:
             ourShader.setMat4("model", model);
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-            //desplegable.draw(ourShader);
+            desplegable.draw(ourShader);
         };
 
     private:

@@ -1,14 +1,17 @@
 #pragma once
-
+#include <gameStarter.h>
+#include <settings.h>
 class Despleg {
 
 public:
 
+    Starter start;
+    Settings settings;
     bool shown;
     vector<glm::vec4> buttons;
 
     // constructor, expects a filepath to a 3D model.
-    Despleg(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
+    Despleg(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader, glm::vec3 v1Real, glm::vec3 v2Real) {
         shown = false;
         vertices[0] = v1.x;
         vertices[1] = v1.y;
@@ -25,14 +28,14 @@ public:
         vertices[9] = 0.0f;
 
         vertices[10] = v1.x;
-        vertices[11] = v1.y + 2;
+        vertices[11] = ySup;
         vertices[12] = v1.z;
 
         vertices[13] = 0.0f;
         vertices[14] = 1.0f;
 
         vertices[15] = v2.x;
-        vertices[16] = v2.y + 2;
+        vertices[16] = ySup;
         vertices[17] = v2.z;
 
         vertices[18] = 1.0f;
@@ -46,7 +49,9 @@ public:
         indices[5] = 3;
 
         setUpWall(ourShader);
-
+        setUpStarter(v1Real, v2Real, ourShader);
+        setUpSettings(v1Real, v2Real, ourShader);
+        setUpButtons();
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
     };
@@ -58,18 +63,37 @@ public:
         shown = !shown;
     }
 
-    int checkButton(double xPos, double yPos) {
-        for (int i = 1; i < buttons.size() + 1; i++) {
+    bool getShown() {
+        return shown;
+    }
+
+    void setUpStarter(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
+        double totalx = v2.x - v1.x;
+        double totaly = 3 - v1.y;
+        start = Starter(glm::vec3(v1.x + 0.74 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.95 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), v1.y + 0.315 * totaly, ourShader);
+    }
+
+    void setUpSettings(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
+        double totalx = v2.x - v1.x;
+        double totaly = 3 - v1.y;
+        settings = Settings(glm::vec3(v1.x + 0.028 * totalx, v1.y + 0.12 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.7 * totalx, v1.y + 0.115 * totaly, v1.z + 0.02), v1.y + 0.88 * totaly, ourShader, v1,v2);
+    }
+
+    void checkButton(double xPos, double yPos, Shader& ourShader) {
+        for (int i = 0; i < buttons.size(); i++) {
             if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
-                return i;
+                SoundEngine->play2D("resources/effects/plik.mp3", false);
+                if (i == 0) {
+                    shown = false;
+                    start.buttonCalled();
+                    settings.buttonCalled();
+                }
             }
         }
-        return -1;
     };
 
 
     void draw(Shader& ourShader) {
-        shown = true;
         if (shown) {
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texture1);
@@ -80,6 +104,8 @@ public:
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }
+        start.draw(ourShader);
+        settings.draw(ourShader);
     };
 
 private:
@@ -89,6 +115,10 @@ private:
     unsigned int indices[6];
     unsigned int VBO, VAO, EBO;
     unsigned int texture1;
+    void setUpButtons() {
+        buttons.push_back(glm::vec4(0.17, 0.45, 0.11, 0.23));
+    }
+
     void setUpWall(Shader& ourShader) {
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);

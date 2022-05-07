@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de encabezado\screen">
+      <UniqueIdentifier>{a431bbc1-dac7-469b-9437-3254ebc4f5ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\glad\src\glad.c">
@@ -61,6 +64,24 @@
     </ClInclude>
     <ClInclude Include="EnemyBullets.h">
       <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="scr_Princ.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="screen.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="desplegable.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="gameStarter.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="lifes.h">
+      <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -116,22 +116,28 @@ int main()
     // build and compile our shader zprogram
     // ------------------------------------
     Shader ourShader("shaders/1.model_loading.vs", "shaders/1.model_loading.fs");
+    /*
+    glm::vec3 v1(-5, -3, -4.2);
+    glm::vec3 v2(5, -3, -4.2);
 
-    
-    //Screen menu(glm::vec3(-4, -3, 10), glm::vec3(4, -3, 10), ourShader);
+    double totalx = v2.x - v1.x;
+    double totaly = 3 - v1.y;
+    Despleg desp(glm::vec3(v1.x + 0.175 * totalx, v1.y + 0.7 * totaly, v1.z), glm::vec3(v1.x + 0.46 * totalx, v1.y + 0.7 * totaly, v1.z), ourShader);
+    */
     Princip menu(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
 
     glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
 
     double prevx = 0;
     double prevy = 0;
-    while (!glfwWindowShouldClose(window))
+    bool finish = false;
+    while (!glfwWindowShouldClose(window) && !finish)
     {
         // input
         if (prevx != lastButtonX || prevy != lastButtonY) {
             prevx = lastButtonX;
             prevy = lastButtonY;
-            menu.checkButton(prevx, prevy);
+            finish = menu.checkButton(prevx, prevy,ourShader);
         }
 
         // render
@@ -139,16 +145,16 @@ int main()
         glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
-
-        // activate shader
-        ourShader.use();
-
-        menu.draw(ourShader);
         // create transformations
         glm::mat4 projection = glm::mat4(1.0f);
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         ourShader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 
+        // activate shader
+        ourShader.use();
+
+        menu.draw(ourShader);
+        
 
         glm::mat4 view = camera.GetViewMatrix();
         
