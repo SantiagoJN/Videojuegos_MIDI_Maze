@@ -144,7 +144,7 @@ public:
                         glm::vec2 ind = nextIndex(i, j, dir);
                         destiny.push_back(glm::vec3(-start + ind.y * dim, 0, start - ind.x * dim));
                         index.push_back(ind);
-                        //cout << "Enemigo " << i << endl;
+                        //cout << "Enemigo " << enemy << endl;
                         //cout << "\tPosicion: " << x << ", " << z << endl;
                         glm::vec3 position(x, 0, z);
                         positions.push_back(position);
@@ -312,16 +312,40 @@ public:
 						// Reiniciamos el enemigo
                         vidas[i] = num_vidas;
                         bool spawned = false;
-                        while (!spawned) {
+                        int intentos = 0;
+                        while (!spawned && intentos < 3) {
+                            intentos++;
 							int x = rand() % (spawnmap.size() - 2) + 1;
 							int z = rand() % (spawnmap.size() - 2) + 1;
 							if (spawnmap[x][z]) { // puede spawnear en ese sitio
-                                positions[i] = glm::vec3(x, 0, z);
-                                states[i] = GIRANDO;
+                                float start = map.size() * dim / 2;
+                                float x2 = -start + x * dim;
+                                float z2 = start - z * dim;
+                                positions[i] = glm::vec3(x2, 0, z2);
+                                glm::vec3 dir(1, 1, 1);
+                                prevIndex[i] = glm::vec2(x, z);
+                                glm::vec2 ind = nextIndex(x, z, dir);
+                                destiny[i] = glm::vec3(-start + ind.y * dim, 0, start - ind.x * dim);
+                                index[i] = ind;
+								//cout << "Index actual: " << x << ", " << z << "; Index nuevo: " << ind[0] << ", " << ind[1] << endl;
+                                //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
+                                //cout << "\tPosicion: " << positions[i].x << ", " << positions[i].y << ", " << positions[i].z << endl;
+                                //cout << "\tDestino: " << destiny[i].x << ", " << destiny[i].y << ", " << destiny[i].z << endl;
+                                directions[i] = dir;
+                                states[i] = ANDANDO;   //Estado inicial
+                                prevState[i] = ANDANDO; // Valor por defecto~~
+                                currentDelays[i] = 0; // Delays de los disparos
+                                viendo[i] = false;
+                                prevGoalRotation[i] = 0.0f;
+                                currentRotation[i] = 0.0f; // Rotación inicial (se va a actualizar el primer frame)
+
 								spawned = true;
-							}
+                            }
+                            else {
+								cout << "No he podido spawnear en " << x << ", " << z << endl;
+                            }
                         }
-						
+                        
                     }
                     SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
                     hit_timeout[i] = hit_time;
