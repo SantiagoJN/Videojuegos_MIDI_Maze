@@ -79,7 +79,7 @@ public:
         settings = Settings(glm::vec3(v1.x + 0.028 * totalx, v1.y + 0.12 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.7 * totalx, v1.y + 0.115 * totaly, v1.z + 0.02), v1.y + 0.88 * totaly, ourShader, v1,v2);
     }
 
-    void checkButton(double xPos, double yPos, Shader& ourShader) {
+    void checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
         for (int i = 0; i < buttons.size(); i++) {
             if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
                 SoundEngine->play2D("resources/effects/plik.mp3", false);
@@ -87,6 +87,9 @@ public:
                     shown = false;
                     start.buttonCalled();
                     settings.buttonCalled();
+                }
+                else if (i == 1) {
+                    glfwSetWindowShouldClose(window, true);
                 }
             }
         }
@@ -117,6 +120,7 @@ private:
     unsigned int texture1;
     void setUpButtons() {
         buttons.push_back(glm::vec4(0.17, 0.45, 0.11, 0.23));
+        buttons.push_back(glm::vec4(0.17, 0.45, 0.241, 0.295));
     }
 
     void setUpWall(Shader& ourShader) {

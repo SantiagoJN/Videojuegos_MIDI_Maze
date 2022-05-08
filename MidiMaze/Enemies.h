@@ -98,6 +98,8 @@ public:
         return positions;
     }
 
+    Enemy() {};
+
     // constructor, expects a filepath to a 3D model.
     Enemy(float scale,int numvidas, int nDumbs, int nMDumbs, int nNDumbs, vector<vector<bool>> laberinto, Map mapa, float dim) : mapa(mapa), map(laberinto), dim(dim), scale(scale) {
         // Comprobamos que el n�mero de enemigos es correcto

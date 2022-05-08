@@ -93,14 +93,14 @@ public:
             desplegable = Despleg(glm::vec3(v1.x + 0.175 * totalx, v1.y + 0.7 * totaly, v1.z+0.01), glm::vec3(v1.x + 0.46 * totalx, v1.y + 0.7 * totaly, v1.z+0.01), v1.y + 0.94 * totaly, ourShader, v1,v2);
         }
 
-        bool checkButton(double xPos, double yPos, Shader& ourShader) {
+        bool checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
             cout << buttons.size() << endl;
             if (xPos >= buttons[0].x && xPos <= buttons[0].y && yPos >= buttons[0].z && yPos <= buttons[0].w) {
                 cout << "BOTON PULSADO" << endl;
                 SoundEngine->play2D("resources/effects/plik.mp3", false);
                 desplegable.buttonCalled();
             }
-            if (desplegable.getShown()) desplegable.checkButton(xPos,yPos,ourShader);
+            if (desplegable.getShown()) desplegable.checkButton(xPos,yPos,ourShader, window);
             if (desplegable.start.getShown()) {
                 int which = desplegable.start.checkButton(xPos, yPos);
                 if (which == 1) {

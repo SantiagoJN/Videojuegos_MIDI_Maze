@@ -147,7 +147,7 @@ int main()
     leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
     //leave = gameLeaver(glm::vec3(camera.getPosition().x -0.4, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x+0.4, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
 
-    while (1) {
+    while (!glfwWindowShouldClose(window)) {
         Princip menu(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
         camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
         cout << "Hola" << endl;
@@ -160,7 +160,7 @@ int main()
             // input
             if (pressed) {
                 pressed = !pressed;
-                finish = menu.checkButton(lastButtonX, lastButtonY, ourShader);
+                finish = menu.checkButton(lastButtonX, lastButtonY, ourShader, window);
             }
 
             // render
@@ -198,9 +198,6 @@ int main()
 
 
 
-
-
-
         //GAME
         glfwSetMouseButtonCallback(window, mouse_button_callback);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el rat�n
@@ -217,7 +214,10 @@ int main()
         bool reviveSpeed = menu.getReviveSpeed();           //Velocidades
         bool reloadSpeed = menu.getReloadSpeed();
 
-        Enemy myEnemies(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, pared.getDim());
+        Enemy myEnemies;
+        if (!glfwWindowShouldClose(window)) {
+            myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, pared.getDim());
+        }
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================
         // =====================================================================================================================

@@ -26,7 +26,7 @@ public:
             
             string line, lastLine;
             getline(filein, line);
-            size = stof(line);
+            size = stof(line)+1;
             float start = size * dim / 2;
             suelo = Wall(size, dim, ourShader);
             int j = 0;
