@@ -159,8 +159,8 @@ public:
                         currentDelays.push_back(0); // Delays de los disparos
                         cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia rápida a todos
 
-                        if (enemy < nDumbs)  dificultades.push_back(VERY_DUMB); // Dificultad del enemigo
-                        if(enemy < (nDumbs + nMDumbs)) dificultades.push_back(PLAIN_DUMB); // Dificultad del enemigo
+                        if (enemy < nDumbs) dificultades.push_back(VERY_DUMB); // Dificultad del enemigo
+                        else if (enemy < (nDumbs + nMDumbs))  dificultades.push_back(PLAIN_DUMB); // Dificultad del enemigo
                         else dificultades.push_back(NOT_SO_DUMB);
 
                         bullets.push_back(EnemBullet("resources/objects/bullets/" + bulletColors[enemy] + "/" + bulletColors[enemy] + ".obj", 0.1));
@@ -603,67 +603,69 @@ public:
     int cont = 0;
     // Gestionar el movimiento cuando el enemigo está girando
     void gestionarApuntando(int enemyIndex, Shader& shader, glm::vec3 playerPosition, float deltaTime) {
-        // Vector que va desde el enemigo al jugador
-		glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex]; 
-        float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
-        //if (deg < 0.0) deg = 180.0f - deg;
-        if (playerPosition.z < positions[enemyIndex].z) {
-			deg = 180.0f + deg;
-        }
-		if (deg < 0.0) deg = 360.0f + deg;
-        
-        /*
-        cont++;
-        if (cont == 200) {
-			cout << "Jugador: " << playerPosition.x << ", " << playerPosition.z << 
-                ". Enemigo: " << positions[enemyIndex].x << ", " << positions[enemyIndex].z << ". Angulo: " << deg << endl;
-            cont = 0;
-        }*/
-		
-        goalRotation[enemyIndex] = deg;
-        actualizarRotacion(enemyIndex, deltaTime, playerPosition); // Rotar lo que sea necesario
-        if (abs(currentRotation[enemyIndex] - goalRotation[enemyIndex]) < rotationSpeed * deltaTime) { 
-            //Si forma un ángulo lo suficientemente pequeño, es que ya le está apuntando
-            disparaEnemigo(enemyIndex, deltaTime, playerPosition); 
-        }
-        pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
+        if (dificultades[enemyIndex] != VERY_DUMB) {
+            // Vector que va desde el enemigo al jugador
+            glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex];
+            float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
+            //if (deg < 0.0) deg = 180.0f - deg;
+            if (playerPosition.z < positions[enemyIndex].z) {
+                deg = 180.0f + deg;
+            }
+            if (deg < 0.0) deg = 360.0f + deg;
 
+            /*
+            cont++;
+            if (cont == 200) {
+                cout << "Jugador: " << playerPosition.x << ", " << playerPosition.z <<
+                    ". Enemigo: " << positions[enemyIndex].x << ", " << positions[enemyIndex].z << ". Angulo: " << deg << endl;
+                cont = 0;
+            }*/
+
+            goalRotation[enemyIndex] = deg;
+            actualizarRotacion(enemyIndex, deltaTime, playerPosition); // Rotar lo que sea necesario
+            if (abs(currentRotation[enemyIndex] - goalRotation[enemyIndex]) < rotationSpeed * deltaTime) {
+                //Si forma un ángulo lo suficientemente pequeño, es que ya le está apuntando
+                disparaEnemigo(enemyIndex, deltaTime, playerPosition);
+            }
+            pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
+        }
     }
 	
     void actualizarViendo(int enemyIndex, glm::vec3 playerPosition, bool quieto) {
-        // Sacamos el ángulo que forman
-        glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex];
-        float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
-        if (playerPosition.z < positions[enemyIndex].z) deg = 180.0f + deg;
-        if (deg < 0.0) deg = 360.0f + deg;
-		
-		float diferencia = abs(deg - currentRotation[enemyIndex]);
-        //cout << "diferencia: " << diferencia << "; deg: " << deg << ", curr: " << currentRotation[enemyIndex] << endl;
-        float distance = glm::length(playerPosition - positions[enemyIndex]);
-        bool somethingBetween = mapa.wallBetween(positions[enemyIndex], playerPosition) || between(enemyIndex, positions[enemyIndex], playerPosition);
-        if ((diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) && !somethingBetween) { // Le está viendo
-			// Si le está viendo, calculamos si hay alguna pared en medio
-			
-            if (states[enemyIndex] != APUNTANDO && quieto) {
-                //cout << "Guardando... Estado actual: " << states[enemyIndex] << ", rotación actual: " << goalRotation[enemyIndex] << endl;
-				prevState[enemyIndex] = states[enemyIndex];
-                prevGoalRotation[enemyIndex] = goalRotation[enemyIndex];
-                states[enemyIndex] = APUNTANDO;
+        if (dificultades[enemyIndex] != VERY_DUMB) {
+            // Sacamos el ángulo que forman
+            glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex];
+            float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
+            if (playerPosition.z < positions[enemyIndex].z) deg = 180.0f + deg;
+            if (deg < 0.0) deg = 360.0f + deg;
+
+            float diferencia = abs(deg - currentRotation[enemyIndex]);
+            //cout << "diferencia: " << diferencia << "; deg: " << deg << ", curr: " << currentRotation[enemyIndex] << endl;
+            float distance = glm::length(playerPosition - positions[enemyIndex]);
+            bool somethingBetween = mapa.wallBetween(positions[enemyIndex], playerPosition) || between(enemyIndex, positions[enemyIndex], playerPosition);
+            if ((diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) && !somethingBetween) { // Le está viendo
+                // Si le está viendo, calculamos si hay alguna pared en medio
+
+                if (states[enemyIndex] != APUNTANDO && quieto) {
+                    //cout << "Guardando... Estado actual: " << states[enemyIndex] << ", rotación actual: " << goalRotation[enemyIndex] << endl;
+                    prevState[enemyIndex] = states[enemyIndex];
+                    prevGoalRotation[enemyIndex] = goalRotation[enemyIndex];
+                    states[enemyIndex] = APUNTANDO;
+                }
+            }
+            else { // No le está viendo
+                if (states[enemyIndex] == APUNTANDO) { // Si antes le estaba apuntando, hay que recuperar el estado
+                    if (prevState[enemyIndex] == GIRANDO) { // Si antes estaba girando, recuperamos el giro
+                        //updateGoalRotation(enemyIndex);
+                        goalRotation[enemyIndex] = prevGoalRotation[enemyIndex];
+                    }
+                    else if (prevState[enemyIndex] == ANDANDO) { // Si antes estaba andando, tendrá que corregir el giro
+                        updateGoalRotation(enemyIndex);
+                    }
+                    states[enemyIndex] = GIRANDO;
+                }
             }
         }
-        else { // No le está viendo
-			if (states[enemyIndex] == APUNTANDO) { // Si antes le estaba apuntando, hay que recuperar el estado
-                if (prevState[enemyIndex] == GIRANDO) { // Si antes estaba girando, recuperamos el giro
-                    //updateGoalRotation(enemyIndex);
-                    goalRotation[enemyIndex] = prevGoalRotation[enemyIndex];
-                }
-                else if (prevState[enemyIndex] == ANDANDO) { // Si antes estaba andando, tendrá que corregir el giro
-                    updateGoalRotation(enemyIndex);
-                }
-                states[enemyIndex] = GIRANDO;
-			}		
-        }
-
     }
 
     void actualizarDelay(int enemyIndex) {
