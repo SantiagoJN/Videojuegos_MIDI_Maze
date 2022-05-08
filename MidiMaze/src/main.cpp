@@ -27,7 +27,7 @@
 #include <irrKlang/irrKlang.h>
 using namespace irrklang;
 
-
+bool pressed = false;
 bool newBullet = false;
 
 //ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
@@ -128,16 +128,13 @@ int main()
 
     glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
 
-    double prevx = 0;
-    double prevy = 0;
     bool finish = false;
     while (!glfwWindowShouldClose(window) && !finish)
     {
         // input
-        if (prevx != lastButtonX || prevy != lastButtonY) {
-            prevx = lastButtonX;
-            prevy = lastButtonY;
-            finish = menu.checkButton(prevx, prevy,ourShader);
+        if (pressed) {
+            pressed = !pressed;
+            finish = menu.checkButton(lastButtonX, lastButtonY,ourShader);
         }
 
         // render
@@ -201,8 +198,10 @@ int main()
 	vector<EnemBullet> enemyBullets;
 
     Map pared("resources/maps/originalMap.txt", ourShader);
+    vidas = menu.getNumVidas();
 
-    Enemy myEnemies(0.5, 1, pared.getLab(), pared, pared.getDim());
+
+    Enemy myEnemies(0.5,vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, pared.getDim());
     // =====================================================================================================================
     // ==================================================== RENDER LOOP ====================================================
     // =====================================================================================================================
@@ -257,8 +256,10 @@ int main()
         int balasRecibidas = 0;
         myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas);
         if (vidas <= 0) {
-            camera.updatePosition(glm::vec3(0.0, 0.0, 0.0));
-            vidas = 3;
+            glm::vec2 pos = myEnemies.getFreePosition();
+            myEnemies.blinded();
+            camera.updatePosition(glm::vec3(pos.x, 0.0, pos.y));
+            vidas = menu.getNumVidas();
         }
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -307,13 +308,13 @@ void processInput(GLFWwindow* window)
     if (versionModerna) {
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
-        cout << camera.Position.x<<","<<camera.Position.y<<","<<camera.Position.z << endl;
+        //cout << camera.Position.x<<","<<camera.Position.y<<","<<camera.Position.z << endl;
         camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime,up,down,left,right);
         }
 
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
-            cout << camera.Position.x << "," << camera.Position.y << "," << camera.Position.z << endl;
+            //cout << camera.Position.x << "," << camera.Position.y << "," << camera.Position.z << endl;
             camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, up, down, left, right);
         }
 
@@ -399,6 +400,7 @@ void menu_mouse_button_callback(GLFWwindow* window, int button, int action, int 
         cout << xpos/width << "," << ypos/height << endl;
         lastButtonX = xpos / width;
         lastButtonY = ypos / height;
+        pressed = true;
     }
 }
 

@@ -1,9 +1,12 @@
 #pragma once
 #include <lifes.h>
+#include <speed.h>
+#include <numEnemies.h>
 class Settings {
 
 public:
-
+    numEnemies veryDumb, plainDumb, notDumb;
+    Speed reload, regen, revive;
     bool shown;
     vector<glm::vec4> buttons;
 
@@ -48,7 +51,9 @@ public:
         indices[5] = 3;
 
         setUpWall(ourShader);
+        setUpNumEnemies(v1Real, v2Real, ourShader);
         setUpLifes(v1Real, v2Real, ourShader);
+        setUpSpeeds(v1Real, v2Real, ourShader);
         //buttons.push_back(glm::vec4(0.17, 0.45, 0.11, 0.23));
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
@@ -71,6 +76,21 @@ public:
         vidas = Lifes(glm::vec3(v1.x + 0.0925 * totalx, v1.y + 0.499 * totaly, v1.z + 0.025), glm::vec3(v1.x + 0.6325 * totalx, v1.y + 0.499 * totaly, v1.z + 0.025), v1.y + 0.55 * totaly, ourShader);
     }
 
+    void setUpSpeeds(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
+        double totalx = v2.x - v1.x;
+        double totaly = 3 - v1.y;
+        reload = Speed(glm::vec3(v1.x + 0.406 * totalx, v1.y + 0.735 * totaly, v1.z + 0.026), glm::vec3(v1.x + 0.635 * totalx, v1.y + 0.735 * totaly, v1.z + 0.026), v1.y + 0.775 * totaly,0.225, ourShader);
+        regen = Speed(glm::vec3(v1.x + 0.406 * totalx, v1.y + 0.695 * totaly, v1.z + 0.0255), glm::vec3(v1.x + 0.635 * totalx, v1.y + 0.695 * totaly, v1.z + 0.0255), v1.y + 0.735 * totaly,0.265, ourShader);
+        revive = Speed(glm::vec3(v1.x + 0.406 * totalx, v1.y + 0.648 * totaly, v1.z + 0.025), glm::vec3(v1.x + 0.635 * totalx, v1.y + 0.648 * totaly, v1.z + 0.025), v1.y + 0.695 * totaly,0.305, ourShader);
+    }
+
+    void setUpNumEnemies(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
+        double totalx = v2.x - v1.x;
+        double totaly = 3 - v1.y;
+        veryDumb = numEnemies(glm::vec3(v1.x + 0.0985 * totalx, v1.y + 0.216 * totaly, v1.z + 0.026), glm::vec3(v1.x + 0.198 * totalx, v1.y + 0.216 * totaly, v1.z + 0.026), v1.y + 0.258 * totaly, 0.095, ourShader);
+        plainDumb = numEnemies(glm::vec3(v1.x + 0.314 * totalx, v1.y + 0.216 * totaly, v1.z + 0.0255), glm::vec3(v1.x + 0.414 * totalx, v1.y + 0.216 * totaly, v1.z + 0.0255), v1.y + 0.257 * totaly, 0.314, ourShader);
+        notDumb = numEnemies(glm::vec3(v1.x + 0.53 * totalx, v1.y + 0.214 * totaly, v1.z + 0.025), glm::vec3(v1.x + 0.63 * totalx, v1.y + 0.214 * totaly, v1.z + 0.025), v1.y + 0.256 * totaly, 0.53, ourShader);
+    }
 
     bool checkButton(double xPos, double yPos, Shader &ourShader) {
         for (int i = 0; i < buttons.size(); i++) {
@@ -81,6 +101,13 @@ public:
             }
         }
         vidas.checkButton(xPos, yPos, ourShader);
+        reload.checkButton(xPos, yPos, ourShader);
+        regen.checkButton(xPos, yPos, ourShader);
+        revive.checkButton(xPos, yPos, ourShader);
+        int totalEnemies = veryDumb.getNEnemies() + plainDumb.getNEnemies() + notDumb.getNEnemies();
+        veryDumb.checkButton(xPos, yPos, totalEnemies, ourShader);
+        plainDumb.checkButton(xPos, yPos, totalEnemies, ourShader);
+        notDumb.checkButton(xPos, yPos, totalEnemies, ourShader);
         return false;
     };
 
@@ -97,6 +124,12 @@ public:
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
             vidas.draw(ourShader);
+            reload.draw(ourShader);
+            regen.draw(ourShader);
+            revive.draw(ourShader);
+            veryDumb.draw(ourShader);
+            plainDumb.draw(ourShader);
+            notDumb.draw(ourShader);
         }
     };
 

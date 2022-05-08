@@ -161,9 +161,11 @@
     <ClInclude Include="EnemyBullets.h" />
     <ClInclude Include="gameStarter.h" />
     <ClInclude Include="lifes.h" />
+    <ClInclude Include="numEnemies.h" />
     <ClInclude Include="screen.h" />
     <ClInclude Include="scr_Princ.h" />
     <ClInclude Include="settings.h" />
+    <ClInclude Include="speed.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="mesh.h" />

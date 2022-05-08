@@ -42,7 +42,6 @@ int reloadTime[] = { 1,3 }; // Delays para representar la cadencia de disparo. C
 
 enum nivelesDificultad { VERY_DUMB, PLAIN_DUMB, NOT_SO_DUMB};
 
-const int num_vidas = 3;
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 float angulo_vision = 45.0f; // 90 grados en total
 
@@ -78,6 +77,8 @@ private:
 
     Map mapa;
 
+    int num_vidas;
+
     vector<int> vidas;
     vector<int> puntuaciones;
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
@@ -98,8 +99,10 @@ public:
     }
 
     // constructor, expects a filepath to a 3D model.
-    Enemy(float scale, int numEnemies, vector<vector<bool>> laberinto, Map mapa, float dim) : mapa(mapa), numEnemies(numEnemies), map(laberinto), dim(dim), scale(scale) {
+    Enemy(float scale,int numvidas, int nDumbs, int nMDumbs, int nNDumbs, vector<vector<bool>> laberinto, Map mapa, float dim) : mapa(mapa), map(laberinto), dim(dim), scale(scale) {
         // Comprobamos que el n�mero de enemigos es correcto
+        num_vidas = numvidas;
+        numEnemies = nDumbs + nMDumbs + nNDumbs;
         int numColors = sizeof(colors) / sizeof(colors[0]);
         assert(numEnemies <= numColors);
 
@@ -131,9 +134,9 @@ public:
             bool end = false;
             int random = rand() % (spawn.size()-2) +1;
             float x, z;
-            for (int i = random; i < spawn.size(); i++) {
-                for (int j = random; j < spawn[i].size(); j++) {
-                    if (!spawn[i][j]) { // El enemigo se puede colocar en i,j
+            for (int i = random; i < spawn.size()-1; i++) {
+                for (int j = random; j < spawn[i].size()-1; j++) {
+                    if (!spawn[i][j] && (!spawn[i+1][j] || !spawn[i-1][j] || !spawn[i][j+1] || !spawn[i][j-1])) { // El enemigo se puede colocar en i,j
                         end = true;
                         //cout << i << " " << j << endl;
                         x = -start + j * dim;
@@ -155,7 +158,11 @@ public:
                         prevState.push_back(ANDANDO); // Valor por defecto~~
                         currentDelays.push_back(0); // Delays de los disparos
                         cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia rápida a todos
-                        dificultades.push_back(VERY_DUMB); // Dificultad del enemigo
+
+                        if (enemy < nDumbs)  dificultades.push_back(VERY_DUMB); // Dificultad del enemigo
+                        if(enemy < (nDumbs + nMDumbs)) dificultades.push_back(PLAIN_DUMB); // Dificultad del enemigo
+                        else dificultades.push_back(NOT_SO_DUMB);
+
                         bullets.push_back(EnemBullet("resources/objects/bullets/" + bulletColors[enemy] + "/" + bulletColors[enemy] + ".obj", 0.1));
                         viendo.push_back(false);   
                         prevGoalRotation.push_back(0.0f); 
@@ -223,6 +230,7 @@ public:
         bool two = false;
         bool three = false;
         bool four = false;
+        int times = 0;
         while (1) {
             switch (wh) {
             case 0:
@@ -282,9 +290,12 @@ public:
                     }
                     cout << "-----------------" << endl;*/
                     //cout << "No sense" << endl;
+                    
                     dir = glm::vec3(0, 0, 0);
                     return glm::vec2(i, j);
                 }
+                if (times > 6)return glm::vec2(0, 0);
+                times++;
             }
         }
         return glm::vec2(-1, -1); // Valor err�neo (se sale del while)
@@ -292,9 +303,9 @@ public:
 
 
     bool checkCollision(glm::vec3 positionBullet, float radiousBullet) {
-        for (int i = 0; i < numEnemies; i++) {
-            if (vidas[i] > 0) {
-                glm::vec3 vec = positions[i] - positionBullet;
+        for (int enemy = 0; enemy < numEnemies; enemy++) {
+            if (vidas[enemy] > 0) {
+                glm::vec3 vec = positions[enemy] - positionBullet;
                 
                 float longit = static_cast<float>(sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2)));
                 
@@ -302,58 +313,89 @@ public:
                 if (longit < (radious + radiousBullet)) {
                     //cout << vec.x << " " << vec.y << " " << vec.z << endl;
                     //cout << longit << "  ----  " << radious << " " << radiousBullet << endl;
-                    vidas[i]--;
-                    if (vidas[i] == 0) {
+                    vidas[enemy]--;
+                    if (vidas[enemy] == 0) {
                         puntuacionJugador++;
                         if (puntuacionJugador == 10) {
                             cout << "*******Jugador gana!!******" << endl;
                         }
                         cout << "PUNTO!" << endl;
 						// Reiniciamos el enemigo
-                        vidas[i] = num_vidas;
+                        map[prevIndex[enemy].x][prevIndex[enemy].y] = false;
+                        map[index[enemy].x][index[enemy].y] = false;
+                        vidas[enemy] = num_vidas;
                         bool spawned = false;
-                        int intentos = 0;
-                        while (!spawned && intentos < 3) {
-                            intentos++;
-							int x = rand() % (spawnmap.size() - 2) + 1;
-							int z = rand() % (spawnmap.size() - 2) + 1;
-							if (spawnmap[x][z]) { // puede spawnear en ese sitio
-                                float start = map.size() * dim / 2;
-                                float x2 = -start + x * dim;
-                                float z2 = start - z * dim;
-                                positions[i] = glm::vec3(x2, 0, z2);
-                                glm::vec3 dir(1, 1, 1);
-                                prevIndex[i] = glm::vec2(x, z);
-                                glm::vec2 ind = nextIndex(x, z, dir);
-                                destiny[i] = glm::vec3(-start + ind.y * dim, 0, start - ind.x * dim);
-                                index[i] = ind;
-								//cout << "Index actual: " << x << ", " << z << "; Index nuevo: " << ind[0] << ", " << ind[1] << endl;
-                                //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
-                                //cout << "\tPosicion: " << positions[i].x << ", " << positions[i].y << ", " << positions[i].z << endl;
-                                //cout << "\tDestino: " << destiny[i].x << ", " << destiny[i].y << ", " << destiny[i].z << endl;
-                                directions[i] = dir;
-                                states[i] = ANDANDO;   //Estado inicial
-                                prevState[i] = ANDANDO; // Valor por defecto~~
-                                currentDelays[i] = 0; // Delays de los disparos
-                                viendo[i] = false;
-                                prevGoalRotation[i] = 0.0f;
-                                currentRotation[i] = 0.0f; // Rotación inicial (se va a actualizar el primer frame)
+                        bool end = false;
+                        int random = rand() % (map.size() - 2) + 1;
+                        for (int i = random; i < map.size() - 1; i++) {
+                            for (int j = random; j < map[i].size() - 1; j++) {
+                                if (!map[i][j] && (!spawnmap[i + 1][j] || !spawnmap[i - 1][j] || !spawnmap[i][j + 1] || !spawnmap[i][j - 1])) { // El enemigo se puede colocar en i,j
+                                    end = true;
+                                    float start = map.size() * dim / 2;
+                                    float x2 = -start + j * dim;
+                                    float z2 = start - i * dim;
+                                    glm::vec3 dir(1, 1, 1);
+                                    prevIndex[enemy] = glm::vec2(i, j);
+                                    glm::vec2 ind = nextIndex(i, j, dir);
+                                    destiny[enemy] = glm::vec3(-start + ind.y * dim, 0, start - ind.x * dim);
+                                    index[enemy] = ind;
+                                    //cout << "Enemigo " << enemy << endl;
+                                    //cout << "\tPosicion: " << x << ", " << z << endl;
+                                    glm::vec3 position(i, 0, j);
+                                    positions[enemy] = position;
+                                    //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
+                                    directions[enemy] = dir;
+                                    vidas[enemy] = num_vidas; // Vidas de los enemigos
+                                    states[enemy] = ANDANDO;   //Estado inicial
+                                    prevState[enemy] = ANDANDO; // Valor por defecto~~
 
-								spawned = true;
+
+                                    viendo[enemy] = false;
+                                    prevGoalRotation[enemy] = 0.0f;
+                                    currentRotation[enemy] = 0.0f; // Rotación inicial (se va a actualizar el primer frame)
+                                    hit_timeout[enemy] = 0;
+                                    spawned = true;
+                                    cout << i << "," << j << endl;
+                                    break;
+                                }
                             }
-                            else {
-								cout << "No he podido spawnear en " << x << ", " << z << endl;
-                            }
+                            if (end) break;
+                            else if (i == map.size() - 2) i = 1;
                         }
+                        cout << "elijo: "<< endl;
                         
                     }
                     SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
-                    hit_timeout[i] = hit_time;
+                    hit_timeout[enemy] = hit_time;
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    void blinded() {
+        for (auto b : viendo) b = false;
+    }
+
+    glm::vec2 getFreePosition() {
+        bool spawned = false;
+        int random = rand() % (map.size() - 2) + 1;
+        bool end = false;
+        for (int i = random; i < map.size() - 1; i++) {
+            for (int j = random; j < map[i].size() - 1; j++) {
+                if (!map[i][j] && (!spawnmap[i + 1][j] || !spawnmap[i - 1][j] || !spawnmap[i][j + 1] || !spawnmap[i][j - 1])) {
+                    end = true;
+                    float start = map.size() * dim / 2;
+                    float x2 = -start + j * dim;
+                    float z2 = start - i * dim;
+                    return glm::vec2(x2, z2);
+                }
+            }
+            if (end)break;
+            else if (i == map.size() - 2) i = 1;
+        }
+        return glm::vec2(0,0);
     }
 
     // Devuelve la puntuaci�n del jugador seguida del resto de puntuaciones
@@ -448,7 +490,7 @@ public:
             }
             //cout << "next rotation: " << currentRotation[enemyIndex] << ", goalRotation: " << goalRotation[enemyIndex] << endl;
 		}
-        actualizarViendo(enemyIndex, playerPosition, true);
+        if(dificultades[enemyIndex] != VERY_DUMB) actualizarViendo(enemyIndex, playerPosition, true);
     }
 
     // Código común que se repite en las funciones de actualización de estado del enemigo
@@ -514,7 +556,7 @@ public:
                 map[static_cast<unsigned int>(prevIndex[enemyIndex].x)][static_cast<unsigned int>(prevIndex[enemyIndex].y)] = false;
             }
             destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
-            actualizarViendo(enemyIndex, playerPosition, true);
+            if (dificultades[enemyIndex] != VERY_DUMB) actualizarViendo(enemyIndex, playerPosition, true);
         }
         if (states[enemyIndex] == ANDANDO) { // Si seguimos moviéndonos
 			//cout << "directions: " << directions[enemyIndex].x << " " << directions[enemyIndex].y << " " << directions[enemyIndex].z << endl;
@@ -635,7 +677,7 @@ public:
         for (int i = 0; i < numEnemies; i++) {
             balasEnemigo = bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition, radious, &positions, i);
             if (vidas[i] > 0) {
-                if (dificultades[i] != VERY_DUMB) actualizarViendo(i, playerPosition, true); // Actualizar si el enemigo i me está viendo o no
+                if (dificultades[i] != VERY_DUMB) actualizarViendo(i, playerPosition, false); // Actualizar si el enemigo i me está viendo o no
                 actualizarDelay(i); // Actualizamos el contador del enemigo
                 //cout << "Enemigo " << i << ": " << states[i] << endl;
                 switch (states[i]) {

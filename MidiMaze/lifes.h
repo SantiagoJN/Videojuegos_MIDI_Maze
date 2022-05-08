@@ -5,6 +5,7 @@ public:
 
     bool shown;
     vector<glm::vec4> buttons;
+    int numLives = 1;
 
     // constructor, expects a filepath to a 3D model.
     Lifes(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader) {
@@ -54,6 +55,9 @@ public:
 
     Lifes() {};
 
+    int getNumVidas() {
+        return numLives;
+    }
 
     void buttonCalled() {
         shown = !shown;
@@ -68,6 +72,8 @@ public:
             if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
                 SoundEngine->play2D("resources/effects/plik.mp3", false);
                 setUpWall(ourShader, i + 1);
+                numLives = i + 1;
+                cout << numLives << endl;
             }
         }
     };

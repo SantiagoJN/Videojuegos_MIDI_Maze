@@ -83,5 +83,11 @@
     <ClInclude Include="lifes.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
+    <ClInclude Include="speed.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="numEnemies.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

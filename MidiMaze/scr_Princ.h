@@ -58,6 +58,21 @@ public:
 
         Princip() {};
 
+        int getVeryDumb() {
+            return desplegable.settings.veryDumb.getNEnemies();
+        }
+
+        int getPlainDumb() {
+            return desplegable.settings.plainDumb.getNEnemies();
+        }
+
+        int getNotDumb() {
+            return desplegable.settings.notDumb.getNEnemies();
+        }
+
+        int getNumVidas() {
+            return desplegable.settings.vidas.getNumVidas();
+        }
 
         void setUpDespleg(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
             double totalx = v2.x - v1.x;
@@ -75,7 +90,10 @@ public:
             if (desplegable.getShown()) desplegable.checkButton(xPos,yPos,ourShader);
             if (desplegable.start.getShown()) {
                 int which = desplegable.start.checkButton(xPos, yPos);
-                if (which == 1) return true;
+                if (which == 1) {
+                    int total = desplegable.settings.veryDumb.getNEnemies() + desplegable.settings.notDumb.getNEnemies() + desplegable.settings.plainDumb.getNEnemies();
+                    return total > 0;
+                }
                 else if (which == 2) {
                     desplegable.start.buttonCalled();
                     desplegable.settings.buttonCalled();

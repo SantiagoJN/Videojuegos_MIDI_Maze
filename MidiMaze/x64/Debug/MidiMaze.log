@@ -1,10 +1,42 @@
 ﻿  main.cpp
 C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\map.h(117,1): warning C4267: 'inicializando': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(159,1): warning C4305: 'argumento': truncamiento de 'double' a 'float'
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(166,1): warning C4305: 'argumento': truncamiento de 'double' a 'float'
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(324,45): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(324,65): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(325,41): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Enemies.h(325,57): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
 C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\Bullets.h(44,132): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(71,172): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(76,172): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(82,1): warning C4305: 'argumento': truncamiento de 'double' a 'float'
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(82,171): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(83,1): warning C4305: 'argumento': truncamiento de 'double' a 'float'
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(83,172): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(84,1): warning C4305: 'argumento': truncamiento de 'double' a 'float'
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(84,171): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(90,1): warning C4305: 'argumento': truncamiento de 'double' a 'float'
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(90,179): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(91,1): warning C4305: 'argumento': truncamiento de 'double' a 'float'
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(91,181): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(92,1): warning C4305: 'argumento': truncamiento de 'double' a 'float'
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(92,175): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\desplegable.h(73,166): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\desplegable.h(79,171): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\scr_Princ.h(65,171): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\scr_Princ.h(80,171): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\wall.h(155): warning C4715: 'Wall::between': no todas las rutas de acceso de control devuelven un valor
   MidiMaze.vcxproj -> C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\x64\Debug\MidiMaze.exe
