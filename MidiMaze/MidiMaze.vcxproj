@@ -160,6 +160,7 @@
     <ClInclude Include="Enemies.h" />
     <ClInclude Include="EnemyBullets.h" />
     <ClInclude Include="gameStarter.h" />
+    <ClInclude Include="leaveGame.h" />
     <ClInclude Include="lifes.h" />
     <ClInclude Include="numEnemies.h" />
     <ClInclude Include="screen.h" />

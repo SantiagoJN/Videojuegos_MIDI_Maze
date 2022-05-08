@@ -514,7 +514,6 @@ public:
 
 	// Gestionar el movimiento cuando el enemigo está parado
     void gestionarParado(int enemyIndex, Shader& shader) {
-        pintarEnemigo(enemyIndex, shader); // Simplemente lo pintamos
     }
 
 
@@ -565,14 +564,11 @@ public:
             //cout << "positions = " << positions[enemyIndex].x << ", " << positions[enemyIndex].z << endl;
         }
         
-        // Y al final dibujamos las caras :)
-        pintarEnemigo(enemyIndex, shader);
     }
 
 	// Gestionar el movimiento cuando el enemigo está girando
 	void gestionarGirando(int enemyIndex, Shader& shader, float deltaTime, glm::vec3 playerPosition) {
         actualizarRotacion(enemyIndex, deltaTime, playerPosition); // Rotar lo que sea necesario
-        pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
 		
 	}
 
@@ -627,7 +623,7 @@ public:
                 //Si forma un ángulo lo suficientemente pequeño, es que ya le está apuntando
                 disparaEnemigo(enemyIndex, deltaTime, playerPosition);
             }
-            pintarEnemigo(enemyIndex, shader); // Pintar el enemigo como tal
+            
         }
     }
 	
@@ -672,36 +668,40 @@ public:
         if (currentDelays[enemyIndex] > 0) currentDelays[enemyIndex]--;
     }
 	
-    void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime, int& balasRecibidas, int& vidasJugador) {
+    void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime, int& balasRecibidas, int& vidasJugador, bool pause) {
         hit_time = static_cast<int>(0.1 / deltaTime);
         int balasAcertadas = 0;
         int balasEnemigo = 0;
         for (int i = 0; i < numEnemies; i++) {
             balasEnemigo = bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition, radious, &positions, i);
-            if (vidas[i] > 0) {
-                if (dificultades[i] != VERY_DUMB) actualizarViendo(i, playerPosition, false); // Actualizar si el enemigo i me está viendo o no
-                actualizarDelay(i); // Actualizamos el contador del enemigo
-                //cout << "Enemigo " << i << ": " << states[i] << endl;
-                switch (states[i]) {
-                case PARADO: {gestionarParado(i, shader); break;}
-                case ANDANDO: {gestionarAndando(i, shader, deltaTime, playerPosition); break;}
-                case GIRANDO: {gestionarGirando(i, shader, deltaTime, playerPosition); break;}
-                case APUNTANDO: {gestionarApuntando(i, shader, playerPosition, deltaTime); break;}
-                default: {cerr << "Error en el estado del enemigo " << i << endl; break;}
+            if (!pause) {
+                if (vidas[i] > 0) {
+                    if (dificultades[i] != VERY_DUMB) actualizarViendo(i, playerPosition, false); // Actualizar si el enemigo i me está viendo o no
+                    actualizarDelay(i); // Actualizamos el contador del enemigo
+                    //cout << "Enemigo " << i << ": " << states[i] << endl;
+                    switch (states[i]) {
+                    case PARADO: {gestionarParado(i, shader); break; }
+                    case ANDANDO: {gestionarAndando(i, shader, deltaTime, playerPosition); break; }
+                    case GIRANDO: {gestionarGirando(i, shader, deltaTime, playerPosition); break; }
+                    case APUNTANDO: {gestionarApuntando(i, shader, playerPosition, deltaTime); break; }
+                    default: {cerr << "Error en el estado del enemigo " << i << endl; break; }
+                    }
+
                 }
-                
-            }
-            if (balasEnemigo > 0) {
-                balasAcertadas += balasEnemigo;
-                vidasJugador -= balasEnemigo;
-                cout << "Vidas: " << vidasJugador << endl;
-                if (vidasJugador <= 0) {
-                    puntuaciones[i]++;
-                    if (puntuaciones[i] == 10) {
-                        cout << "******GANA ENEMIGO " << i << "******" << endl;
+                if (balasEnemigo > 0) {
+                    balasAcertadas += balasEnemigo;
+                    vidasJugador -= balasEnemigo;
+                    cout << "Vidas: " << vidasJugador << endl;
+                    if (vidasJugador <= 0) {
+                        puntuaciones[i]++;
+                        if (puntuaciones[i] == 10) {
+                            cout << "******GANA ENEMIGO " << i << "******" << endl;
+                        }
                     }
                 }
             }
+            pintarEnemigo(i, shader); // Pintar el enemigo como tal
+            
         }
         
         if (balasAcertadas > 0) SoundEngine->play2D("resources/effects/hitmarker.mp3", false);

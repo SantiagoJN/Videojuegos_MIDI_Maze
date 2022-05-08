@@ -57,6 +57,10 @@ public:
     Speed() {};
 
 
+    bool getSpeed() {
+        return fast;
+    }
+
     void checkButton(double xPos, double yPos, Shader& ourShader) {
         for (int i = 0; i < buttons.size(); i++) {
             if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {

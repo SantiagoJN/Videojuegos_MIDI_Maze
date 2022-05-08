@@ -58,6 +58,19 @@ public:
 
         Princip() {};
 
+
+        bool getRegenSpeed() {
+            return desplegable.settings.regen.getSpeed();
+        }
+
+        bool getReviveSpeed() {
+            return desplegable.settings.revive.getSpeed();
+        }
+
+        bool getReloadSpeed() {
+            return desplegable.settings.reload.getSpeed();
+        }
+
         int getVeryDumb() {
             return desplegable.settings.veryDumb.getNEnemies();
         }

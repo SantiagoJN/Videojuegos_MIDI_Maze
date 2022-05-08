@@ -37,6 +37,39 @@ C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(92,1): 
 C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\settings.h(92,175): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\desplegable.h(73,166): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\desplegable.h(79,171): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\scr_Princ.h(80,171): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\scr_Princ.h(93,171): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\leaveGame.h(16,39): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\leaveGame.h(17,39): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\leaveGame.h(22,30): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\leaveGame.h(23,30): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\leaveGame.h(24,30): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\leaveGame.h(25,30): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\leaveGame.h(41,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\leaveGame.h(48,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\leaveGame.h(92): warning C4715: 'gameLeaver::checkButton': no todas las rutas de acceso de control devuelven un valor
 C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\wall.h(155): warning C4715: 'Wall::between': no todas las rutas de acceso de control devuelven un valor
   MidiMaze.vcxproj -> C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\x64\Debug\MidiMaze.exe

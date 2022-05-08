@@ -89,5 +89,8 @@
     <ClInclude Include="numEnemies.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
+    <ClInclude Include="leaveGame.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

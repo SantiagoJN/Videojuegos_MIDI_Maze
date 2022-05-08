@@ -150,5 +150,5 @@ private:
         ourShader.use();
         glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
 
-    }
+    };
 };
