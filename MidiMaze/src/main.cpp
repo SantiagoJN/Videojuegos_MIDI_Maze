@@ -215,7 +215,7 @@ int main()
 
         mirilla mira("resources/objects/bullets/yellow/yellow.obj");
 
-        cout << menu.getMapName() << endl;
+        cout << "Jugando con mapa " << menu.getMapName() << endl;
         Map pared(menu.getMapName(), ourShader);
         vidas = menu.getNumVidas();
 
@@ -227,7 +227,7 @@ int main()
         Enemy myEnemies;
         if (!glfwWindowShouldClose(window)) {
             myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, 
-                pared.getDim(), menu.getRegenSpeed(), menu.getReloadSpeed());
+                pared.getDim(), menu.getRegenSpeed(), menu.getReloadSpeed(), menu.getReviveSpeed());
         }
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================

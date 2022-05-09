@@ -19,6 +19,18 @@ string bulletColors[] = { "blue", "orange", "green", "pink", "lightblue", "magen
                    "yellow", "blue", "orange", "green", "pink", "lightblue", "magenta", "white" };
 string yellowColor = "yellow";
 
+
+/*  COLORES EN HEXA
+    Amarillo: e4f812
+    Azul: 4c3de3
+    Naranja: f58c11
+    Verde: 03d10a
+    Rosa: ef0ce5
+    Azul claro: 15aee7
+    Magenta: 8e0b5a
+    Blanco: f5f0f4
+*/
+
 enum Estados{
     PARADO,
     GIRANDO,
@@ -26,19 +38,12 @@ enum Estados{
 	APUNTANDO
 };
 
-/*  COLORES EN HEXA
-    Amarillo: e4f812
-	Azul: 4c3de3
-	Naranja: f58c11
-	Verde: 03d10a
-	Rosa: ef0ce5
-	Azul claro: 15aee7
-	Magenta: 8e0b5a
-	Blanco: f5f0f4
-*/
-
 enum cadencia { CAD_RAPIDA, CAD_LENTA }; // Rapida = 1s, lenta = 3s
 int reloadTime[] = { 1,3 }; // Delays para representar la cadencia de disparo. Cuanto más delay, menos cadencia
+
+enum spawns { SPAWN_RAPIDO, SPAWN_LENTO }; // Rapida = 1s, lenta = 3s
+int spawnTime[] = { 3, 6 }; // Delay del spawn
+bool spawnSeleccionado;
 
 enum nivelesDificultad { VERY_DUMB, PLAIN_DUMB, NOT_SO_DUMB};
 
@@ -64,6 +69,7 @@ private:
     vector<float> prevGoalRotation; // Para no perder el ángulo al girar
     vector<Estados> prevState; // Estado anterior al apuntar
     vector<unsigned int> currentDelays;
+    vector<int> spawnCont; // Contadores de los spawns
     vector<cadencia> cadencias; // Cadencias de los enemigos
     //EnemBullet bala("resources/objects/bullets/yellow/yellow.obj", 0.1);
     //EnemBullet myBullets("resources/objects/bullets/yellow/yellow.obj", 0.1);
@@ -109,10 +115,11 @@ public:
 
     // constructor, expects a filepath to a 3D model.
     Enemy(float scale,int numvidas, int nDumbs, int nMDumbs, int nNDumbs, vector<vector<bool>> laberinto, Map mapa, 
-        float dim, bool regenSpeed, bool reloadSpeed) 
+        float dim, bool regenSpeed, bool reloadSpeed, bool reviveSpeed) 
         : mapa(mapa), map(laberinto), dim(dim), scale(scale){
         // Comprobamos que el n�mero de enemigos es correcto
         regenSeleccionada = regenSpeed;
+        spawnSeleccionado = reviveSpeed;
         num_vidas = numvidas;
         numEnemies = nDumbs + nMDumbs + nNDumbs;
         int numColors = sizeof(colors) / sizeof(colors[0]);
@@ -171,8 +178,9 @@ public:
                         currentDelays.push_back(0); // Delays de los disparos
 						if(reloadSpeed) cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia
                         else cadencias.push_back(CAD_LENTA);
+						
+                        spawnCont.push_back(0); // Inicializamos a ceros
                         
-
                         if (enemy < nDumbs) dificultades.push_back(VERY_DUMB); // Dificultad del enemigo
                         else if (enemy < (nDumbs + nMDumbs))  dificultades.push_back(PLAIN_DUMB); // Dificultad del enemigo
                         else dificultades.push_back(NOT_SO_DUMB);
@@ -316,7 +324,7 @@ public:
     }
 
 
-    bool checkCollision(glm::vec3 positionBullet, float radiousBullet) {
+    bool checkCollision(glm::vec3 positionBullet, float radiousBullet, float deltaTime) {
         for (int enemy = 0; enemy < numEnemies; enemy++) {
             if (vidas[enemy] > 0) {
                 glm::vec3 vec = positions[enemy] - positionBullet;
@@ -329,6 +337,8 @@ public:
                     //cout << longit << "  ----  " << radious << " " << radiousBullet << endl;
                     vidas[enemy]--;
                     if (vidas[enemy] == 0) {
+                        if (spawnSeleccionado) spawnCont[enemy] = static_cast<int>(spawnTime[SPAWN_RAPIDO] / deltaTime);
+                        else spawnCont[enemy] = static_cast<int>(spawnTime[SPAWN_LENTO] / deltaTime);
                         puntuacionJugador++;
                         if (puntuacionJugador == 10) {
                             cout << "*******Jugador gana!!******" << endl;
@@ -682,6 +692,10 @@ public:
         if (currentDelays[enemyIndex] > 0) currentDelays[enemyIndex]--;
     }
 
+    void actualizarSpawn(int enemyIndex) {
+        if (spawnCont[enemyIndex] > 0) spawnCont[enemyIndex]--;
+    }
+
     void actualizarRegenJugador(int& vidasJugador, float deltaTime) {
         if (vidasJugador < num_vidas) {
             if (counterRegen == 1) { // Se le suma una vida
@@ -713,7 +727,8 @@ public:
         for (int i = 0; i < numEnemies; i++) {
             balasEnemigo = bullets[i].DrawBullets(shader, mapa, deltaTime, playerPosition, radious, &positions, i);
             if (!pause) {
-                if (vidas[i] > 0) {
+                actualizarSpawn(i);
+                if (spawnCont[i] == 0) {
                     if (dificultades[i] != VERY_DUMB) actualizarViendo(i, playerPosition, false); // Actualizar si el enemigo i me está viendo o no
                     actualizarDelay(i); // Actualizamos el contador del enemigo
                     //cout << "Enemigo " << i << ": " << states[i] << endl;
