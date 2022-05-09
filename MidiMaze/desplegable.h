@@ -73,19 +73,19 @@ public:
     void setUpStarter(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        start = Starter(glm::vec3(v1.x + 0.74 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.95 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), v1.y + 0.315 * totaly, ourShader);
+        start = Starter(glm::vec3(v1.x + 0.74 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.95 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), static_cast<float>(v1.y + 0.315 * totaly), ourShader);
     }
 
     void setUpSettings(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        settings = Settings(glm::vec3(v1.x + 0.028 * totalx, v1.y + 0.12 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.7 * totalx, v1.y + 0.115 * totaly, v1.z + 0.02), v1.y + 0.88 * totaly, ourShader, v1,v2);
+        settings = Settings(glm::vec3(v1.x + 0.028 * totalx, v1.y + 0.12 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.7 * totalx, v1.y + 0.115 * totaly, v1.z + 0.02), static_cast<float>(v1.y + 0.88 * totaly), ourShader, v1,v2);
     }
 
     void setUpMaps(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        maps = mapSelector(glm::vec3(v1.x + 0.005 * totalx, v1.y + 0.1 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.995 * totalx, v1.y + 0.1 * totaly, v1.z + 0.02), v1.y + 0.9 * totaly, ourShader, v1, v2);
+        maps = mapSelector(glm::vec3(v1.x + 0.005 * totalx, v1.y + 0.1 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.995 * totalx, v1.y + 0.1 * totaly, v1.z + 0.02), static_cast<float>(v1.y + 0.9 * totaly), ourShader, v1, v2);
     }
 
     void checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {

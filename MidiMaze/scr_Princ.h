@@ -94,7 +94,7 @@ public:
         void setUpDespleg(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
             double totalx = v2.x - v1.x;
             double totaly = 3 - v1.y;
-            desplegable = Despleg(glm::vec3(v1.x + 0.175 * totalx, v1.y + 0.7 * totaly, v1.z+0.01), glm::vec3(v1.x + 0.46 * totalx, v1.y + 0.7 * totaly, v1.z+0.01), v1.y + 0.94 * totaly, ourShader, v1,v2);
+            desplegable = Despleg(glm::vec3(v1.x + 0.175f * totalx, v1.y + 0.7f * totaly, v1.z+0.01f), glm::vec3(v1.x + 0.46f * totalx, v1.y + 0.7f * totaly, v1.z+0.01f), static_cast<float>(v1.y + 0.94f * totaly), ourShader, v1,v2);
         }
 
         bool checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {

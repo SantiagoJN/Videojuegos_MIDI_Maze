@@ -177,7 +177,7 @@ public:
                         else if (enemy < (nDumbs + nMDumbs))  dificultades.push_back(PLAIN_DUMB); // Dificultad del enemigo
                         else dificultades.push_back(NOT_SO_DUMB);
 
-                        bullets.push_back(EnemBullet("resources/objects/bullets/" + bulletColors[enemy] + "/" + bulletColors[enemy] + ".obj", 0.1));
+                        bullets.push_back(EnemBullet("resources/objects/bullets/" + bulletColors[enemy] + "/" + bulletColors[enemy] + ".obj", 0.1f));
                         viendo.push_back(false);   
                         prevGoalRotation.push_back(0.0f); 
                         currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
@@ -335,8 +335,8 @@ public:
                         }
                         cout << "PUNTO!" << endl;
 						// Reiniciamos el enemigo
-                        map[prevIndex[enemy].x][prevIndex[enemy].y] = false;
-                        map[index[enemy].x][index[enemy].y] = false;
+                        map[static_cast<int>(prevIndex[enemy].x)][static_cast<int>(prevIndex[enemy].y)] = false;
+                        map[static_cast<int>(index[enemy].x)][static_cast<int>(index[enemy].y)] = false;
                         vidas[enemy] = num_vidas;
                         bool spawned = false;
                         bool end = false;
@@ -700,7 +700,7 @@ public:
                 }
             }
             else if (counterRegen > 0) {
-                cout << "counterregen " << counterRegen << endl;
+                //cout << "counterregen " << counterRegen << endl;
                 counterRegen--; // Se actualiza el contador
             }
         }

@@ -73,23 +73,23 @@ public:
     void setUpLifes(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        vidas = Lifes(glm::vec3(v1.x + 0.0925 * totalx, v1.y + 0.499 * totaly, v1.z + 0.025), glm::vec3(v1.x + 0.6325 * totalx, v1.y + 0.499 * totaly, v1.z + 0.025), v1.y + 0.55 * totaly, ourShader);
+        vidas = Lifes(glm::vec3(v1.x + 0.0925f * totalx, v1.y + 0.499f * totaly, v1.z + 0.025f), glm::vec3(v1.x + 0.6325f * totalx, v1.y + 0.499f * totaly, v1.z + 0.025f), static_cast<float>(v1.y + 0.55f * totaly), ourShader);
     }
 
     void setUpSpeeds(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        reload = Speed(glm::vec3(v1.x + 0.406 * totalx, v1.y + 0.735 * totaly, v1.z + 0.026), glm::vec3(v1.x + 0.635 * totalx, v1.y + 0.735 * totaly, v1.z + 0.026), v1.y + 0.775 * totaly,0.225, ourShader);
-        regen = Speed(glm::vec3(v1.x + 0.406 * totalx, v1.y + 0.695 * totaly, v1.z + 0.0255), glm::vec3(v1.x + 0.635 * totalx, v1.y + 0.695 * totaly, v1.z + 0.0255), v1.y + 0.735 * totaly,0.265, ourShader);
-        revive = Speed(glm::vec3(v1.x + 0.406 * totalx, v1.y + 0.648 * totaly, v1.z + 0.025), glm::vec3(v1.x + 0.635 * totalx, v1.y + 0.648 * totaly, v1.z + 0.025), v1.y + 0.695 * totaly,0.305, ourShader);
+        reload = Speed(glm::vec3(v1.x + 0.406f * totalx, v1.y + 0.735f * totaly, v1.z + 0.026f), glm::vec3(v1.x + 0.635f * totalx, v1.y + 0.735f * totaly, v1.z + 0.026f), static_cast<float>(v1.y + 0.775f * totaly),0.225f, ourShader);
+        regen = Speed(glm::vec3(v1.x + 0.406f * totalx, v1.y + 0.695f * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.635f * totalx, v1.y + 0.695f * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + 0.735f * totaly),0.265f, ourShader);
+        revive = Speed(glm::vec3(v1.x + 0.406f * totalx, v1.y + 0.648f * totaly, v1.z + 0.025f), glm::vec3(v1.x + 0.635f * totalx, v1.y + 0.648f * totaly, v1.z + 0.025f), static_cast<float>(v1.y + 0.695f * totaly),0.305f, ourShader);
     }
 
     void setUpNumEnemies(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        veryDumb = numEnemies(glm::vec3(v1.x + 0.0985 * totalx, v1.y + 0.216 * totaly, v1.z + 0.026), glm::vec3(v1.x + 0.198 * totalx, v1.y + 0.216 * totaly, v1.z + 0.026), v1.y + 0.258 * totaly, 0.095, ourShader);
-        plainDumb = numEnemies(glm::vec3(v1.x + 0.314 * totalx, v1.y + 0.216 * totaly, v1.z + 0.0255), glm::vec3(v1.x + 0.414 * totalx, v1.y + 0.216 * totaly, v1.z + 0.0255), v1.y + 0.257 * totaly, 0.314, ourShader);
-        notDumb = numEnemies(glm::vec3(v1.x + 0.53 * totalx, v1.y + 0.214 * totaly, v1.z + 0.025), glm::vec3(v1.x + 0.63 * totalx, v1.y + 0.214 * totaly, v1.z + 0.025), v1.y + 0.256 * totaly, 0.53, ourShader);
+        veryDumb = numEnemies(glm::vec3(v1.x + 0.0985f * totalx, v1.y + 0.216f * totaly, v1.z + 0.026f), glm::vec3(v1.x + 0.198f * totalx, v1.y + 0.216f * totaly, v1.z + 0.026f), static_cast<float>(v1.y + 0.258f * totaly), 0.095f, ourShader);
+        plainDumb = numEnemies(glm::vec3(v1.x + 0.314f * totalx, v1.y + 0.216f * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.414f * totalx, v1.y + 0.216f * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + 0.257f * totaly), 0.314f, ourShader);
+        notDumb = numEnemies(glm::vec3(v1.x + 0.53f * totalx, v1.y + 0.214f * totaly, v1.z + 0.025f), glm::vec3(v1.x + 0.63f * totalx, v1.y + 0.214f * totaly, v1.z + 0.025f), static_cast<float>(v1.y + 0.256f * totaly), 0.53f, ourShader);
     }
 
     bool checkButton(double xPos, double yPos, Shader &ourShader) {

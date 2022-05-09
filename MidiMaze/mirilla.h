@@ -4,7 +4,7 @@ class mirilla {
 public:
 
     Model punto;
-    float scale = 0.0005;
+    float scale = 0.0005f;
 
     // constructor, expects a filepath to a 3D model.
     mirilla(string path) {
@@ -18,12 +18,12 @@ public:
             double dist = 0.1;  //Está a 0.12 de la cámara
 
             glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
-            camPosition.x = camPosition.x + front.x * dist;
-            camPosition.z = camPosition.z + front.z * dist;
+            camPosition.x = static_cast<float>(camPosition.x + front.x * dist);
+            camPosition.z = static_cast<float>(camPosition.z + front.z * dist);
 
             glm::vec3 v1(0, 0, 0);
-            v1.x = camPosition.x - ancho * frontPerp.x;
-            v1.z = camPosition.z - ancho * frontPerp.z;
+            v1.x = static_cast<float>(camPosition.x - ancho * frontPerp.x);
+            v1.z = static_cast<float>(camPosition.z - ancho * frontPerp.z);
 
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, v1);

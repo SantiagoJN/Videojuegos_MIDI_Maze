@@ -114,7 +114,7 @@ public:
 
     bool wallBetween(glm::vec3 enemyPos, glm::vec3 playerPos) {
         bool intersects = false;
-        for (unsigned int i = laberinto.size(); i < map.size()-laberinto.size(); i++) {
+        for (size_t i = laberinto.size(); i < map.size()-laberinto.size(); i++) {
             intersects = map[i].between( glm::vec2(enemyPos.x, enemyPos.z), glm::vec2(playerPos.x, playerPos.z));
             if (intersects) {
                 //cout << "Muro " << i << endl;

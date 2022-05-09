@@ -13,16 +13,16 @@ public:
         double dist = 0.12;  //Está a 0.12 de la cámara
 
         glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
-        camPosition.x = camPosition.x + front.x * dist;
-        camPosition.z = camPosition.z + front.z * dist;
+        camPosition.x = static_cast<float>(camPosition.x + front.x * dist);
+        camPosition.z = static_cast<float>(camPosition.z + front.z * dist);
 
         cout << "Punto:" << camPosition.x << "," << camPosition.z << endl;
         glm::vec3 v1(0, -0.015, 0);
         glm::vec3 v2(0, -0.015, 0);
-        v1.x = camPosition.x - 0.04 * frontPerp.x;
-        v2.x = camPosition.x + 0.04 * frontPerp.x;
-        v1.z = camPosition.z - 0.04 * frontPerp.z;
-        v2.z = camPosition.z + 0.04 * frontPerp.z;
+        v1.x = static_cast<float>(camPosition.x - 0.04f * frontPerp.x);
+        v2.x = static_cast<float>(camPosition.x + 0.04f * frontPerp.x);
+        v1.z = static_cast<float>(camPosition.z - 0.04f * frontPerp.z);
+        v2.z = static_cast<float>(camPosition.z + 0.04f * frontPerp.z);
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
@@ -38,14 +38,14 @@ public:
         vertices[9] = 0.0f;
 
         vertices[10] = v1.x;
-        vertices[11] = v1.y + 0.03;
+        vertices[11] = static_cast<float>(v1.y + 0.03f);
         vertices[12] = v1.z;
 
         vertices[13] = 0.0f;
         vertices[14] = 1.0f;
 
         vertices[15] = v2.x;
-        vertices[16] = v2.y + 0.03;
+        vertices[16] = static_cast<float>(v2.y + 0.03f);
         vertices[17] = v2.z;
 
         vertices[18] = 1.0f;
@@ -88,7 +88,7 @@ public:
                 else return 1;
             }
         }
-        -1;
+        return -1;
     };
 
     void draw(Shader& ourShader) {

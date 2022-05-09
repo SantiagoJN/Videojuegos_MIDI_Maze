@@ -14,15 +14,15 @@ public:
         double alto = 0.015;
 
         glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
-        camPosition.x = camPosition.x + front.x * dist;
-        camPosition.z = camPosition.z + front.z * dist;
+        camPosition.x = static_cast<float>(camPosition.x + front.x * dist);
+        camPosition.z = static_cast<float>(camPosition.z + front.z * dist);
 
         glm::vec3 v1(0, 0.035, 0);
         glm::vec3 v2(0, 0.035, 0);
-        v1.x = camPosition.x - ancho * frontPerp.x + 0.0562 * frontPerp.x;
-        v2.x = camPosition.x + ancho * frontPerp.x + 0.0562 * frontPerp.x;
-        v1.z = camPosition.z - ancho * frontPerp.z + 0.0562 * frontPerp.z;
-        v2.z = camPosition.z + ancho * frontPerp.z + 0.0562 * frontPerp.z;
+        v1.x = static_cast<float>(camPosition.x - ancho * frontPerp.x + 0.0562f * frontPerp.x);
+        v2.x = static_cast<float>(camPosition.x + ancho * frontPerp.x + 0.0562f * frontPerp.x);
+        v1.z = static_cast<float>(camPosition.z - ancho * frontPerp.z + 0.0562f * frontPerp.z);
+        v2.z = static_cast<float>(camPosition.z + ancho * frontPerp.z + 0.0562f * frontPerp.z);
 
         //glm::vec3 v1(-0.02, -0.015, 0);
         //glm::vec3 v2(0.02, -0.015, 0);
@@ -41,14 +41,14 @@ public:
         vertices[9] = 0.0f;
 
         vertices[10] = v1.x;
-        vertices[11] = v1.y + alto;
+        vertices[11] = static_cast<float>(v1.y + alto);
         vertices[12] = v1.z;
 
         vertices[13] = 0.0f;
         vertices[14] = 1.0f;
 
         vertices[15] = v2.x;
-        vertices[16] = v2.y + alto;
+        vertices[16] = static_cast<float>(v2.y + alto);
         vertices[17] = v2.z;
 
         vertices[18] = 1.0f;
@@ -76,15 +76,15 @@ public:
         double alto = 0.015;
 
         glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
-        camPosition.x = camPosition.x + front.x * dist;
-        camPosition.z = camPosition.z + front.z * dist;
+        camPosition.x = static_cast<float>(camPosition.x + front.x * dist);
+        camPosition.z = static_cast<float>(camPosition.z + front.z * dist);
 
         glm::vec3 v1(0, 0.035, 0);
         glm::vec3 v2(0, 0.035, 0);
-        v1.x = camPosition.x - ancho * frontPerp.x + 0.0562*frontPerp.x;
-        v2.x = camPosition.x + ancho * frontPerp.x + 0.0562*frontPerp.x;
-        v1.z = camPosition.z - ancho * frontPerp.z + 0.0562*frontPerp.z;
-        v2.z = camPosition.z + ancho * frontPerp.z + 0.0562*frontPerp.z;
+        v1.x = static_cast<float>(camPosition.x - ancho * frontPerp.x + 0.0562f*frontPerp.x);
+        v2.x = static_cast<float>(camPosition.x + ancho * frontPerp.x + 0.0562f*frontPerp.x);
+        v1.z = static_cast<float>(camPosition.z - ancho * frontPerp.z + 0.0562f*frontPerp.z);
+        v2.z = static_cast<float>(camPosition.z + ancho * frontPerp.z + 0.0562f*frontPerp.z);
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
@@ -100,14 +100,14 @@ public:
         vertices[9] = 0.0f;
 
         vertices[10] = v1.x;
-        vertices[11] = v1.y + alto;
+        vertices[11] = static_cast<float>(v1.y + alto);
         vertices[12] = v1.z;
 
         vertices[13] = 0.0f;
         vertices[14] = 1.0f;
 
         vertices[15] = v2.x;
-        vertices[16] = v2.y + alto;
+        vertices[16] = static_cast<float>(v2.y + alto);
         vertices[17] = v2.z;
 
         vertices[18] = 1.0f;

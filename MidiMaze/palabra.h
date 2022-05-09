@@ -9,8 +9,8 @@ public:
     char letras[12];
     letra miLista[12];
 
-    float ancho = 0.03;
-    float largo = 0.04;
+    float ancho = 0.03f;
+    float largo = 0.04f;
 
     // constructor, expects a filepath to a 3D model.
     Palabra(glm::vec3 v1Real, glm::vec3 v2Real,double xInicial, double y, Shader& ourShader, string palabra) {
@@ -38,7 +38,7 @@ public:
     void setUpLetra(glm::vec3 v1, glm::vec3 v2, Shader& ourShader, int indice, char let, double x, double y) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        miLista[indice] = letra(glm::vec3(v1.x + x * totalx, v1.y + y * totaly, v1.z + 0.025), glm::vec3(v1.x + (x + ancho) * totalx, v1.y + y * totaly, v1.z + 0.025), v1.y + (y + largo) * totaly, ourShader, let);
+        miLista[indice] = letra(glm::vec3(v1.x + x * totalx, v1.y + y * totaly, v1.z + 0.025), glm::vec3(v1.x + (x + ancho) * totalx, v1.y + y * totaly, v1.z + 0.025), static_cast<float>(v1.y + (y + largo) * totaly), ourShader, let);
     }
 
 
