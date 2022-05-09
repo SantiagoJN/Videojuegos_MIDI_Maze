@@ -82,6 +82,7 @@ Map temp;
 
 // ###Constantes varias###
 const bool versionModerna = true;
+bool relSpeed;
 
 
 int main()
@@ -196,12 +197,10 @@ int main()
         }
 
 
+        // =====================================================================================================================
+        // ======================================================== GAME =======================================================
+        // =====================================================================================================================
 
-
-
-
-
-        //GAME
         glfwSetMouseButtonCallback(window, mouse_button_callback);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el rat�n
         glfwSetCursorPosCallback(window, mouse_callback);
@@ -218,10 +217,12 @@ int main()
         bool regenSpeed = menu.getRegenSpeed();
         bool reviveSpeed = menu.getReviveSpeed();           //Velocidades
         bool reloadSpeed = menu.getReloadSpeed();
+        relSpeed = reloadSpeed;
         statusPlayer status(camera.getPosition(), camera.Front, ourShader, vidas);
         Enemy myEnemies;
         if (!glfwWindowShouldClose(window)) {
-            myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, pared.getDim());
+            myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, 
+                pared.getDim(), menu.getRegenSpeed(), menu.getReloadSpeed());
         }
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================
@@ -434,12 +435,15 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (versionModerna) {
         if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-            cout << currentDelay<<" "<<deltaTime<<" "<< reloadTime[CAD_RAPIDA] << endl;
+            //cout << currentDelay<<" "<<deltaTime<<" "<< reloadTime[CAD_RAPIDA] << endl;
             if (currentDelay == 0) { // Puedo disparar
                 //leave = gameLeaver(glm::vec3(camera.getPosition().x - 0.04, -0.01,camera.Front.z * (camera.getPosition().z - 0.12)), glm::vec3(camera.getPosition().x + 0.04, -0.01, camera.Front.z * (camera.getPosition().z - 0.12)), camera.getPosition(), ourShader);
                 newBullet = true;
                 SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
-                currentDelay = static_cast<unsigned int>(reloadTime[CAD_RAPIDA] / deltaTime);
+                //currentDelay = static_cast<unsigned int>(reloadTime[CAD_RAPIDA] / deltaTime);
+                if (relSpeed) currentDelay = static_cast<unsigned int>(reloadTime[CAD_RAPIDA] / deltaTime);
+                else currentDelay = static_cast<unsigned int>(reloadTime[CAD_LENTA] / deltaTime);
+                
             }
             //cout << camera.Position[0] << "," << camera.Position[1] << "," << camera.Position[2] << endl;
             //cout << camera.Front[0] << "," << camera.Front[1] << "," << camera.Front[2] << endl;

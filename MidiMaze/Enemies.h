@@ -44,6 +44,7 @@ enum nivelesDificultad { VERY_DUMB, PLAIN_DUMB, NOT_SO_DUMB};
 
 enum velocidadRegeneracion {REG_RAPIDA, REG_LENTA};
 int regenJugador[] = { 5, 10 }; // Numero de frames que se regenera el jugador
+bool regenSeleccionada;
 
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 float angulo_vision = 45.0f; // 90 grados en total
@@ -107,8 +108,11 @@ public:
     Enemy() {};
 
     // constructor, expects a filepath to a 3D model.
-    Enemy(float scale,int numvidas, int nDumbs, int nMDumbs, int nNDumbs, vector<vector<bool>> laberinto, Map mapa, float dim) : mapa(mapa), map(laberinto), dim(dim), scale(scale) {
+    Enemy(float scale,int numvidas, int nDumbs, int nMDumbs, int nNDumbs, vector<vector<bool>> laberinto, Map mapa, 
+        float dim, bool regenSpeed, bool reloadSpeed) 
+        : mapa(mapa), map(laberinto), dim(dim), scale(scale){
         // Comprobamos que el n�mero de enemigos es correcto
+        regenSeleccionada = regenSpeed;
         num_vidas = numvidas;
         numEnemies = nDumbs + nMDumbs + nNDumbs;
         int numColors = sizeof(colors) / sizeof(colors[0]);
@@ -165,7 +169,9 @@ public:
                         states.push_back(ANDANDO);   //Estado inicial
                         prevState.push_back(ANDANDO); // Valor por defecto~~
                         currentDelays.push_back(0); // Delays de los disparos
-                        cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia rápida a todos
+						if(reloadSpeed) cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia
+                        else cadencias.push_back(CAD_LENTA);
+                        
 
                         if (enemy < nDumbs) dificultades.push_back(VERY_DUMB); // Dificultad del enemigo
                         else if (enemy < (nDumbs + nMDumbs))  dificultades.push_back(PLAIN_DUMB); // Dificultad del enemigo
@@ -682,14 +688,19 @@ public:
                 vidasJugador++;
                 SoundEngine->play2D("resources/effects/iniciopartida.mp3", false);
                 if (vidasJugador < num_vidas) { // Si aún se puede recuperar más, se resetea el contador
-                    counterRegen = static_cast<int>(static_cast<float>(regenJugador[REG_RAPIDA]) / deltaTime);
+                    if (regenSeleccionada) { // Regeneración lenta
+                        counterRegen = static_cast<int>(static_cast<float>(regenJugador[REG_LENTA]) / deltaTime);
+                    }
+                    else {
+                        counterRegen = static_cast<int>(static_cast<float>(regenJugador[REG_RAPIDA]) / deltaTime);
+                    }
                 }
                 else {
                     counterRegen = 0;
                 }
             }
             else if (counterRegen > 0) {
-                //cout << "counterregen " << counterRegen << endl;
+                cout << "counterregen " << counterRegen << endl;
                 counterRegen--; // Se actualiza el contador
             }
         }
@@ -726,7 +737,12 @@ public:
                         }
                     }
                     else{ // Si aún le quedan vidas y no tiene contador, se le da tiempo de recuperación
-                        counterRegen = static_cast<int>(static_cast<float>(regenJugador[REG_RAPIDA]) / deltaTime);
+                        if (regenSeleccionada) { // Regeneración lenta
+                            counterRegen = static_cast<int>(static_cast<float>(regenJugador[REG_LENTA]) / deltaTime);
+                        }
+                        else {
+                            counterRegen = static_cast<int>(static_cast<float>(regenJugador[REG_RAPIDA]) / deltaTime);
+                        }
                     }
                 }
 				
