@@ -301,8 +301,9 @@ int main()
 
             leave.draw(ourShader);
 
-            status.setUp(camera.getPosition(), camera.Front, ourShader,vidas);
-            status.draw(camera.getPosition(), camera.Front,ourShader);
+            
+            //status.setUp(camera.getPosition(), camera.Front, ourShader,vidas);
+            status.draw(camera.getPosition(), camera.Front,camera.Pitch, ourShader);
 
             if(!leave.pause()) mira.draw(camera.getPosition(), camera.Front, ourShader);
 

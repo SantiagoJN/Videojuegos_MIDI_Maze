@@ -12,7 +12,7 @@ public:
         double ancho = 0.01;    //ancho/2
         double dist = 0.12;  //Está a 0.12 de la cámara
         double alto = 0.015;
-
+        /*
         glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
         camPosition.x = static_cast<float>(camPosition.x + front.x * dist);
         camPosition.z = static_cast<float>(camPosition.z + front.z * dist);
@@ -23,9 +23,9 @@ public:
         v2.x = static_cast<float>(camPosition.x + ancho * frontPerp.x + 0.0562f * frontPerp.x);
         v1.z = static_cast<float>(camPosition.z - ancho * frontPerp.z + 0.0562f * frontPerp.z);
         v2.z = static_cast<float>(camPosition.z + ancho * frontPerp.z + 0.0562f * frontPerp.z);
-
-        //glm::vec3 v1(-0.02, -0.015, 0);
-        //glm::vec3 v2(0.02, -0.015, 0);
+        */
+        glm::vec3 v1(-0.02, -0.015, 0);
+        glm::vec3 v2(0.02, -0.015, 0);
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
@@ -134,22 +134,27 @@ public:
     statusPlayer() {};
 
 
-    void draw(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader) {
+    void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader) {
         if (shown) {
-            /*float dist = 0.12;
-            double ancho = 0.02;
+            float dist = 0.12;
+            double ancho = 0.01;
             glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
-            camPosition.x = camPosition.x + front.x * dist - ancho * frontPerp.x;
-            camPosition.z = camPosition.z + front.z * dist - ancho * frontPerp.z;
+            camPosition.x = camPosition.x + front.x * dist;
+            camPosition.z = camPosition.z + front.z * dist;
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, camPosition);
-            //model = glm::rotate(model, glm::radians(-90.0f), front);
-            ourShader.setMat4("model", model);*/
+            //cout << front.x<<"\t"<<front.y<<"\t"<<front.z << endl;
+            float angle = atan(front.x / front.z) * 180.0f / 3.1415f;
+            cout << angle << endl;
+            if (angle < 0) angle -= 180;
+            cout << "\t"<<angle << endl;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+            ourShader.setMat4("model", model);
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texture1);
-            glm::mat4 model = glm::mat4(1.0f);
+            /*glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3(0, 0, 0)); // translate it so it's at the center of the scene
-            ourShader.setMat4("model", model);
+            ourShader.setMat4("model", model);*/
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }
