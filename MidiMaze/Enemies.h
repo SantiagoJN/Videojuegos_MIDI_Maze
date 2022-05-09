@@ -42,6 +42,9 @@ int reloadTime[] = { 1,3 }; // Delays para representar la cadencia de disparo. C
 
 enum nivelesDificultad { VERY_DUMB, PLAIN_DUMB, NOT_SO_DUMB};
 
+enum velocidadRegeneracion {REG_RAPIDA, REG_LENTA};
+int regenJugador[] = { 5, 10 }; // Numero de frames que se regenera el jugador
+
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 float angulo_vision = 45.0f; // 90 grados en total
 
@@ -72,6 +75,9 @@ private:
     vector<glm::vec2> prevIndex;
     vector<glm::vec2> index;
     vector<glm::vec3> destiny;
+
+    
+    int counterRegen = 0;
 
     float radious;
 
@@ -669,6 +675,25 @@ public:
     void actualizarDelay(int enemyIndex) {
         if (currentDelays[enemyIndex] > 0) currentDelays[enemyIndex]--;
     }
+
+    void actualizarRegenJugador(int& vidasJugador, float deltaTime) {
+        if (vidasJugador < num_vidas) {
+            if (counterRegen == 1) { // Se le suma una vida
+                vidasJugador++;
+                SoundEngine->play2D("resources/effects/iniciopartida.mp3", false);
+                if (vidasJugador < num_vidas) { // Si aún se puede recuperar más, se resetea el contador
+                    counterRegen = static_cast<int>(static_cast<float>(regenJugador[REG_RAPIDA]) / deltaTime);
+                }
+                else {
+                    counterRegen = 0;
+                }
+            }
+            else if (counterRegen > 0) {
+                //cout << "counterregen " << counterRegen << endl;
+                counterRegen--; // Se actualiza el contador
+            }
+        }
+    }
 	
     void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime, int& balasRecibidas, int& vidasJugador, bool pause) {
         hit_time = static_cast<int>(0.1 / deltaTime);
@@ -693,16 +718,21 @@ public:
                 if (balasEnemigo > 0) {
                     balasAcertadas += balasEnemigo;
                     vidasJugador -= balasEnemigo;
-                    cout << "Vidas: " << vidasJugador << endl;
+                    //cout << "Vidas: " << vidasJugador << endl;
                     if (vidasJugador <= 0) {
                         puntuaciones[i]++;
                         if (puntuaciones[i] == 10) {
                             cout << "******GANA ENEMIGO " << i << "******" << endl;
                         }
                     }
+                    else{ // Si aún le quedan vidas y no tiene contador, se le da tiempo de recuperación
+                        counterRegen = static_cast<int>(static_cast<float>(regenJugador[REG_RAPIDA]) / deltaTime);
+                    }
                 }
+				
             }
             pintarEnemigo(i, shader); // Pintar el enemigo como tal
+            actualizarRegenJugador(vidasJugador, deltaTime);
             
         }
         

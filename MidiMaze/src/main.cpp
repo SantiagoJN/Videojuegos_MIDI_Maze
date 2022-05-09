@@ -356,9 +356,9 @@ void processInput(GLFWwindow* window)
             glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS ||
             glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ||
             glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            cout << "Hey " << velocity<<endl;
+            //cout << "Hey " << velocity<<endl;
             velocity = velocity / 2;
-            cout << "Slowed " << velocity << endl;
+            //cout << "Slowed " << velocity << endl;
             slow = true;
         }
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
@@ -384,7 +384,7 @@ void processInput(GLFWwindow* window)
         }
         if (slow) {
             velocity = velocity * 2;
-            cout << "ou " << velocity << endl;
+            //cout << "ou " << velocity << endl;
         }
     }
     else {
