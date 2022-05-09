@@ -393,8 +393,10 @@ public:
                         cout << "elijo: "<< endl;
                         
                     }
+                    else {
+                        hit_timeout[enemy] = hit_time;
+                    }
                     SoundEngine->play2D("resources/effects/hitmarker.mp3", false); //Play the sound without loop
-                    hit_timeout[enemy] = hit_time;
                     return true;
                 }
             }
@@ -531,7 +533,7 @@ public:
         model = glm::rotate(model, glm::radians(currentRotation[enemyIndex]), glm::vec3(0, 1, 0)); // Rotamos en la dirección en la que está mirando
 
         shader.setMat4("model", model);
-        if (hit_timeout[enemyIndex] > 0) { // Dibujarlo amarillo un momento cuando se le golpea
+        if (hit_timeout[enemyIndex] > 0 && vidas[enemyIndex] > 0) { // Dibujarlo amarillo un momento cuando se le golpea
             yellowModel.Draw(shader);
             hit_timeout[enemyIndex]--; // Ya hemos dibujado un frame
         }
@@ -766,8 +768,10 @@ public:
                 }
 				
             }
-            pintarEnemigo(i, shader); // Pintar el enemigo como tal
-            actualizarRegenJugador(vidasJugador, deltaTime);
+            if (spawnCont[i] == 0) {
+                pintarEnemigo(i, shader); // Pintar el enemigo como tal
+                actualizarRegenJugador(vidasJugador, deltaTime);
+            }
             
         }
         
