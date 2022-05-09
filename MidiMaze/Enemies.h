@@ -95,7 +95,7 @@ private:
     vector<int> vidas;
     vector<int> puntuaciones;
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
-    int puntuacionJugador;
+    int puntuacionJugador = 0;
     float enemySpeed = 2.0f;
     float rotationSpeed = 120.0f;
 
@@ -204,6 +204,10 @@ public:
         }
 
     };
+
+    int getPuntuacionJugador() {
+        return puntuacionJugador;
+    }
 
     void rotacionInicial(int enemyIndex) {
         // Girar las caras para que siempre miren hacia el frente

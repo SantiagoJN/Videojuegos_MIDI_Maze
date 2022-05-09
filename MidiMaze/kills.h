@@ -1,5 +1,5 @@
 #pragma once
-class statusPlayer {
+class killsPlayer {
 
 public:
 
@@ -7,25 +7,14 @@ public:
     bool shown;
 
     // constructor, expects a filepath to a 3D model.
-    statusPlayer(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader, int numVidas) {
+    killsPlayer(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader) {
         shown = true;
         double ancho = 0.01;    //ancho/2
         double dist = 0.12;  //Está a 0.12 de la cámara
         double alto = 0.015;
-        /*
-        glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
-        camPosition.x = static_cast<float>(camPosition.x + front.x * dist);
-        camPosition.z = static_cast<float>(camPosition.z + front.z * dist);
-
-        glm::vec3 v1(0, 0.035, 0);
-        glm::vec3 v2(0, 0.035, 0);
-        v1.x = static_cast<float>(camPosition.x - ancho * frontPerp.x + 0.0562f * frontPerp.x);
-        v2.x = static_cast<float>(camPosition.x + ancho * frontPerp.x + 0.0562f * frontPerp.x);
-        v1.z = static_cast<float>(camPosition.z - ancho * frontPerp.z + 0.0562f * frontPerp.z);
-        v2.z = static_cast<float>(camPosition.z + ancho * frontPerp.z + 0.0562f * frontPerp.z);
-        */
-        glm::vec3 v1(-ancho+0.0562f, 0.035, 0);
-        glm::vec3 v2(ancho+ 0.0562f, 0.035, 0);
+        
+        glm::vec3 v1(-ancho + 0.0362f, 0.035, 0);
+        glm::vec3 v2(ancho + 0.0362f, 0.035, 0);
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
@@ -61,7 +50,7 @@ public:
         indices[4] = 2;
         indices[5] = 3;
 
-        setUpWall(ourShader,numVidas);
+        setUpWall(ourShader, 0);
         //setUpDespleg(v1, v2, ourShader);
 
 
@@ -69,10 +58,6 @@ public:
         else normal = glm::vec2(1, 0);
     };
 
-    void setUp(Shader& ourShader, int numLives) {
-        
-        setUpWall(ourShader,numLives);
-    }
 
     bool pause() {
         return shown;
@@ -82,7 +67,13 @@ public:
         shown = !shown;
     }
 
-    statusPlayer() {};
+    killsPlayer() {};
+
+
+    void setUp(Shader& ourShader, int numLives) {
+        
+        setUpWall(ourShader, numLives);
+    }
 
 
     void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader) {
@@ -117,7 +108,7 @@ private:
     unsigned int indices[6];
     unsigned int VBO, VAO, EBO;
     unsigned int texture1;
-    void setUpWall(Shader& ourShader, int numLives) {
+    void setUpWall(Shader& ourShader, int numKills) {
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
@@ -152,11 +143,8 @@ private:
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-        string photo = "resources/Fotos_midi_maze/";
-        if (numLives <= 0) photo = photo + "0hp.jpg";
-        else if(numLives == 1) photo = photo + "1hp.jpg";
-        else if (numLives == 2) photo = photo + "2hp.jpg";
-        else photo = photo + "3hp.jpg";
+        string photo = "resources/Fotos_midi_maze/kills/";
+        photo = photo + to_string(numKills) + ".jpg";
 
         unsigned char* data;
         data = stbi_load(photo.c_str(), &width, &height, &nrChannels, 0);
@@ -167,7 +155,7 @@ private:
         }
         else
         {
-            std::cout << "Failed to load texture" << std::endl;
+            std::cout << "Failed to load texture " <<photo<< std::endl;
         }
         stbi_image_free(data);
 

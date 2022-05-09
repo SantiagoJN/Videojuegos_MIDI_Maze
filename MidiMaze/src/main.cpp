@@ -20,7 +20,7 @@
 #include <leaveGame.h>
 #include <statusIngame.h>
 #include <mirilla.h>
-
+#include <kills.h>
 
 #include <iostream>
 
@@ -224,12 +224,15 @@ int main()
         bool reviveSpeed = menu.getReviveSpeed();           //Velocidades
         bool reloadSpeed = menu.getReloadSpeed();
         relSpeed = reloadSpeed;
+
+        killsPlayer kills(camera.getPosition(), camera.Front, ourShader);
         statusPlayer status(camera.getPosition(), camera.Front, ourShader, vidas);
         Enemy myEnemies;
         if (!glfwWindowShouldClose(window)) {
             myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, 
                 pared.getDim(), menu.getRegenSpeed(), menu.getReloadSpeed(), menu.getReviveSpeed());
         }
+        int puntJug = 0;
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================
         // =====================================================================================================================
@@ -300,12 +303,18 @@ int main()
                 myEnemies.blinded();
                 camera.updatePosition(glm::vec3(pos.x, 0.0, pos.y));
                 vidas = menu.getNumVidas();
+                status.setUp( ourShader, vidas);
             }
 
             leave.draw(ourShader);
 
+            if (myEnemies.getPuntuacionJugador() != puntJug) {
+                puntJug = myEnemies.getPuntuacionJugador();
+                kills.setUp(ourShader, puntJug);
+            }
+
+            kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             
-            //status.setUp(camera.getPosition(), camera.Front, ourShader,vidas);
             status.draw(camera.getPosition(), camera.Front,camera.Pitch, ourShader);
 
             if(!leave.pause()) mira.draw(camera.getPosition(), camera.Front, ourShader);

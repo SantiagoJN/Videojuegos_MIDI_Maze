@@ -162,6 +162,7 @@
     <ClInclude Include="Enemies.h" />
     <ClInclude Include="EnemyBullets.h" />
     <ClInclude Include="gameStarter.h" />
+    <ClInclude Include="kills.h" />
     <ClInclude Include="leaveGame.h" />
     <ClInclude Include="letra.h" />
     <ClInclude Include="lifes.h" />

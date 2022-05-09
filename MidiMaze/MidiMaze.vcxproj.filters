@@ -110,5 +110,8 @@
     <ClInclude Include="diccionario.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
+    <ClInclude Include="kills.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

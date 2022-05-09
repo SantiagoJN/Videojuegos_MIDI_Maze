@@ -122,7 +122,8 @@ public:
                 }
                 else if (i > 3) {
                     int map = i - 4;
-                    selection = currentIndex + map;
+                    if(currentIndex + map < pal.size())selection = currentIndex + map;
+                    
                     cout << getSelection() << endl;
                 }
             }
