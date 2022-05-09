@@ -68,6 +68,7 @@ Shader ourShader;
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
+
 float lastFrameFPS = 0.0f;
 int countFrames = 0; // Para saber los frames que ha habido en 1s
 
@@ -83,6 +84,7 @@ Map temp;
 // ###Constantes varias###
 const bool versionModerna = true;
 bool relSpeed;
+float volume = 0.7f;
 
 
 int main()
@@ -131,6 +133,7 @@ int main()
     // build and compile our shader zprogram
     // ------------------------------------
     ourShader = Shader("shaders/1.model_loading.vs", "shaders/1.model_loading.fs");
+    SoundEngine->setSoundVolume(volume);
     /*
     glm::vec3 v1(-5, -3, -4.2);
     glm::vec3 v2(5, -3, -4.2);
