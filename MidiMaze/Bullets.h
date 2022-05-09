@@ -44,7 +44,7 @@ public:
                 if (!collided[i]) {
                     collided[i] = mapa.checkCollisionBullets(positions[i], positions[i] + directions[i] * bulletSpeed * deltaTime, radious * 0.8f);
                     if (!collided[i]) {
-                        collided[i] = enemies.checkCollision(positions[i], radious);
+                        collided[i] = enemies.checkCollision(positions[i], radious, deltaTime);
                         if (!collided[i]) {
                             glm::mat4 model = glm::mat4(1.0f);
                             positions[i] = positions[i] + directions[i] * bulletSpeed * deltaTime;

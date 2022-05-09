@@ -136,7 +136,7 @@ public:
 
     void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader) {
         if (shown) {
-            float dist = 0.12;
+            float dist = 0.12f;
             double ancho = 0.01;
             glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
             camPosition.x = camPosition.x + front.x * dist;

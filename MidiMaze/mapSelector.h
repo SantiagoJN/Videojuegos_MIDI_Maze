@@ -148,7 +148,7 @@ public:
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
             int gap = currentIndex + 9;
-            if (gap > pal.size()) gap = pal.size();
+            if (gap > pal.size()) gap = static_cast<int>(pal.size());
             for (int i = currentIndex; i < gap; i++) {
                 pal[i].draw(ourShader,i-currentIndex,false);
             }
