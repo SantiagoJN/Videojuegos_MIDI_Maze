@@ -303,9 +303,11 @@ int main()
 
             int balasRecibidas = 0;
             bool ganaEnemigo = false;
+            bool mataEnemigo = false;
             string nombreGanador = "";
             myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas, 
-                leave.pause() || WON, ganaEnemigo, nombreGanador);
+                leave.pause() || WON, ganaEnemigo, mataEnemigo, nombreGanador);
+            if (mataEnemigo) cout << "--Te ha matado el bot " << nombreGanador << endl;
             if (ganaEnemigo) cout << "******Ha ganado el bot " << nombreGanador << "*******" << endl;
             if (vidas <= 0) {
                 glm::vec2 pos = myEnemies.getFreePosition();
