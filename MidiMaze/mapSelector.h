@@ -7,7 +7,8 @@ public:
     bool shown;
     vector<glm::vec4> buttons;
     string selection = "resources/maps/originalMap.MAZ";
-    Palabra pal;
+    vector<Palabra> pal;
+    int currentIndex;
 
     // constructor, expects a filepath to a 3D model.
     mapSelector(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader, glm::vec3 v1Real, glm::vec3 v2Real) {
@@ -49,12 +50,15 @@ public:
 
         setUpWall(ourShader);
 
-        string path = "/";
-
-        for (const auto& file : std::filesystem::directory_iterator("resources/maps/"))
+        int i = 0;
+        for (const auto& file : std::filesystem::directory_iterator("resources/maps/")) {
             cout << file.path() << endl;
+            //setUpPalabra(v1Real, v2Real, ourShader, file.path().string(), i);
+            i++;
+        }
+            
 
-        setUpPalabra(v1Real, v2Real, ourShader);
+        
         cout << "Map selector" << endl;
         buttons.push_back(glm::vec4(0.7, 0.93, 0.605, 0.65));
         buttons.push_back(glm::vec4(0.7, 0.93, 0.52, 0.575));
@@ -91,12 +95,12 @@ public:
         return false;
     };
 
-    void setUpPalabra(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
+    void setUpPalabra(glm::vec3 v1, glm::vec3 v2,double x,double y, Shader& ourShader,string palabra, int index) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        double x = 0.175;
-        double y = 0.517;
-        pal = Palabra(v1,v2,x,y, ourShader, "palabras.MAZ");
+        //double x = 0.175;
+        //double y = 0.517;
+        pal[index] = Palabra(v1, v2, x, y, ourShader, palabra);
     }
 
 
@@ -111,7 +115,7 @@ public:
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }
-        pal.draw(ourShader);
+        //pal.draw(ourShader);
     };
 
 private:

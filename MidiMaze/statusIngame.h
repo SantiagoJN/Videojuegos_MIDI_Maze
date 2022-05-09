@@ -24,8 +24,8 @@ public:
         v1.z = static_cast<float>(camPosition.z - ancho * frontPerp.z + 0.0562f * frontPerp.z);
         v2.z = static_cast<float>(camPosition.z + ancho * frontPerp.z + 0.0562f * frontPerp.z);
         */
-        glm::vec3 v1(-0.02, -0.015, 0);
-        glm::vec3 v2(0.02, -0.015, 0);
+        glm::vec3 v1(-ancho+0.0562f, 0.035, 0);
+        glm::vec3 v2(ancho+ 0.0562f, 0.035, 0);
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
