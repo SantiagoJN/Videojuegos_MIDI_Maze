@@ -113,5 +113,11 @@
     <ClInclude Include="kills.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
+    <ClInclude Include="Dead.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="showScreen.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

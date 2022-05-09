@@ -21,7 +21,7 @@
 #include <statusIngame.h>
 #include <mirilla.h>
 #include <kills.h>
-#include <winner.h>
+#include <showScreen.h>
 
 #include <iostream>
 
@@ -33,7 +33,7 @@
 using namespace irrklang;
 
 
-bool WON;
+bool WON, regenerando;
 
 double prevXM, prevYM;
 
@@ -154,7 +154,8 @@ int main()
     cout << camera.Front.x << "," << camera.Front.y << "," << camera.Front.z << endl;
 
     
-    winner win = winner(camera.getPosition(), camera.Front, ourShader);
+    showScreen win = showScreen(camera.getPosition(), camera.Front, ourShader, "resources/Fotos_midi_maze/winner/");
+    showScreen dead = showScreen(camera.getPosition(), camera.Front, ourShader, "resources/Fotos_midi_maze/dead/");
     leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
     //leave = gameLeaver(glm::vec3(camera.getPosition().x -0.4, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x+0.4, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
     Princip menu;
@@ -235,6 +236,7 @@ int main()
         }
         int puntJug = 0;
         WON = false;
+        regenerando = false;
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================
         // =====================================================================================================================
@@ -268,10 +270,7 @@ int main()
             }
             if (currentDelay > 0) currentDelay--; // Decrementar el contador de delay para el disparo del jugador
 
-            if (currentRegenTime > 0) {
-                cout << "Regenerando... " << currentRegenTime << endl;
-                currentRegenTime--;
-            }
+            
             // input
             if (!leave.pause()) processInput(window);
 
@@ -306,7 +305,11 @@ int main()
             string nombreGanador = "";
             myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas, 
                 leave.pause() || WON, ganaEnemigo, nombreGanador);
-            if (ganaEnemigo) cout << "******Ha ganado el bot " << nombreGanador << "*******" << endl;
+            if (ganaEnemigo) {
+                win.setUp(ourShader, nombreGanador);
+                WON = true;
+                cout << "******Ha ganado el bot " << nombreGanador << "*******" << endl;
+            }
             if (vidas <= 0) {
                 glm::vec2 pos = myEnemies.getFreePosition();
                 myEnemies.blinded();
@@ -315,6 +318,19 @@ int main()
                 status.setUp( ourShader, vidas);
                 if (reviveSpeed) currentRegenTime = static_cast<int>(spawnTime[SPAWN_RAPIDO] / deltaTime);
                 else currentRegenTime = static_cast<int>(spawnTime[SPAWN_LENTO] / deltaTime);
+                dead.setUp(ourShader, "blue");
+            }
+
+
+            if (currentRegenTime > 0) {
+                regenerando = true;
+                myEnemies.blinded();
+                cout << "Regenerando... " << currentRegenTime << endl;
+                currentRegenTime--;
+                dead.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
+            }
+            else {
+                regenerando = false;
             }
 
             leave.draw(ourShader);
@@ -325,7 +341,10 @@ int main()
                 
             }
 
-            if (puntJug > 0) {
+            if (WON) {
+                win.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
+            }
+            else if (puntJug > 9) {
                 cout << "Winner" << endl;
                 WON = true;
                 win.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
@@ -385,7 +404,7 @@ void processInput(GLFWwindow* window)
         glfwSetCursorPosCallback(window, nada);
         //glfwSetWindowShouldClose(window, true);
     }
-    if (!WON) {
+    if (!WON && !regenerando) {
         if (versionModerna) {
             bool slow = false;
             if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ||
@@ -455,14 +474,15 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
         lastY = static_cast<float>(ypos);
         firstMouse = false;
     }
-
-    if (versionModerna) {
-        float xoffset = static_cast<float>(xpos - lastX);
-        float yoffset = static_cast<float>(lastY - ypos); // reversed since y-coordinates range from bottom to top
-        lastX = static_cast<float>(xpos);
-        lastY = static_cast<float>(ypos);
-        //leave = gameLeaver(glm::vec3(camera.getPosition().x - 0.04, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x + 0.04, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
-        camera.ProcessMouseMovement(xoffset, yoffset);
+    if (!WON && !regenerando) {
+        if (versionModerna) {
+            float xoffset = static_cast<float>(xpos - lastX);
+            float yoffset = static_cast<float>(lastY - ypos); // reversed since y-coordinates range from bottom to top
+            lastX = static_cast<float>(xpos);
+            lastY = static_cast<float>(ypos);
+            //leave = gameLeaver(glm::vec3(camera.getPosition().x - 0.04, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x + 0.04, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
+            camera.ProcessMouseMovement(xoffset, yoffset);
+        }
     }
 }
 

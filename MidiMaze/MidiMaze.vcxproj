@@ -157,6 +157,7 @@
     <ClInclude Include="..\..\..\irrKlang-64bit-1.6.0\examples\common\conio.h" />
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Dead.h" />
     <ClInclude Include="desplegable.h" />
     <ClInclude Include="diccionario.h" />
     <ClInclude Include="Enemies.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="src\shader_m.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="showScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
