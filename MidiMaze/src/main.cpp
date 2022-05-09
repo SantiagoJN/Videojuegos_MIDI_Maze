@@ -302,7 +302,11 @@ int main()
             myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime, leave.pause() || WON);
 
             int balasRecibidas = 0;
-            myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas, leave.pause() || WON);
+            bool ganaEnemigo = false;
+            string nombreGanador = "";
+            myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas, 
+                leave.pause() || WON, ganaEnemigo, nombreGanador);
+            if (ganaEnemigo) cout << "******Ha ganado el bot " << nombreGanador << "*******" << endl;
             if (vidas <= 0) {
                 glm::vec2 pos = myEnemies.getFreePosition();
                 myEnemies.blinded();
