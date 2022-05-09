@@ -119,6 +119,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\HOME\Documents\midiMazeArch\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,12 +162,17 @@
     <ClInclude Include="EnemyBullets.h" />
     <ClInclude Include="gameStarter.h" />
     <ClInclude Include="leaveGame.h" />
+    <ClInclude Include="letra.h" />
     <ClInclude Include="lifes.h" />
+    <ClInclude Include="mapSelector.h" />
+    <ClInclude Include="mirilla.h" />
     <ClInclude Include="numEnemies.h" />
+    <ClInclude Include="palabra.h" />
     <ClInclude Include="screen.h" />
     <ClInclude Include="scr_Princ.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="speed.h" />
+    <ClInclude Include="statusIngame.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="mesh.h" />

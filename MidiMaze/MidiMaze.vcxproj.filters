@@ -92,5 +92,20 @@
     <ClInclude Include="leaveGame.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
+    <ClInclude Include="mapSelector.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="statusIngame.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="mirilla.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="letra.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="palabra.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
