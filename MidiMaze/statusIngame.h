@@ -9,22 +9,23 @@ public:
     // constructor, expects a filepath to a 3D model.
     statusPlayer(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader, int numVidas) {
         shown = true;
-        double ancho = 0.02;    //ancho/2
+        double ancho = 0.01;    //ancho/2
         double dist = 0.12;  //Está a 0.12 de la cámara
-        double alto = 0.02;
+        double alto = 0.015;
 
         glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
         camPosition.x = camPosition.x + front.x * dist;
         camPosition.z = camPosition.z + front.z * dist;
 
-        cout << "Punto:" << camPosition.x << "," << camPosition.z << endl;
-        glm::vec3 v1(0, -0.015, 0);
-        glm::vec3 v2(0, -0.015, 0);
-        v1.x = camPosition.x - ancho * frontPerp.x;
-        v2.x = camPosition.x + ancho * frontPerp.x;
-        v1.z = camPosition.z - ancho * frontPerp.z;
-        v2.z = camPosition.z + ancho * frontPerp.z;
+        glm::vec3 v1(0, 0.035, 0);
+        glm::vec3 v2(0, 0.035, 0);
+        v1.x = camPosition.x - ancho * frontPerp.x + 0.0562 * frontPerp.x;
+        v2.x = camPosition.x + ancho * frontPerp.x + 0.0562 * frontPerp.x;
+        v1.z = camPosition.z - ancho * frontPerp.z + 0.0562 * frontPerp.z;
+        v2.z = camPosition.z + ancho * frontPerp.z + 0.0562 * frontPerp.z;
 
+        //glm::vec3 v1(-0.02, -0.015, 0);
+        //glm::vec3 v2(0.02, -0.015, 0);
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
@@ -63,8 +64,6 @@ public:
         setUpWall(ourShader,numVidas);
         //setUpDespleg(v1, v2, ourShader);
 
-        buttons.push_back(glm::vec4(0.31, 0.47, 0.56, 0.62));
-        buttons.push_back(glm::vec4(0.52, 0.68, 0.56, 0.62));
 
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
@@ -134,24 +133,20 @@ public:
 
     statusPlayer() {};
 
-    int checkButton(double xPos, double yPos, Shader& ourShader) {
-        for (int i = 0; i < buttons.size(); i++) {
-            if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
-                SoundEngine->play2D("resources/effects/plik.mp3", false);
-                if (i == 0) {
-                    return 0;
-                }
-                else return 1;
-            }
-        }
-        - 1;
-    };
 
-    void draw(Shader& ourShader) {
+    void draw(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader) {
         if (shown) {
+            /*float dist = 0.12;
+            double ancho = 0.02;
+            glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
+            camPosition.x = camPosition.x + front.x * dist - ancho * frontPerp.x;
+            camPosition.z = camPosition.z + front.z * dist - ancho * frontPerp.z;
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, camPosition);
+            //model = glm::rotate(model, glm::radians(-90.0f), front);
+            ourShader.setMat4("model", model);*/
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texture1);
-
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3(0, 0, 0)); // translate it so it's at the center of the scene
             ourShader.setMat4("model", model);

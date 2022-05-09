@@ -298,7 +298,7 @@ int main()
             leave.draw(ourShader);
 
             status.setUp(camera.getPosition(), camera.Front, ourShader,vidas);
-            status.draw(ourShader);
+            status.draw(camera.getPosition(), camera.Front,ourShader);
 
             if(!leave.pause()) mira.draw(camera.getPosition(), camera.Front, ourShader);
 
@@ -351,26 +351,40 @@ void processInput(GLFWwindow* window)
         //glfwSetWindowShouldClose(window, true);
     }
     if (versionModerna) {
+        bool slow = false;
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ||
+            glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS ||
+            glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ||
+            glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            cout << "Hey " << velocity<<endl;
+            velocity = velocity / 2;
+            cout << "Slowed " << velocity << endl;
+            slow = true;
+        }
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
         //cout << camera.Position.x<<","<<camera.Position.y<<","<<camera.Position.z << endl;
-        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime,up,down,left,right);
+        camera.ProcessKeyboard(Camera_Movement::FORWARD, velocity,up,down,left,right);
         }
 
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
             //cout << camera.Position.x << "," << camera.Position.y << "," << camera.Position.z << endl;
-            camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, up, down, left, right);
+            camera.ProcessKeyboard(Camera_Movement::BACKWARD, velocity, up, down, left, right);
         }
 
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
             left = temp.checkIntersections(camera.Position, (camera.Position - (camera.Right * velocity)));
-            camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime, up, down, left, right);
+            camera.ProcessKeyboard(Camera_Movement::LEFT, velocity, up, down, left, right);
         }
 
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
             right = temp.checkIntersections(camera.Position, (camera.Position + (camera.Right * velocity)));
-            camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime, up, down, left, right);
+            camera.ProcessKeyboard(Camera_Movement::RIGHT, velocity, up, down, left, right);
+        }
+        if (slow) {
+            velocity = velocity * 2;
+            cout << "ou " << velocity << endl;
         }
     }
     else {
