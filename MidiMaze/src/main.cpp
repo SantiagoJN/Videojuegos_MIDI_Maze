@@ -85,7 +85,7 @@ Map temp;
 const bool versionModerna = true;
 bool relSpeed;
 float volume = 0.7f;
-
+int currentRegenTime;
 
 int main()
 {
@@ -264,6 +264,10 @@ int main()
             }
             if (currentDelay > 0) currentDelay--; // Decrementar el contador de delay para el disparo del jugador
 
+            if (currentRegenTime > 0) {
+                cout << "Regenerando... " << currentRegenTime << endl;
+                currentRegenTime--;
+            }
             // input
             if (!leave.pause()) processInput(window);
 
@@ -301,6 +305,8 @@ int main()
                 camera.updatePosition(glm::vec3(pos.x, 0.0, pos.y));
                 vidas = menu.getNumVidas();
                 status.setUp( ourShader, vidas);
+                if (reviveSpeed) currentRegenTime = static_cast<int>(spawnTime[SPAWN_RAPIDO] / deltaTime);
+                else currentRegenTime = static_cast<int>(spawnTime[SPAWN_LENTO] / deltaTime);
             }
 
             leave.draw(ourShader);
