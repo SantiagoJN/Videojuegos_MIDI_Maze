@@ -145,9 +145,7 @@ public:
             model = glm::translate(model, camPosition);
             //cout << front.x<<"\t"<<front.y<<"\t"<<front.z << endl;
             float angle = atan(front.x / front.z) * 180.0f / 3.1415f;
-            cout << angle << endl;
-            if (angle < 0) angle -= 180;
-            cout << "\t"<<angle << endl;
+            if (front.z > 0) angle -= 180;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
             ourShader.setMat4("model", model);
             glActiveTexture(GL_TEXTURE0);
