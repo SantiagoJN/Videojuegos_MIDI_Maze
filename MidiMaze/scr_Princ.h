@@ -50,6 +50,7 @@ public:
             setUpDespleg(v1,v2,ourShader);
 
             buttons.push_back(glm::vec4(0.177, 0.273, 0, 0.05));
+            buttons.push_back(glm::vec4(0.187, 0.38, 0.245, 0.51));
 
             if (v1.x != v2.x) normal = glm::vec2(0, 1);
             else normal = glm::vec2(1, 0);
@@ -99,10 +100,12 @@ public:
 
         bool checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
             cout << buttons.size() << endl;
-            if (xPos >= buttons[0].x && xPos <= buttons[0].y && yPos >= buttons[0].z && yPos <= buttons[0].w) {
-                cout << "BOTON PULSADO" << endl;
-                SoundEngine->play2D("resources/effects/plik.mp3", false);
-                desplegable.buttonCalled();
+            for (int i = 0; i < buttons.size(); i++) {
+                if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
+                    cout << "BOTON PULSADO" << endl;
+                    SoundEngine->play2D("resources/effects/plik.mp3", false);
+                    desplegable.buttonCalled();
+                }
             }
             if (desplegable.getShown()) desplegable.checkButton(xPos,yPos,ourShader, window);
             if (desplegable.maps.getShown()) desplegable.maps.checkButton(xPos, yPos, ourShader);
@@ -110,6 +113,9 @@ public:
                 int which = desplegable.start.checkButton(xPos, yPos);
                 if (which == 1) {
                     int total = desplegable.settings.veryDumb.getNEnemies() + desplegable.settings.notDumb.getNEnemies() + desplegable.settings.plainDumb.getNEnemies();
+                    desplegable.start.buttonCalled();
+                    desplegable.settings.buttonCalled();
+                    predSettings();
                     return total > 0;
                 }
                 else if (which == 2) {
@@ -122,6 +128,12 @@ public:
             }
             return false;
         };
+
+
+        void predSettings() {
+            desplegable.maps.selection = 0;
+            desplegable.settings.restart();
+        }
 
 
         void draw(Shader& ourShader) {

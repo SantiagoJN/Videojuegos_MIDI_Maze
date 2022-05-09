@@ -38,19 +38,21 @@ public:
         collided.push_back(false);
     }
 
-    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa, float deltaTime) {
-        for (int i = 0; i < numBullets; i++) {
-            if (!collided[i]) {
-                collided[i] = mapa.checkCollisionBullets(positions[i], positions[i] + directions[i] * bulletSpeed*deltaTime,radious*0.8f);
+    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa, float deltaTime, bool pause) {
+        if (!pause) {
+            for (int i = 0; i < numBullets; i++) {
                 if (!collided[i]) {
-                    collided[i] = enemies.checkCollision(positions[i], radious);
+                    collided[i] = mapa.checkCollisionBullets(positions[i], positions[i] + directions[i] * bulletSpeed * deltaTime, radious * 0.8f);
                     if (!collided[i]) {
-                        glm::mat4 model = glm::mat4(1.0f);
-                        positions[i] = positions[i] + directions[i] * bulletSpeed * deltaTime;
-                        model = glm::translate(model, positions[i]);
-                        model = glm::scale(model, glm::vec3(scale, scale, scale));
-                        shader.setMat4("model", model);
-                        bullet.Draw(shader);
+                        collided[i] = enemies.checkCollision(positions[i], radious);
+                        if (!collided[i]) {
+                            glm::mat4 model = glm::mat4(1.0f);
+                            positions[i] = positions[i] + directions[i] * bulletSpeed * deltaTime;
+                            model = glm::translate(model, positions[i]);
+                            model = glm::scale(model, glm::vec3(scale, scale, scale));
+                            shader.setMat4("model", model);
+                            bullet.Draw(shader);
+                        }
                     }
                 }
             }

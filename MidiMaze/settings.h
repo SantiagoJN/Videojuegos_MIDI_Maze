@@ -61,6 +61,14 @@ public:
 
     Settings() {};
 
+    void restart() {
+        veryDumb.nEnemies = 0;
+        plainDumb.nEnemies = 0;
+        notDumb.nEnemies = 0;
+        reload.fast = true;
+        regen.fast = true;
+        revive.fast = true;
+    }
 
     void buttonCalled() {
         shown = !shown;

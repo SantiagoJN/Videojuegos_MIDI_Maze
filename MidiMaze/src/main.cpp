@@ -153,11 +153,12 @@ int main()
     
     leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
     //leave = gameLeaver(glm::vec3(camera.getPosition().x -0.4, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x+0.4, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
-
+    Princip menu;
+    bool first = true;
     while (!glfwWindowShouldClose(window)) {
-        Princip menu(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+        if( first )menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+        first = false;
         camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-        cout << "Hola" << endl;
         glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
         leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
 
@@ -198,7 +199,7 @@ int main()
             glfwPollEvents();
 
         }
-
+        if (glfwWindowShouldClose(window)) break;
 
         // =====================================================================================================================
         // ======================================================== GAME =======================================================
@@ -214,6 +215,7 @@ int main()
 
         mirilla mira("resources/objects/bullets/yellow/yellow.obj");
 
+        cout << menu.getMapName() << endl;
         Map pared(menu.getMapName(), ourShader);
         vidas = menu.getNumVidas();
 
@@ -288,7 +290,7 @@ int main()
             }
 
             //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
-            myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime);
+            myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime, leave.pause());
 
             int balasRecibidas = 0;
             myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas, leave.pause());

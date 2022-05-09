@@ -14,7 +14,7 @@ public:
 
     // constructor, expects a filepath to a 3D model.
     Map(string const& path, Shader& ourShader) {
-        loadWalls(path, ourShader);
+        loadWalls("resources/maps/" + path, ourShader);
     };
 
     Map() {};

@@ -6,9 +6,12 @@ class mapSelector {
 public:
     bool shown;
     vector<glm::vec4> buttons;
-    string selection = "resources/maps/originalMap.MAZ";
+    int selection = 0;
     vector<Palabra> pal;
     int currentIndex;
+
+    float ancho = 0.03f;
+    float largo = 0.04f;
 
     // constructor, expects a filepath to a 3D model.
     mapSelector(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader, glm::vec3 v1Real, glm::vec3 v2Real) {
@@ -52,9 +55,15 @@ public:
 
         int i = 0;
         for (const auto& file : std::filesystem::directory_iterator("resources/maps/")) {
-            cout << file.path() << endl;
-            //setUpPalabra(v1Real, v2Real, ourShader, file.path().string(), i);
-            i++;
+            string a = file.path().filename().string();
+            if (a.substr(a.size() - 4) == ".MAZ") {
+                double x = 0.175 - ancho*2;
+                double y = 0.497;// - 0.04f * i;
+                setUpPalabra(v1Real, v2Real, x, y, ourShader, file.path().filename().string(), i);
+                i++;
+                currentIndex = 0;
+            }
+            
         }
             
 
@@ -62,12 +71,28 @@ public:
         cout << "Map selector" << endl;
         buttons.push_back(glm::vec4(0.7, 0.93, 0.605, 0.65));
         buttons.push_back(glm::vec4(0.7, 0.93, 0.52, 0.575));
+        buttons.push_back(glm::vec4(0.547, 0.588, 0.415, 0.45));
+        buttons.push_back(glm::vec4(0.547, 0.588, 0.825, 0.865));
+
+        buttons.push_back(glm::vec4(0.115, 0.49, 0.46, 0.495));
+        buttons.push_back(glm::vec4(0.115, 0.49, 0.5, 0.536));
+        buttons.push_back(glm::vec4(0.115, 0.49, 0.54, 0.576));
+        buttons.push_back(glm::vec4(0.115, 0.49, 0.581, 0.616));
+        buttons.push_back(glm::vec4(0.115, 0.49, 0.625, 0.655));
+        buttons.push_back(glm::vec4(0.115, 0.49, 0.665, 0.698));
+        buttons.push_back(glm::vec4(0.115, 0.49, 0.705, 0.738));
+        buttons.push_back(glm::vec4(0.115, 0.49, 0.745, 0.778));
+        buttons.push_back(glm::vec4(0.115, 0.49, 0.785, 0.82));
+
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
     };
 
     mapSelector() {};
 
+    string getSelection() {
+        return pal[selection].palabra;
+    }
 
     void buttonCalled() {
         shown = !shown;
@@ -77,9 +102,6 @@ public:
         return shown;
     }
 
-    string getSelection() {
-        return selection;
-    }
 
     bool checkButton(double xPos, double yPos, Shader& ourShader) {
         for (int i = 0; i < buttons.size(); i++) {
@@ -88,7 +110,16 @@ public:
                 if (i == 0) shown = false;
                 else if (i == 1) {
                     shown = false;
-                    selection = "resources/maps/originalMap.MAZ";
+                }
+                else if (i == 3) {
+                    if (currentIndex + 9 < pal.size()) currentIndex++;
+                }
+                else if(i==2) {
+                    if (currentIndex > 0) currentIndex--;
+                }
+                else if (i > 3) {
+                    int map = i - 4;
+                    selection = currentIndex + map;
                 }
             }
         }
@@ -98,9 +129,7 @@ public:
     void setUpPalabra(glm::vec3 v1, glm::vec3 v2,double x,double y, Shader& ourShader,string palabra, int index) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        //double x = 0.175;
-        //double y = 0.517;
-        pal[index] = Palabra(v1, v2, x, y, ourShader, palabra);
+        pal.push_back(Palabra(v1, v2, x, y, ourShader, palabra));
     }
 
 
@@ -114,8 +143,14 @@ public:
             ourShader.setMat4("model", model);
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            int gap = currentIndex + 9;
+            if (gap > pal.size()) gap = pal.size();
+            for (int i = currentIndex; i < gap; i++) {
+                pal[i].draw(ourShader,i-currentIndex,false);
+            }
+            pal[selection].draw(ourShader, selection, true);
         }
-        //pal.draw(ourShader);
+        
     };
 
 private:
@@ -161,8 +196,7 @@ private:
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
         unsigned char* data;
-        data = stbi_load("resources/Fotos_midi_maze/mapSelect/selectorwindow.jpg", &width, &height, &nrChannels, 0);
-        cout << "Setting up map" << endl;
+        data = stbi_load("resources/Fotos_midi_maze/mapSelect/selectorwindow2.jpg", &width, &height, &nrChannels, 0);
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);

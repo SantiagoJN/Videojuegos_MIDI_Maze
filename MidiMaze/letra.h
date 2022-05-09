@@ -4,8 +4,8 @@ class letra {
 public:
     bool shown;
     vector<glm::vec4> buttons;
-    string selection = "resources/maps/originalMap.MAZ";
     char caract;
+    float largo = 0.04f;
 
     // constructor, expects a filepath to a 3D model.
     letra(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader, char caracter) {
@@ -62,32 +62,22 @@ public:
         return shown;
     }
 
-    string getSelection() {
-        return selection;
-    }
-
-    bool checkButton(double xPos, double yPos, Shader& ourShader) {
-        for (int i = 0; i < buttons.size(); i++) {
-            if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
-                SoundEngine->play2D("resources/effects/plik.mp3", false);
-                if (i == 0) shown = false;
-                else if (i == 1) {
-                    shown = false;
-                    selection = "resources/maps/originalMap.MAZ";
-                }
-            }
-        }
-        return false;
-    };
 
 
-    void draw(Shader& ourShader) {
+    void draw(Shader& ourShader, int indexP, bool selection) {
+        
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texture1);
-
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(0, 0, 0)); // translate it so it's at the center of the scene
-            ourShader.setMat4("model", model);
+            if (!selection) {
+                glm::mat4 model = glm::mat4(1.0f);
+                model = glm::translate(model, glm::vec3(0, -(vertices[1] + 0.24 * indexP), 0)); // translate it so it's at the center of the scene
+                ourShader.setMat4("model", model);
+            }
+            else {
+                glm::mat4 model = glm::mat4(1.0f);
+                model = glm::translate(model, glm::vec3(1.3, 1, 0)); // translate it so it's at the center of the scene
+                ourShader.setMat4("model", model);
+            }
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     };
@@ -136,11 +126,14 @@ private:
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
         unsigned char* data;
         string cual = "resources/Fotos_midi_maze/letras/";
+        if (caract >= 'A' && caract<='Z') {
+            caract = caract + 32;
+        }
         if (caract == '_') cual = cual + "guion.jpg";
         else if (caract == '.') cual = cual + "punto.jpg";
+        else if (caract >= '0' && caract <= '9') cual = cual + "guion.jpg";
         else cual = cual + caract + ".jpg";
         data = stbi_load(cual.c_str(), &width, &height, &nrChannels, 0);
-        cout << "Setting up map" << endl;
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -148,7 +141,7 @@ private:
         }
         else
         {
-            std::cout << "Failed to load texture" << std::endl;
+            if(caract != ' ') std::cout << "Failed to load texture"<<cual << std::endl;
         }
         stbi_image_free(data);
 
