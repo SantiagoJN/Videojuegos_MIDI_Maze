@@ -158,6 +158,7 @@ int main()
     while (!glfwWindowShouldClose(window)) {
         if( first )menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
         first = false;
+        menu.predSettings();
         camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
         glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
         leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);

@@ -1,6 +1,7 @@
 #pragma once
 #include <palabra.h>
 #include <filesystem>
+#include <diccionario.h>
 class mapSelector {
 
 public:
@@ -9,6 +10,7 @@ public:
     int selection = 0;
     vector<Palabra> pal;
     int currentIndex;
+    diccionario dicc;
 
     float ancho = 0.03f;
     float largo = 0.04f;
@@ -52,7 +54,9 @@ public:
         indices[5] = 3;
 
         setUpWall(ourShader);
-
+        double x = 0.175 - ancho * 2;
+        double y = 0.497;
+        dicc = diccionario(v1Real, v2Real, x, y, ourShader);
         int i = 0;
         for (const auto& file : std::filesystem::directory_iterator("resources/maps/")) {
             string a = file.path().filename().string();
@@ -65,8 +69,7 @@ public:
             }
             
         }
-            
-
+        
         
         cout << "Map selector" << endl;
         buttons.push_back(glm::vec4(0.7, 0.93, 0.605, 0.65));
@@ -120,6 +123,7 @@ public:
                 else if (i > 3) {
                     int map = i - 4;
                     selection = currentIndex + map;
+                    cout << getSelection() << endl;
                 }
             }
         }
@@ -129,7 +133,7 @@ public:
     void setUpPalabra(glm::vec3 v1, glm::vec3 v2,double x,double y, Shader& ourShader,string palabra, int index) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        pal.push_back(Palabra(v1, v2, x, y, ourShader, palabra));
+        pal.push_back(Palabra(v1, v2, x, y, ourShader, palabra, dicc));
     }
 
 

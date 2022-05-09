@@ -158,6 +158,7 @@
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="desplegable.h" />
+    <ClInclude Include="diccionario.h" />
     <ClInclude Include="Enemies.h" />
     <ClInclude Include="EnemyBullets.h" />
     <ClInclude Include="gameStarter.h" />

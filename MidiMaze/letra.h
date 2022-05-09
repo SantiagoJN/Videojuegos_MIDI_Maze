@@ -64,18 +64,18 @@ public:
 
 
 
-    void draw(Shader& ourShader, int indexP, bool selection) {
+    void draw(Shader& ourShader,int indexL, int indexP, bool selection) {
         
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texture1);
             if (!selection) {
                 glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, glm::vec3(0, -(vertices[1] + 0.24 * indexP), 0)); // translate it so it's at the center of the scene
+                model = glm::translate(model, glm::vec3(-(- 0.21 * indexL), -(vertices[1] + 0.24 * indexP), 0)); // translate it so it's at the center of the scene
                 ourShader.setMat4("model", model);
             }
             else {
                 glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, glm::vec3(1.3, 1, 0)); // translate it so it's at the center of the scene
+                model = glm::translate(model, glm::vec3(-(-0.21 * indexL)+1.3, 1, 0)); // translate it so it's at the center of the scene
                 ourShader.setMat4("model", model);
             }
             glBindVertexArray(VAO);
@@ -131,7 +131,7 @@ private:
         }
         if (caract == '_') cual = cual + "guion.jpg";
         else if (caract == '.') cual = cual + "punto.jpg";
-        else if (caract >= '0' && caract <= '9') cual = cual + "guion.jpg";
+        else if (caract >= '0' && caract <= '9') cual = cual + caract + ".jpg";
         else cual = cual + caract + ".jpg";
         data = stbi_load(cual.c_str(), &width, &height, &nrChannels, 0);
         if (data)

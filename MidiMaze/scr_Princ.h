@@ -101,10 +101,12 @@ public:
         bool checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
             cout << buttons.size() << endl;
             for (int i = 0; i < buttons.size(); i++) {
-                if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
-                    cout << "BOTON PULSADO" << endl;
-                    SoundEngine->play2D("resources/effects/plik.mp3", false);
-                    desplegable.buttonCalled();
+                if (!desplegable.maps.getShown() && !desplegable.settings.getShown()) {
+                    if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
+                        cout << "BOTON PULSADO" << endl;
+                        SoundEngine->play2D("resources/effects/plik.mp3", false);
+                        desplegable.buttonCalled();
+                    }
                 }
             }
             if (desplegable.getShown()) desplegable.checkButton(xPos,yPos,ourShader, window);
@@ -115,7 +117,6 @@ public:
                     int total = desplegable.settings.veryDumb.getNEnemies() + desplegable.settings.notDumb.getNEnemies() + desplegable.settings.plainDumb.getNEnemies();
                     desplegable.start.buttonCalled();
                     desplegable.settings.buttonCalled();
-                    predSettings();
                     return total > 0;
                 }
                 else if (which == 2) {
