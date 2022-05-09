@@ -727,9 +727,10 @@ public:
     }
 	
     void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime, 
-        int& balasRecibidas, int& vidasJugador, bool pause, bool& ganaEnemigo, string& enemigoGanador) {
+        int& balasRecibidas, int& vidasJugador, bool pause, bool& ganaEnemigo, bool& mataEnemigo, string& enemigoGanador) {
         hit_time = static_cast<int>(0.1 / deltaTime);
         ganaEnemigo = false;
+        mataEnemigo = false;
         int balasAcertadas = 0;
         int balasEnemigo = 0;
         for (int i = 0; i < numEnemies; i++) {
@@ -755,10 +756,11 @@ public:
                     //cout << "Vidas: " << vidasJugador << endl;
                     if (vidasJugador <= 0) {
                         puntuaciones[i]++;
+                        mataEnemigo = true;
                         if (puntuaciones[i] == 10) {
                             ganaEnemigo = true;
-							enemigoGanador = colors[i];
                         }
+                        enemigoGanador = colors[i];						
                     }
                     else{ // Si aún le quedan vidas y no tiene contador, se le da tiempo de recuperación
                         if (regenSeleccionada) { // Regeneración lenta
