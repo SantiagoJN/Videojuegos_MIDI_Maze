@@ -72,7 +72,7 @@ public:
                     }
                 }
                 if (i == 1) {
-                    if (nEnemies >= 0) {
+                    if (nEnemies > 0) {
                         nEnemies--;
                         setUpWall(ourShader, nEnemies);
                         cout << "numEnemies:" << nEnemies << endl;

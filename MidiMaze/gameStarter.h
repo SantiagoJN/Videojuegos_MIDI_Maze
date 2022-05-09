@@ -67,7 +67,7 @@ public:
         for (int i = 0; i < buttons.size(); i++) {
             if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
                 if (i == 0) {
-                    SoundEngine->play2D("resources/effects/iniciopartida.mp3", false);
+                    //SoundEngine->play2D("resources/effects/iniciopartida.mp3", false);
                     return 1;
                 }
                 SoundEngine->play2D("resources/effects/plik.mp3", false);

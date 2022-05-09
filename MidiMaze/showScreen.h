@@ -8,7 +8,7 @@ public:
     string texturePath;
 
     // constructor, expects a filepath to a 3D model.
-    showScreen(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader, string texturePath_) {
+    showScreen(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader, string texturePath_, string name) {
         texturePath = texturePath_;
         shown = false;
         double ancho = 0.06745;    //ancho/2
@@ -51,7 +51,7 @@ public:
         indices[4] = 2;
         indices[5] = 3;
 
-        setUpWall(ourShader, "player");
+        setUpWall(ourShader, name);
         //setUpDespleg(v1, v2, ourShader);
 
 

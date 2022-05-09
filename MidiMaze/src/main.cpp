@@ -154,8 +154,8 @@ int main()
     cout << camera.Front.x << "," << camera.Front.y << "," << camera.Front.z << endl;
 
     
-    showScreen win = showScreen(camera.getPosition(), camera.Front, ourShader, "resources/Fotos_midi_maze/winner/");
-    showScreen dead = showScreen(camera.getPosition(), camera.Front, ourShader, "resources/Fotos_midi_maze/dead/");
+    showScreen win = showScreen(camera.getPosition(), camera.Front, ourShader, "resources/Fotos_midi_maze/winner/", "player");
+    showScreen dead = showScreen(camera.getPosition(), camera.Front, ourShader, "resources/Fotos_midi_maze/dead/", "blue");
     leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
     //leave = gameLeaver(glm::vec3(camera.getPosition().x -0.4, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x+0.4, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
     Princip menu;
@@ -203,7 +203,8 @@ int main()
 
         }
         if (glfwWindowShouldClose(window)) break;
-
+        menu.desplegable.start.buttonCalled();
+        menu.desplegable.settings.buttonCalled();
         // =====================================================================================================================
         // ======================================================== GAME =======================================================
         // =====================================================================================================================
@@ -279,7 +280,9 @@ int main()
             glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
-
+            if (currentRegenTime > 0) {
+                myEnemies.blinded();
+            }
             // activate shader
             ourShader.use();
 
@@ -305,7 +308,7 @@ int main()
             bool mataEnemigo = false;
             string nombreGanador = "";
             myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas, 
-                leave.pause() || WON, ganaEnemigo, mataEnemigo, nombreGanador);
+                leave.pause() || WON || regenerando, ganaEnemigo, mataEnemigo, nombreGanador);
             if (mataEnemigo) cout << "--Te ha matado el bot " << nombreGanador << endl;
             if (ganaEnemigo) {
                 win.setUp(ourShader, nombreGanador);
@@ -314,13 +317,12 @@ int main()
             }
             if (vidas <= 0) {
                 glm::vec2 pos = myEnemies.getFreePosition();
-                myEnemies.blinded();
                 camera.updatePosition(glm::vec3(pos.x, 0.0, pos.y));
                 vidas = menu.getNumVidas();
                 status.setUp( ourShader, vidas);
                 if (reviveSpeed) currentRegenTime = static_cast<int>(spawnTime[SPAWN_RAPIDO] / deltaTime);
                 else currentRegenTime = static_cast<int>(spawnTime[SPAWN_LENTO] / deltaTime);
-                dead.setUp(ourShader, "blue");
+                dead.setUp(ourShader, nombreGanador);
             }
 
 

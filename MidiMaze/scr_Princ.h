@@ -99,7 +99,7 @@ public:
         }
 
         bool checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
-            cout << buttons.size() << endl;
+            if (desplegable.getShown()) desplegable.checkButton(xPos, yPos, ourShader, window);
             for (int i = 0; i < buttons.size(); i++) {
                 if (!desplegable.maps.getShown() && !desplegable.settings.getShown()) {
                     if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
@@ -109,14 +109,13 @@ public:
                     }
                 }
             }
-            if (desplegable.getShown()) desplegable.checkButton(xPos,yPos,ourShader, window);
             if (desplegable.maps.getShown()) desplegable.maps.checkButton(xPos, yPos, ourShader);
             if (desplegable.start.getShown()) {
                 int which = desplegable.start.checkButton(xPos, yPos);
                 if (which == 1) {
                     int total = desplegable.settings.veryDumb.getNEnemies() + desplegable.settings.notDumb.getNEnemies() + desplegable.settings.plainDumb.getNEnemies();
-                    desplegable.start.buttonCalled();
-                    desplegable.settings.buttonCalled();
+                    if(total > 0) SoundEngine->play2D("resources/effects/iniciopartida.mp3", false);
+                    else SoundEngine->play2D("resources/effects/hitmarker.mp3", false);
                     return total > 0;
                 }
                 else if (which == 2) {
