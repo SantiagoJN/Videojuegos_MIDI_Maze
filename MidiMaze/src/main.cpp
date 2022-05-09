@@ -325,6 +325,10 @@ int main()
                 dead.setUp(ourShader, nombreGanador);
             }
 
+            if (balasRecibidas > 0) {
+                status.setUp(ourShader, vidas);
+            }
+
 
             if (currentRegenTime > 0) {
                 regenerando = true;
@@ -334,6 +338,8 @@ int main()
                 dead.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             }
             else {
+                if (!WON) kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
+                if (!WON) status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
                 regenerando = false;
             }
 
@@ -354,11 +360,9 @@ int main()
                 win.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             }
 
-            if(!WON) kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             
-            if(!WON) status.draw(camera.getPosition(), camera.Front,camera.Pitch, ourShader);
 
-            if(!leave.pause() && !WON) mira.draw(camera.getPosition(), camera.Front, ourShader);
+            if(!leave.pause() && !WON && currentRegenTime <= 0) mira.draw(camera.getPosition(), camera.Front, ourShader);
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             // -------------------------------------------------------------------------------
