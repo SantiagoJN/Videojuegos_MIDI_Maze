@@ -18,6 +18,9 @@
 #include <scr_Princ.h>
 #include <menu.h>
 #include <leaveGame.h>
+#include <statusIngame.h>
+#include <mirilla.h>
+
 
 #include <iostream>
 
@@ -143,7 +146,7 @@ int main()
     cout << camera.Front.x << "," << camera.Front.y << "," << camera.Front.z << endl;
 
     
-
+    
     leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
     //leave = gameLeaver(glm::vec3(camera.getPosition().x -0.4, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x+0.4, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
 
@@ -204,16 +207,18 @@ int main()
         glfwSetCursorPosCallback(window, mouse_callback);
 
 
-        Bullet myBullets("resources/objects/bullets/yellow/yellow.obj", 0.1);
+        Bullet myBullets(0.1);
         vector<EnemBullet> enemyBullets;
 
-        Map pared("resources/maps/originalMap.txt", ourShader);
+        mirilla mira("resources/objects/bullets/yellow/yellow.obj");
+
+        Map pared(menu.getMapName(), ourShader);
         vidas = menu.getNumVidas();
 
         bool regenSpeed = menu.getRegenSpeed();
         bool reviveSpeed = menu.getReviveSpeed();           //Velocidades
         bool reloadSpeed = menu.getReloadSpeed();
-
+        statusPlayer status(camera.getPosition(), camera.Front, ourShader, vidas);
         Enemy myEnemies;
         if (!glfwWindowShouldClose(window)) {
             myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, pared.getDim());
@@ -292,7 +297,10 @@ int main()
 
             leave.draw(ourShader);
 
+            status.setUp(camera.getPosition(), camera.Front, ourShader,vidas);
+            status.draw(ourShader);
 
+            if(!leave.pause()) mira.draw(camera.getPosition(), camera.Front, ourShader);
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             // -------------------------------------------------------------------------------

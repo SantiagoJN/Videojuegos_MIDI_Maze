@@ -1,20 +1,30 @@
 #pragma once
-#include <gameStarter.h>
-#include <settings.h>
-#include <mapSelector.h>
-class Despleg {
+class statusPlayer {
 
 public:
 
-    Starter start;
-    Settings settings;
-    mapSelector maps;
-    bool shown;
     vector<glm::vec4> buttons;
+    bool shown;
 
     // constructor, expects a filepath to a 3D model.
-    Despleg(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader, glm::vec3 v1Real, glm::vec3 v2Real) {
-        shown = false;
+    statusPlayer(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader, int numVidas) {
+        shown = true;
+        double ancho = 0.02;    //ancho/2
+        double dist = 0.12;  //Está a 0.12 de la cámara
+        double alto = 0.02;
+
+        glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
+        camPosition.x = camPosition.x + front.x * dist;
+        camPosition.z = camPosition.z + front.z * dist;
+
+        cout << "Punto:" << camPosition.x << "," << camPosition.z << endl;
+        glm::vec3 v1(0, -0.015, 0);
+        glm::vec3 v2(0, -0.015, 0);
+        v1.x = camPosition.x - ancho * frontPerp.x;
+        v2.x = camPosition.x + ancho * frontPerp.x;
+        v1.z = camPosition.z - ancho * frontPerp.z;
+        v2.z = camPosition.z + ancho * frontPerp.z;
+
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
@@ -30,14 +40,14 @@ public:
         vertices[9] = 0.0f;
 
         vertices[10] = v1.x;
-        vertices[11] = ySup;
+        vertices[11] = v1.y + alto;
         vertices[12] = v1.z;
 
         vertices[13] = 0.0f;
         vertices[14] = 1.0f;
 
         vertices[15] = v2.x;
-        vertices[16] = ySup;
+        vertices[16] = v2.y + alto;
         vertices[17] = v2.z;
 
         vertices[18] = 1.0f;
@@ -50,65 +60,92 @@ public:
         indices[4] = 2;
         indices[5] = 3;
 
-        setUpWall(ourShader);
-        setUpStarter(v1Real, v2Real, ourShader);
-        setUpSettings(v1Real, v2Real, ourShader);
-        setUpMaps(v1Real, v2Real, ourShader);
-        setUpButtons();
+        setUpWall(ourShader,numVidas);
+        //setUpDespleg(v1, v2, ourShader);
+
+        buttons.push_back(glm::vec4(0.31, 0.47, 0.56, 0.62));
+        buttons.push_back(glm::vec4(0.52, 0.68, 0.56, 0.62));
+
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
     };
 
-    Despleg() {};
+    void setUp(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader, int numLives) {
+        shown = true;
+        double ancho = 0.01;    //ancho/2
+        double dist = 0.12;  //Está a 0.12 de la cámara
+        double alto = 0.015;
 
+        glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
+        camPosition.x = camPosition.x + front.x * dist;
+        camPosition.z = camPosition.z + front.z * dist;
 
-    void buttonCalled() {
-        shown = !shown;
+        glm::vec3 v1(0, 0.035, 0);
+        glm::vec3 v2(0, 0.035, 0);
+        v1.x = camPosition.x - ancho * frontPerp.x + 0.0562*frontPerp.x;
+        v2.x = camPosition.x + ancho * frontPerp.x + 0.0562*frontPerp.x;
+        v1.z = camPosition.z - ancho * frontPerp.z + 0.0562*frontPerp.z;
+        v2.z = camPosition.z + ancho * frontPerp.z + 0.0562*frontPerp.z;
+        vertices[0] = v1.x;
+        vertices[1] = v1.y;
+        vertices[2] = v1.z;
+
+        vertices[3] = 0.0f;
+        vertices[4] = 0.0f;
+
+        vertices[5] = v2.x;
+        vertices[6] = v2.y;
+        vertices[7] = v2.z;
+
+        vertices[8] = 1.0f;
+        vertices[9] = 0.0f;
+
+        vertices[10] = v1.x;
+        vertices[11] = v1.y + alto;
+        vertices[12] = v1.z;
+
+        vertices[13] = 0.0f;
+        vertices[14] = 1.0f;
+
+        vertices[15] = v2.x;
+        vertices[16] = v2.y + alto;
+        vertices[17] = v2.z;
+
+        vertices[18] = 1.0f;
+        vertices[19] = 1.0f;
+
+        indices[0] = 0;
+        indices[1] = 1;
+        indices[2] = 2;
+        indices[3] = 1;
+        indices[4] = 2;
+        indices[5] = 3;
+
+        setUpWall(ourShader,numLives);
     }
 
-    bool getShown() {
+    bool pause() {
         return shown;
     }
 
-    void setUpStarter(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
-        double totalx = v2.x - v1.x;
-        double totaly = 3 - v1.y;
-        start = Starter(glm::vec3(v1.x + 0.74 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.95 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), v1.y + 0.315 * totaly, ourShader);
+    void show() {
+        shown = !shown;
     }
 
-    void setUpSettings(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
-        double totalx = v2.x - v1.x;
-        double totaly = 3 - v1.y;
-        settings = Settings(glm::vec3(v1.x + 0.028 * totalx, v1.y + 0.12 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.7 * totalx, v1.y + 0.115 * totaly, v1.z + 0.02), v1.y + 0.88 * totaly, ourShader, v1,v2);
-    }
+    statusPlayer() {};
 
-    void setUpMaps(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
-        double totalx = v2.x - v1.x;
-        double totaly = 3 - v1.y;
-        maps = mapSelector(glm::vec3(v1.x + 0.005 * totalx, v1.y + 0.1 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.995 * totalx, v1.y + 0.1 * totaly, v1.z + 0.02), v1.y + 0.9 * totaly, ourShader, v1, v2);
-    }
-
-    void checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
+    int checkButton(double xPos, double yPos, Shader& ourShader) {
         for (int i = 0; i < buttons.size(); i++) {
             if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
                 SoundEngine->play2D("resources/effects/plik.mp3", false);
                 if (i == 0) {
-                    shown = false;
-                    start.buttonCalled();
-                    settings.buttonCalled();
+                    return 0;
                 }
-                else if (i == 1) {
-                    glfwSetWindowShouldClose(window, true);
-                }
-                else if(i== 2) {
-                    cout<<"MENU MAPS"<<endl;
-                    shown = false;
-                    maps.buttonCalled();
-                }
+                else return 1;
             }
         }
+        - 1;
     };
-
 
     void draw(Shader& ourShader) {
         if (shown) {
@@ -121,9 +158,7 @@ public:
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }
-        maps.draw(ourShader);
-        start.draw(ourShader);
-        settings.draw(ourShader);
+
     };
 
 private:
@@ -133,13 +168,7 @@ private:
     unsigned int indices[6];
     unsigned int VBO, VAO, EBO;
     unsigned int texture1;
-    void setUpButtons() {
-        buttons.push_back(glm::vec4(0.17, 0.45, 0.11, 0.23));
-        buttons.push_back(glm::vec4(0.17, 0.45, 0.241, 0.295));
-        buttons.push_back(glm::vec4(0.17, 0.45, 0.058, 0.1));
-    }
-
-    void setUpWall(Shader& ourShader) {
+    void setUpWall(Shader& ourShader, int numLives) {
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
@@ -174,8 +203,14 @@ private:
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+        string photo = "resources/Fotos_midi_maze/";
+        if (numLives <= 0) photo = photo + "0hp.jpg";
+        else if(numLives == 1) photo = photo + "1hp.jpg";
+        else if (numLives == 2) photo = photo + "2hp.jpg";
+        else photo = photo + "3hp.jpg";
+
         unsigned char* data;
-        data = stbi_load("resources/Fotos_midi_maze/desplegable.jpg", &width, &height, &nrChannels, 0);
+        data = stbi_load(photo.c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -190,5 +225,5 @@ private:
         ourShader.use();
         glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
 
-    }
+    };
 };

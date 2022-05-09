@@ -87,6 +87,10 @@ public:
             return desplegable.settings.vidas.getNumVidas();
         }
 
+        string getMapName() {
+            return desplegable.maps.getSelection();
+        }
+
         void setUpDespleg(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
             double totalx = v2.x - v1.x;
             double totaly = 3 - v1.y;
@@ -101,6 +105,7 @@ public:
                 desplegable.buttonCalled();
             }
             if (desplegable.getShown()) desplegable.checkButton(xPos,yPos,ourShader, window);
+            if (desplegable.maps.getShown()) desplegable.maps.checkButton(xPos, yPos, ourShader);
             if (desplegable.start.getShown()) {
                 int which = desplegable.start.checkButton(xPos, yPos);
                 if (which == 1) {

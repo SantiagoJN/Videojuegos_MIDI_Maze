@@ -20,8 +20,8 @@ public:
     float scale;
 
     // constructor, expects a filepath to a 3D model.
-    Bullet(string const& path, float scale) : scale(scale) {
-        Model a(path);
+    Bullet( float scale) : scale(scale) {
+        Model a("resources/objects/bullets/yellow/yellow.obj");
         bullet = a;
 
         radious = bullet.getRadious() * scale/2;

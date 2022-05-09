@@ -1,19 +1,13 @@
 #pragma once
-#include <gameStarter.h>
-#include <settings.h>
-#include <mapSelector.h>
-class Despleg {
+class mapSelector {
 
 public:
-
-    Starter start;
-    Settings settings;
-    mapSelector maps;
     bool shown;
     vector<glm::vec4> buttons;
+    string selection = "resources/maps/originalMap.MAZ";
 
     // constructor, expects a filepath to a 3D model.
-    Despleg(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader, glm::vec3 v1Real, glm::vec3 v2Real) {
+    mapSelector(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader, glm::vec3 v1Real, glm::vec3 v2Real) {
         shown = false;
         vertices[0] = v1.x;
         vertices[1] = v1.y;
@@ -51,15 +45,14 @@ public:
         indices[5] = 3;
 
         setUpWall(ourShader);
-        setUpStarter(v1Real, v2Real, ourShader);
-        setUpSettings(v1Real, v2Real, ourShader);
-        setUpMaps(v1Real, v2Real, ourShader);
-        setUpButtons();
+        cout << "Map selector" << endl;
+        buttons.push_back(glm::vec4(0.7, 0.93, 0.605, 0.65));
+        buttons.push_back(glm::vec4(0.7, 0.93, 0.52, 0.575));
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
     };
 
-    Despleg() {};
+    mapSelector() {};
 
 
     void buttonCalled() {
@@ -70,43 +63,22 @@ public:
         return shown;
     }
 
-    void setUpStarter(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
-        double totalx = v2.x - v1.x;
-        double totaly = 3 - v1.y;
-        start = Starter(glm::vec3(v1.x + 0.74 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.95 * totalx, v1.y + 0.14 * totaly, v1.z + 0.02), v1.y + 0.315 * totaly, ourShader);
+    string getSelection() {
+        return selection;
     }
 
-    void setUpSettings(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
-        double totalx = v2.x - v1.x;
-        double totaly = 3 - v1.y;
-        settings = Settings(glm::vec3(v1.x + 0.028 * totalx, v1.y + 0.12 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.7 * totalx, v1.y + 0.115 * totaly, v1.z + 0.02), v1.y + 0.88 * totaly, ourShader, v1,v2);
-    }
-
-    void setUpMaps(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
-        double totalx = v2.x - v1.x;
-        double totaly = 3 - v1.y;
-        maps = mapSelector(glm::vec3(v1.x + 0.005 * totalx, v1.y + 0.1 * totaly, v1.z + 0.02), glm::vec3(v1.x + 0.995 * totalx, v1.y + 0.1 * totaly, v1.z + 0.02), v1.y + 0.9 * totaly, ourShader, v1, v2);
-    }
-
-    void checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
+    bool checkButton(double xPos, double yPos, Shader& ourShader) {
         for (int i = 0; i < buttons.size(); i++) {
             if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
                 SoundEngine->play2D("resources/effects/plik.mp3", false);
-                if (i == 0) {
-                    shown = false;
-                    start.buttonCalled();
-                    settings.buttonCalled();
-                }
+                if (i == 0) shown = false;
                 else if (i == 1) {
-                    glfwSetWindowShouldClose(window, true);
-                }
-                else if(i== 2) {
-                    cout<<"MENU MAPS"<<endl;
                     shown = false;
-                    maps.buttonCalled();
+                    selection = "resources/maps/originalMap.MAZ";
                 }
             }
         }
+        return false;
     };
 
 
@@ -121,9 +93,6 @@ public:
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }
-        maps.draw(ourShader);
-        start.draw(ourShader);
-        settings.draw(ourShader);
     };
 
 private:
@@ -133,12 +102,6 @@ private:
     unsigned int indices[6];
     unsigned int VBO, VAO, EBO;
     unsigned int texture1;
-    void setUpButtons() {
-        buttons.push_back(glm::vec4(0.17, 0.45, 0.11, 0.23));
-        buttons.push_back(glm::vec4(0.17, 0.45, 0.241, 0.295));
-        buttons.push_back(glm::vec4(0.17, 0.45, 0.058, 0.1));
-    }
-
     void setUpWall(Shader& ourShader) {
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
@@ -175,7 +138,8 @@ private:
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
         unsigned char* data;
-        data = stbi_load("resources/Fotos_midi_maze/desplegable.jpg", &width, &height, &nrChannels, 0);
+        data = stbi_load("resources/Fotos_midi_maze/mapSelect/selectorwindow.jpg", &width, &height, &nrChannels, 0);
+        cout << "Setting up map" << endl;
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
