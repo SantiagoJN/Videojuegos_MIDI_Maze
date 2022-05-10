@@ -149,62 +149,70 @@ public:
         vector<vector<bool>> spawn(map);
         spawnmap = vector<vector<bool>>(map);
 //        bullets.reserve(numEnemies);
+        
+        cout << numEnemies << endl;
         for (int enemy = 0; enemy < numEnemies; enemy++) {
             bool end = false;
-            int random = rand() % (spawn.size()-2) +1;
+            int random = rand() % (spawn.size()-3) +1;
             float x, z;
-            
-            for (int i = random; i < spawn.size()-2; i++) {
-                for (int j = random; j < spawn[i].size()-2; j++) {
-                    cout << "Map dim " << spawn.size() << "," << spawn[i].size();
-                    cout << "Access " << i << "," << j << endl;
-                    if (!spawn[i][j] && (!spawn[i+1][j] || !spawn[i-1][j] || !spawn[i][j+1] || !spawn[i][j-1])) { // El enemigo se puede colocar en i,j
-                        end = true;
-                        //cout << i << " " << j << endl;
-                        x = -start + j * dim;
-                        z = start - i * dim;
-                        glm::vec3 dir(1,1,1);
-                        spawn[i][j] = true;
-                        prevIndex.push_back(glm::vec2(i, j));
-                        glm::vec2 ind = nextIndex(i, j, dir);
-                        destiny.push_back(glm::vec3(-start + ind.y * dim, 0, start - ind.x * dim));
-                        index.push_back(ind);
-                        //cout << "Enemigo " << enemy << endl;
-                        //cout << "\tPosicion: " << x << ", " << z << endl;
-                        glm::vec3 position(x, 0, z);
-                        positions.push_back(position);
-                        //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
-                        directions.push_back(dir);
-                        vidas.push_back(num_vidas); // Vidas de los enemigos
-                        states.push_back(ANDANDO);   //Estado inicial
-                        prevState.push_back(ANDANDO); // Valor por defecto~~
-                        currentDelays.push_back(0); // Delays de los disparos
-						if(reloadSpeed) cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia
-                        else cadencias.push_back(CAD_LENTA);
-						
-                        spawnCont.push_back(0); // Inicializamos a ceros
-                        
-                        if (enemy < nDumbs) dificultades.push_back(VERY_DUMB); // Dificultad del enemigo
-                        else if (enemy < (nDumbs + nMDumbs))  dificultades.push_back(PLAIN_DUMB); // Dificultad del enemigo
-                        else dificultades.push_back(NOT_SO_DUMB);
+            cout << "rand " << random << " into " << spawn.size() - 1 << endl;
+            for (int i = random; i < spawn.size()-1; i++) {
+                if(!end){
+                    for (int j = random; j < spawn[i].size() - 1; j++) {
+                        if (!spawn[i][j] && (!spawn[i + 1][j] || !spawn[i - 1][j] || !spawn[i][j + 1] || !spawn[i][j - 1])) { // El enemigo se puede colocar en i,j
+                            cout << "Enemy number " << enemy << endl;
+                            end = true;
+                            //cout << i << " " << j << endl;
+                            x = -start + j * dim;
+                            z = start - i * dim;
+                            glm::vec3 dir(1, 1, 1);
+                            spawn[i][j] = true;
+                            prevIndex.push_back(glm::vec2(i, j));
+                            glm::vec2 ind = nextIndex(i, j, dir);
+                            destiny.push_back(glm::vec3(-start + ind.y * dim, 0, start - ind.x * dim));
+                            index.push_back(ind);
+                            cout << "prev" << i << "," << j << endl;
+                            cout << "next" << ind.x << "," << ind.y << endl;
+                            //cout << "Enemigo " << enemy << endl;
+                            //cout << "\tPosicion: " << x << ", " << z << endl;
+                            glm::vec3 position(x, 0, z);
+                            positions.push_back(position);
+                            //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
+                            directions.push_back(dir);
+                            vidas.push_back(num_vidas); // Vidas de los enemigos
+                            states.push_back(ANDANDO);   //Estado inicial
+                            prevState.push_back(ANDANDO); // Valor por defecto~~
+                            currentDelays.push_back(0); // Delays de los disparos
+                            if (reloadSpeed) cadencias.push_back(CAD_RAPIDA); // Les ponemos cadencia
+                            else cadencias.push_back(CAD_LENTA);
 
-                        bullets.push_back(EnemBullet("resources/objects/bullets/" + bulletColors[enemy] + "/" + bulletColors[enemy] + ".obj", 0.1f));
-                        viendo.push_back(false);   
-                        prevGoalRotation.push_back(0.0f); 
-                        currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
-                        puntuaciones.push_back(0);
-                        hit_timeout.push_back(0);
-                        break;
+                            spawnCont.push_back(0); // Inicializamos a ceros
+
+                            if (enemy < nDumbs) dificultades.push_back(VERY_DUMB); // Dificultad del enemigo
+                            else if (enemy < (nDumbs + nMDumbs))  dificultades.push_back(PLAIN_DUMB); // Dificultad del enemigo
+                            else dificultades.push_back(NOT_SO_DUMB);
+
+                            bullets.push_back(EnemBullet("resources/objects/bullets/" + bulletColors[enemy] + "/" + bulletColors[enemy] + ".obj", 0.1f));
+                            viendo.push_back(false);
+                            prevGoalRotation.push_back(0.0f);
+                            currentRotation.push_back(0.0f); // Rotación inicial (se va a actualizar el primer frame)
+                            puntuaciones.push_back(0);
+                            hit_timeout.push_back(0);
+                            break;
+                        }
                     }
                 }
+                if (end) cout << "END A TRUE ENEMIGO " << enemy << endl;
                 if (end) break;
-                else if (i == spawn.size() - 2) i = 1;
+                else if(i >= spawn.size() - 2) i = 1;
             }
+            cout << "Enemigo " << enemy << endl;
         }
         for (int i = 0; i < numEnemies; i++) {
             rotacionInicial(i); // Poner la rotación inicial de los enemigos
             goalRotation.push_back(0.0f); // Inicializar el vector para modificarlo más adelante
         }
+        cout << "Fuera bucle" << endl;
 
     };
 
@@ -213,6 +221,8 @@ public:
     }
 
     void rotacionInicial(int enemyIndex) {
+        cout << "num Dific " << dificultades.size() << endl;
+        cout <<"Rotación inicial " << directions.size() << " " << currentRotation.size() << endl;
         // Girar las caras para que siempre miren hacia el frente
         if (directions[enemyIndex][2] != 0.0) { // Se est� moviendo en el eje Z
             if (directions[enemyIndex][2] > 0.0) { // Se mueve hacia el NORTE
@@ -270,6 +280,9 @@ public:
                         map[i][j+1] = true;
                         return glm::vec2(i, j + 1);
                     }
+                    else {
+                        one = true;
+                    }
                 }
                 else {
                     one = true;
@@ -281,6 +294,9 @@ public:
                         //map[i][j] = false;
                         map[i][j - 1] = true;
                         return glm::vec2(i, j - 1);
+                    }
+                    else {
+                        two = true;
                     }
                 }
                 else {
@@ -294,6 +310,9 @@ public:
                         map[i+1][j] = true;
                         return glm::vec2(i + 1, j);
                     }
+                    else {
+                        three = true;
+                    }
                 }
                 else {
                     three = true;
@@ -305,6 +324,9 @@ public:
                         //map[i][j] = false;
                         map[i-1][j] = true;
                         return glm::vec2(i - 1, j);
+                    }
+                    else {
+                        four = true;
                     }
                 }
                 else {
@@ -352,8 +374,8 @@ public:
                         }
                         cout << "PUNTO!" << endl;
 						// Reiniciamos el enemigo
-                        map[static_cast<int>(prevIndex[enemy].x)][static_cast<int>(prevIndex[enemy].y)] = false;
-                        map[static_cast<int>(index[enemy].x)][static_cast<int>(index[enemy].y)] = false;
+                        map[prevIndex[enemy].x][prevIndex[enemy].y] = false;
+                        map[index[enemy].x][index[enemy].y] = false;
                         vidas[enemy] = num_vidas;
                         bool spawned = false;
                         bool end = false;
@@ -578,14 +600,14 @@ public:
             positions[enemyIndex] = destiny[enemyIndex];
             glm::vec3 prevDir = directions[enemyIndex];
             prevIndex[enemyIndex] = index[enemyIndex];
-            index[enemyIndex] = nextIndex(static_cast<int>(index[enemyIndex].x), static_cast<int>(index[enemyIndex].y), directions[enemyIndex]);
+            index[enemyIndex] = nextIndex(index[enemyIndex].x, index[enemyIndex].y, directions[enemyIndex]);
             if (prevDir != directions[enemyIndex]) {
                 //cout << "Cambiando dir" << prevDir.x<< " " << prevDir.z << " --> " << directions[enemyIndex].x << " " << directions[enemyIndex].z << endl;
                 updateGoalRotation(enemyIndex);
                 states[enemyIndex] = GIRANDO;
             }
             else {
-                map[static_cast<unsigned int>(prevIndex[enemyIndex].x)][static_cast<unsigned int>(prevIndex[enemyIndex].y)] = false;
+                map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
             }
             destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
             if (dificultades[enemyIndex] != VERY_DUMB) actualizarViendo(enemyIndex, playerPosition, true);

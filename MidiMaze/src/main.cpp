@@ -236,6 +236,7 @@ int main()
             myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, 
                 pared.getDim(), menu.getRegenSpeed(), menu.getReloadSpeed(), menu.getReviveSpeed());
         }
+        cout << "Fuera enemigos" << endl;
         int puntJug = 0;
         WON = false;
         regenerando = false;
@@ -267,7 +268,7 @@ int main()
             countFrames++; // Actualizar los frames en el �ltimo segundo
             // Datos para gestionar los fps
             if (currentFrame - lastFrameFPS > 1.0f) {
-                cout << "FPS: " << countFrames << endl;
+                //cout << "FPS: " << countFrames << endl;
                 countFrames = 0;
                 lastFrameFPS = currentFrame; // Actualizamos
             }
