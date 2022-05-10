@@ -60,7 +60,7 @@ public:
         int i = 0;
         for (const auto& file : std::filesystem::directory_iterator("resources/maps/")) {
             string a = file.path().filename().string();
-            if (a.substr(a.size() - 4) == ".MAZ") {
+            if (a.substr(a.size() - 4) == ".maz" || a.substr(a.size() - 4) == ".MAZ") {
                 double x = 0.175 - ancho*2;
                 double y = 0.497;// - 0.04f * i;
                 setUpPalabra(v1Real, v2Real, x, y, ourShader, file.path().filename().string(), i);

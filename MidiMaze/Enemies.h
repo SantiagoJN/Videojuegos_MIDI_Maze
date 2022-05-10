@@ -153,8 +153,11 @@ public:
             bool end = false;
             int random = rand() % (spawn.size()-2) +1;
             float x, z;
-            for (int i = random; i < spawn.size()-1; i++) {
-                for (int j = random; j < spawn[i].size()-1; j++) {
+            
+            for (int i = random; i < spawn.size()-2; i++) {
+                for (int j = random; j < spawn[i].size()-2; j++) {
+                    cout << "Map dim " << spawn.size() << "," << spawn[i].size();
+                    cout << "Access " << i << "," << j << endl;
                     if (!spawn[i][j] && (!spawn[i+1][j] || !spawn[i-1][j] || !spawn[i][j+1] || !spawn[i][j-1])) { // El enemigo se puede colocar en i,j
                         end = true;
                         //cout << i << " " << j << endl;
@@ -354,9 +357,9 @@ public:
                         vidas[enemy] = num_vidas;
                         bool spawned = false;
                         bool end = false;
-                        int random = rand() % (map.size() - 2) + 1;
-                        for (int i = random; i < map.size() - 1; i++) {
-                            for (int j = random; j < map[i].size() - 1; j++) {
+                        int random = rand() % (map.size() - 3) + 1;
+                        for (int i = random; i < map.size() - 2; i++) {
+                            for (int j = random; j < map[i].size() - 2; j++) {
                                 if (!map[i][j] && (!spawnmap[i + 1][j] || !spawnmap[i - 1][j] || !spawnmap[i][j + 1] || !spawnmap[i][j - 1])) { // El enemigo se puede colocar en i,j
                                     end = true;
                                     float start = map.size() * dim / 2;
@@ -410,7 +413,7 @@ public:
 
     glm::vec2 getFreePosition() {
         bool spawned = false;
-        int random = rand() % (map.size() - 2) + 1;
+        int random = rand() % (map.size() - 3) + 1;
         bool end = false;
         for (int i = random; i < map.size() - 1; i++) {
             for (int j = random; j < map[i].size() - 1; j++) {

@@ -17,9 +17,9 @@ public:
     // constructor, expects a filepath to a 3D model.
     Palabra(glm::vec3 v1Real, glm::vec3 v2Real,double xInicial, double y, Shader& ourShader, string palabra_, diccionario dicc_) : dicc(dicc_) {
         palabra = palabra_;
-        show = "...............";
+        show = "               ";
         for (int i = 0; i < show.size(); i++) {
-            if (i >= palabra.size()) break;
+            if (i >= palabra.size()-4) break;
             else show[i] = palabra[i];
         }
         if (palabra_.size() > 15) {
@@ -28,11 +28,8 @@ public:
             show[14] = '.';
         }
         else if (palabra.size() < 15) {
-            for (int i = palabra.size() - 1; i < 12; i++) {
-                show[i] = ' ';
-            }
-            show[12] = '.';
-            show[14] = 'M';
+            show[11] = '.';
+            show[12] = 'M';
             show[13] = 'A';
             show[14] = 'Z';
         }

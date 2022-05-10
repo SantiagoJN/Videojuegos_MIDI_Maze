@@ -34,6 +34,7 @@ using namespace irrklang;
 
 
 bool WON, regenerando;
+bool processGame;
 
 double prevXM, prevYM;
 
@@ -164,7 +165,7 @@ int main()
         camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
         glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
         leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
-
+        processGame = false;
         bool finish = false;
         while (!glfwWindowShouldClose(window) && !finish)
         {
@@ -188,7 +189,7 @@ int main()
             ourShader.use();
 
             menu.draw(ourShader);
-
+            processInput(window);
 
             glm::mat4 view = camera.GetViewMatrix();
 
@@ -238,6 +239,7 @@ int main()
         int puntJug = 0;
         WON = false;
         regenerando = false;
+        processGame = true;
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================
         // =====================================================================================================================
@@ -402,78 +404,80 @@ void processInput(GLFWwindow* window)
     bool right = false;
 
     //REPASARLO
-    
-    float velocity = camera.MovementSpeed * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
-        leave.show();
-        glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);    //Capturar el rat�n
-        glfwSetCursorPosCallback(window, nada);
-        //glfwSetWindowShouldClose(window, true);
-    }
-    if (!WON && !regenerando) {
-        if (versionModerna) {
-            bool slow = false;
-            if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ||
-                glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS ||
-                glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ||
-                glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-                //cout << "Hey " << velocity<<endl;
-                velocity = velocity / 2;
-                //cout << "Slowed " << velocity << endl;
-                slow = true;
-            }
-            if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-                up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
-                //cout << camera.Position.x<<","<<camera.Position.y<<","<<camera.Position.z << endl;
-                camera.ProcessKeyboard(Camera_Movement::FORWARD, velocity, up, down, left, right);
-            }
+    if (processGame) {
+        float velocity = camera.MovementSpeed * deltaTime;
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
+            leave.show();
+            glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);    //Capturar el rat�n
+            glfwSetCursorPosCallback(window, nada);
+            //glfwSetWindowShouldClose(window, true);
+        }
+        if (!WON && !regenerando) {
+            if (versionModerna) {
+                bool slow = false;
+                if ((glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) ||
+                    (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) ||
+                    (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) ||
+                    (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)) {
+                    //cout << "Hey " << velocity<<endl;
+                    velocity = velocity / 2;
+                    //cout << "Slowed " << velocity << endl;
+                    slow = true;
+                }
+                if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+                    up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
+                    //cout << camera.Position.x<<","<<camera.Position.y<<","<<camera.Position.z << endl;
+                    camera.ProcessKeyboard(Camera_Movement::FORWARD, velocity, up, down, left, right);
+                }
 
-            if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-                down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
-                //cout << camera.Position.x << "," << camera.Position.y << "," << camera.Position.z << endl;
-                camera.ProcessKeyboard(Camera_Movement::BACKWARD, velocity, up, down, left, right);
-            }
+                if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+                    down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
+                    //cout << camera.Position.x << "," << camera.Position.y << "," << camera.Position.z << endl;
+                    camera.ProcessKeyboard(Camera_Movement::BACKWARD, velocity, up, down, left, right);
+                }
 
-            if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-                left = temp.checkIntersections(camera.Position, (camera.Position - (camera.Right * velocity)));
-                camera.ProcessKeyboard(Camera_Movement::LEFT, velocity, up, down, left, right);
-            }
+                if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+                    left = temp.checkIntersections(camera.Position, (camera.Position - (camera.Right * velocity)));
+                    camera.ProcessKeyboard(Camera_Movement::LEFT, velocity, up, down, left, right);
+                }
 
-            if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-                right = temp.checkIntersections(camera.Position, (camera.Position + (camera.Right * velocity)));
-                camera.ProcessKeyboard(Camera_Movement::RIGHT, velocity, up, down, left, right);
+                if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+                    right = temp.checkIntersections(camera.Position, (camera.Position + (camera.Right * velocity)));
+                    camera.ProcessKeyboard(Camera_Movement::RIGHT, velocity, up, down, left, right);
+                }
+                if (slow) {
+                    velocity = velocity * 2;
+                    //cout << "ou " << velocity << endl;
+                }
             }
-            if (slow) {
-                velocity = velocity * 2;
-                //cout << "ou " << velocity << endl;
+            else {
+                if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+                    up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
+                camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+                if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+                    down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
+                camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+                if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+                    newBullet = true;
+                    SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+                }
+                if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+                    float xoffset = 0.7;
+                    float yoffset = 0.0;
+                    camera.ProcessMouseMovement(xoffset, yoffset);
+                }
+                if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+                    float xoffset = -0.7;
+                    float yoffset = 0.0;
+                    camera.ProcessMouseMovement(xoffset, yoffset);
+                }
+
             }
         }
-        else {
-            if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-                up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
-            camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
-            if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-                down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
-            camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
-            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-                newBullet = true;
-                SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
-            }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-                float xoffset = 0.7;
-                float yoffset = 0.0;
-                camera.ProcessMouseMovement(xoffset, yoffset);
-            }
-            if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-                float xoffset = -0.7;
-                float yoffset = 0.0;
-                camera.ProcessMouseMovement(xoffset, yoffset);
-            }
-
-        }
     }
+    //ACCIONES DURANTE TODO EL BUCLE
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -500,7 +504,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
             //cout << currentDelay<<" "<<deltaTime<<" "<< reloadTime[CAD_RAPIDA] << endl;
             if (!WON) {
-                if (currentDelay == 0) { // Puedo disparar
+                if (currentDelay == 0 && currentRegenTime <=0) { // Puedo disparar
                     //leave = gameLeaver(glm::vec3(camera.getPosition().x - 0.04, -0.01,camera.Front.z * (camera.getPosition().z - 0.12)), glm::vec3(camera.getPosition().x + 0.04, -0.01, camera.Front.z * (camera.getPosition().z - 0.12)), camera.getPosition(), ourShader);
                     newBullet = true;
                     SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
