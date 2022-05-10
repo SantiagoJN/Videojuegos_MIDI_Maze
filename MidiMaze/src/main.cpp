@@ -222,7 +222,8 @@ int main()
 
 
 
-        versionModerna = !menu.config.getMovimientoOriginal();
+        versionModerna = !menu.config.getMovimientoOriginal();      //VERSION MODERNA RATÓN 
+        int volume = menu.config.getVolume();           //VOLUME 0(mute) 1(bajo) 2(normal)
 
 
         Bullet myBullets(0.1);

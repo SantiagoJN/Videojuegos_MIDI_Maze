@@ -5,7 +5,6 @@ public:
 
     bool original;
     vector<glm::vec4> buttons;
-    int numLives = 1;
 
     // constructor, expects a filepath to a 3D model.
     Version(glm::vec3 v1, glm::vec3 v2, float ySup, float where, Shader& ourShader) {
@@ -47,8 +46,8 @@ public:
 
         setUpWall(ourShader, 0);
         cout << "DIM:" << ySup << endl;
-        buttons.push_back(glm::vec4(0.24, 0.3275, where - 0.06, where));
-        buttons.push_back(glm::vec4(0.34, 0.42, where - 0.06, where));
+        buttons.push_back(glm::vec4(0.234, 0.3215, where - 0.06, where));
+        buttons.push_back(glm::vec4(0.334, 0.414, where - 0.06, where));
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
     };

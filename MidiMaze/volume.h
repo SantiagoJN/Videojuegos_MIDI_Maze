@@ -1,21 +1,14 @@
 #pragma once
-#include <gameStarter.h>
-#include <settings.h>
-#include <mapSelector.h>
-#include <version.h>
-#include <volume.h>
-class confAvanzada {
+class Volume {
 
 public:
 
-    bool shown;
     vector<glm::vec4> buttons;
-    Version movimiento, IA;
-    Volume vol;
+    int volume;
 
     // constructor, expects a filepath to a 3D model.
-    confAvanzada(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader, glm::vec3 v1Real, glm::vec3 v2Real) {
-        shown = false;
+    Volume(glm::vec3 v1, glm::vec3 v2, float ySup, float where, Shader& ourShader) {
+        volume = 0;
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
@@ -51,73 +44,44 @@ public:
         indices[4] = 2;
         indices[5] = 3;
 
-        setUpWall(ourShader);
-        setUpButtons();
-        setUpVersions(v1Real, v2Real, ourShader);
+        setUpWall(ourShader, 0);
+        cout << "DIM:" << ySup << endl;
+        buttons.push_back(glm::vec4(0.24, 0.321, 0.5, 0.56));
+        buttons.push_back(glm::vec4(0.335, 0.415, 0.5, 0.56));
+        buttons.push_back(glm::vec4(0.4325, 0.5125, 0.5, 0.56));
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
     };
 
-    confAvanzada() {};
+    Volume() {};
 
 
-    void buttonCalled() {
-        shown = !shown;
+    bool getVolume() {
+        return volume;
     }
 
-    bool getShown() {
-        return shown;
-    }
-
-    void checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
+    void checkButton(double xPos, double yPos, Shader& ourShader) {
         for (int i = 0; i < buttons.size(); i++) {
             if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
                 SoundEngine->play2D("resources/effects/plik.mp3", false);
-                if (i == 0) {
-                    shown = false;
-                }
+                setUpWall(ourShader, i);
+                volume = i;
+                cout << "PULSADO: " << i << endl;
             }
         }
-        movimiento.checkButton(xPos, yPos, ourShader);
-        IA.checkButton(xPos, yPos, ourShader);
-        vol.checkButton(xPos, yPos, ourShader);
     };
 
-    void setUpVersions(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
-        double totalx = v2.x - v1.x;
-        double totaly = 3 - v1.y;
-        movimiento = Version(glm::vec3(v1.x + 0.241f * totalx, v1.y + 0.6f * totaly, v1.z + 0.026f), glm::vec3(v1.x + 0.418f * totalx, v1.y + 0.6f * totaly, v1.z + 0.026f), static_cast<float>(v1.y + 0.665f * totaly), 0.39f, ourShader);
-        IA = Version(glm::vec3(v1.x + 0.241f * totalx, v1.y + 0.525f * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.418f * totalx, v1.y + 0.525f * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + 0.59f * totaly), 0.475f, ourShader);
-        vol = Volume(glm::vec3(v1.x + 0.241f * totalx, v1.y + 0.435f * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.515f * totalx, v1.y + 0.435f * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + 0.50f * totaly), 0.55f, ourShader);
- 
-    }
-
-    bool getMovimientoOriginal() {
-        return movimiento.original;
-    }
-
-    bool getIAOriginal() {
-        return IA.original;
-    }
-
-    bool getVolume() {
-        return vol.getVolume();
-    }
 
     void draw(Shader& ourShader) {
-        if (shown) {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, texture1);
+        //cout << "Dibujando" << endl;
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
 
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(0, 0, 0)); // translate it so it's at the center of the scene
-            ourShader.setMat4("model", model);
-            glBindVertexArray(VAO);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-            movimiento.draw(ourShader);
-            IA.draw(ourShader);
-            vol.draw(ourShader);
-        }
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0, 0, 0)); // translate it so it's at the center of the scene
+        ourShader.setMat4("model", model);
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     };
 
 private:
@@ -127,11 +91,7 @@ private:
     unsigned int indices[6];
     unsigned int VBO, VAO, EBO;
     unsigned int texture1;
-    void setUpButtons() {
-        buttons.push_back(glm::vec4(0.21, 0.345, 0.605, 0.698));
-    }
-
-    void setUpWall(Shader& ourShader) {
+    void setUpWall(Shader& ourShader, int vol) {
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
@@ -167,7 +127,12 @@ private:
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
         unsigned char* data;
-        data = stbi_load("resources/Fotos_midi_maze/configAvanzada.jpg", &width, &height, &nrChannels, 0);
+        string img = "resources/Fotos_midi_maze/";
+        if (vol == 0) img = img + "mute.jpg";
+        else if (vol == 1) img = img + "bajo.jpg";
+        else if (vol == 2) img = img + "normal.jpg";
+
+        data = stbi_load(img.c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);

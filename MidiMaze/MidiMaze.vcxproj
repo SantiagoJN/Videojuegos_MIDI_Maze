@@ -177,6 +177,7 @@
     <ClInclude Include="speed.h" />
     <ClInclude Include="statusIngame.h" />
     <ClInclude Include="version.h" />
+    <ClInclude Include="volume.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="mesh.h" />

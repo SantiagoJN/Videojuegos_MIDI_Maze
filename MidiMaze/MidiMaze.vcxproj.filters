@@ -125,5 +125,21 @@
     <ClInclude Include="version.h">
       <Filter>Archivos de encabezado\screen\versionNueva</Filter>
     </ClInclude>
+    <ClInclude Include="volume.h">
+      <Filter>Archivos de encabezado\screen\versionNueva</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MidiMaze.rc">
+      <Filter>Archivos de recursos</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="resources\Fotos_midi_maze\icon.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
   </ItemGroup>
 </Project>
