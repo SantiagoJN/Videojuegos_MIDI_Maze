@@ -44,7 +44,7 @@ public:
         indices[4] = 2;
         indices[5] = 3;
 
-        setUpWall(ourShader, 0);
+        setUpWall(ourShader, 1);
         cout << "DIM:" << ySup << endl;
         buttons.push_back(glm::vec4(0.24, 0.321, 0.5, 0.56));
         buttons.push_back(glm::vec4(0.335, 0.415, 0.5, 0.56));

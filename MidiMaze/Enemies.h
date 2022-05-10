@@ -155,12 +155,11 @@ public:
             bool end = false;
             int random = rand() % (spawn.size()-3) +1;
             float x, z;
-            cout << "rand " << random << " into " << spawn.size() - 1 << endl;
             for (int i = random; i < spawn.size()-1; i++) {
                 if(!end){
                     for (int j = random; j < spawn[i].size() - 1; j++) {
                         if (!spawn[i][j] && (!spawn[i + 1][j] || !spawn[i - 1][j] || !spawn[i][j + 1] || !spawn[i][j - 1])) { // El enemigo se puede colocar en i,j
-                            cout << "Enemy number " << enemy << endl;
+                            
                             end = true;
                             //cout << i << " " << j << endl;
                             x = -start + j * dim;
@@ -171,8 +170,6 @@ public:
                             glm::vec2 ind = nextIndex(i, j, dir);
                             destiny.push_back(glm::vec3(-start + ind.y * dim, 0, start - ind.x * dim));
                             index.push_back(ind);
-                            cout << "prev" << i << "," << j << endl;
-                            cout << "next" << ind.x << "," << ind.y << endl;
                             //cout << "Enemigo " << enemy << endl;
                             //cout << "\tPosicion: " << x << ", " << z << endl;
                             glm::vec3 position(x, 0, z);
@@ -202,17 +199,14 @@ public:
                         }
                     }
                 }
-                if (end) cout << "END A TRUE ENEMIGO " << enemy << endl;
                 if (end) break;
                 else if(i >= spawn.size() - 2) i = 1;
             }
-            cout << "Enemigo " << enemy << endl;
         }
         for (int i = 0; i < numEnemies; i++) {
             rotacionInicial(i); // Poner la rotación inicial de los enemigos
             goalRotation.push_back(0.0f); // Inicializar el vector para modificarlo más adelante
         }
-        cout << "Fuera bucle" << endl;
 
     };
 
@@ -221,8 +215,6 @@ public:
     }
 
     void rotacionInicial(int enemyIndex) {
-        cout << "num Dific " << dificultades.size() << endl;
-        cout <<"Rotación inicial " << directions.size() << " " << currentRotation.size() << endl;
         // Girar las caras para que siempre miren hacia el frente
         if (directions[enemyIndex][2] != 0.0) { // Se est� moviendo en el eje Z
             if (directions[enemyIndex][2] > 0.0) { // Se mueve hacia el NORTE
