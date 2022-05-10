@@ -28,7 +28,7 @@ public:
             show[14] = '.';
         }
         else if (palabra.size() < 15) {
-            for (int i = palabra.size() - 1; i < 12; i++) {
+            for (size_t i = palabra.size() - 1; i < 12; i++) {
                 show[i] = ' ';
             }
             show[12] = '.';

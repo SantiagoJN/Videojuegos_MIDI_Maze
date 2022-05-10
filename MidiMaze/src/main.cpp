@@ -333,7 +333,7 @@ int main()
             if (currentRegenTime > 0) {
                 regenerando = true;
                 myEnemies.blinded();
-                cout << "Regenerando... " << currentRegenTime << endl;
+                //cout << "Regenerando... " << currentRegenTime << endl;
                 currentRegenTime--;
                 dead.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             }
