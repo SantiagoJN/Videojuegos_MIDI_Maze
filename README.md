@@ -11,7 +11,7 @@ quedado clara, recomendamos leer el apartado correspondiente de la memoria.
 ## Cómo jugar
 ### Iniciar una partida
  Lo primero que hay que hacer es ejecutar el MidiMaze.exe que se encuentra en
-la carpeta "appfiles". Se abrirá la pantalla de inicio, y se tendrá que 
+la carpeta "Videojuego". Se abrirá la pantalla de inicio, y se tendrá que 
 configurar la partida que se quiere jugar. Para ello se configuran dos cosas:
 el mapa en el que jugar, y las características de la partida.
 
