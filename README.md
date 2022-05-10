@@ -18,6 +18,9 @@ el mapa en el que jugar, y las características de la partida.
  Para acceder a la configuración, presionar el texto "MAZE" de la parte superior
 o la flecha azul, y aparecerá un desplegable.
 
+ Para acceder a la configuración extra, presionar el botón a la izquierda del
+texto "MAZE".
+
  El mapa se carga en la opción "load". Al darle a esta opción, se muestran los
 mapas que se encuentran en la carpeta "maps" (se pueden modificar con un editor
 de texto; más información en la memoria). Se selecciona un mapa dándole click.
