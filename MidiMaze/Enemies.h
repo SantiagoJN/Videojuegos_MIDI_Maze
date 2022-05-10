@@ -48,7 +48,7 @@ bool spawnSeleccionado;
 enum nivelesDificultad { VERY_DUMB, PLAIN_DUMB, NOT_SO_DUMB};
 
 enum velocidadRegeneracion {REG_RAPIDA, REG_LENTA};
-int regenJugador[] = { 5, 10 }; // Numero de frames que se regenera el jugador
+int regenJugador[] = { 4, 8 }; // Numero de frames que se regenera el jugador
 bool regenSeleccionada;
 
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
@@ -737,7 +737,7 @@ public:
                 }
             }
             else if (counterRegen > 0) {
-                //cout << "counterregen " << counterRegen << endl;
+                cout << "counterregen " << counterRegen << endl;
                 counterRegen--; // Se actualiza el contador
             }
         }
@@ -748,6 +748,7 @@ public:
         hit_time = static_cast<int>(0.1 / deltaTime);
         ganaEnemigo = false;
         mataEnemigo = false;
+        actualizarRegenJugador(vidasJugador, deltaTime);
         int balasAcertadas = 0;
         int balasEnemigo = 0;
         for (int i = 0; i < numEnemies; i++) {
@@ -792,7 +793,6 @@ public:
             }
             if (spawnCont[i] == 0) {
                 pintarEnemigo(i, shader); // Pintar el enemigo como tal
-                actualizarRegenJugador(vidasJugador, deltaTime);
             }
             
         }
