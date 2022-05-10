@@ -91,6 +91,8 @@ const bool versionModerna = true;
 bool relSpeed;
 float volume = 0.7f;
 int currentRegenTime;
+bool oPresionado = false;
+bool lPresionado = false;
 
 int main()
 {
@@ -478,6 +480,22 @@ void processInput(GLFWwindow* window)
         }
     }
     //ACCIONES DURANTE TODO EL BUCLE
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS && !oPresionado) {
+        oPresionado = true;
+        if (volume < 1.0) volume += 0.1f;
+        SoundEngine->setSoundVolume(volume);
+        //cout << "Volumen subido a " << volume << endl;
+        SoundEngine->play2D("resources/effects/plik.mp3", false);
+    }
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS && !lPresionado) {
+        lPresionado = true;
+        if (volume > 0.0) volume -= 0.1f;
+        SoundEngine->setSoundVolume(volume);
+        //cout << "Volumen bajado a " << volume << endl;
+        SoundEngine->play2D("resources/effects/plik.mp3", false);
+    }
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_RELEASE) oPresionado = false;
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_RELEASE) lPresionado = false;
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
