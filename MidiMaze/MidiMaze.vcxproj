@@ -149,42 +149,41 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\glad\src\glad.c" />
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="src\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\irrKlang-64bit-1.6.0\examples\common\conio.h" />
-    <ClInclude Include="Bullets.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="configuracionAvanzada.h" />
-    <ClInclude Include="Dead.h" />
-    <ClInclude Include="desplegable.h" />
-    <ClInclude Include="diccionario.h" />
-    <ClInclude Include="Enemies.h" />
-    <ClInclude Include="EnemyBullets.h" />
-    <ClInclude Include="gameStarter.h" />
-    <ClInclude Include="kills.h" />
-    <ClInclude Include="leaveGame.h" />
-    <ClInclude Include="letra.h" />
-    <ClInclude Include="lifes.h" />
-    <ClInclude Include="mapSelector.h" />
-    <ClInclude Include="mirilla.h" />
-    <ClInclude Include="numEnemies.h" />
-    <ClInclude Include="palabra.h" />
-    <ClInclude Include="scr_Princ.h" />
-    <ClInclude Include="settings.h" />
-    <ClInclude Include="speed.h" />
-    <ClInclude Include="statusIngame.h" />
-    <ClInclude Include="version.h" />
-    <ClInclude Include="volume.h" />
-    <ClInclude Include="wall.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="model.h" />
+    <ClInclude Include="src\Bullets.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\configuracionAvanzada.h" />
+    <ClInclude Include="src\Dead.h" />
+    <ClInclude Include="src\desplegable.h" />
+    <ClInclude Include="src\diccionario.h" />
+    <ClInclude Include="src\Enemies.h" />
+    <ClInclude Include="src\EnemyBullets.h" />
+    <ClInclude Include="src\gameStarter.h" />
+    <ClInclude Include="src\kills.h" />
+    <ClInclude Include="src\leaveGame.h" />
+    <ClInclude Include="src\letra.h" />
+    <ClInclude Include="src\lifes.h" />
+    <ClInclude Include="src\map.h" />
+    <ClInclude Include="src\mapSelector.h" />
+    <ClInclude Include="src\mesh.h" />
+    <ClInclude Include="src\mirilla.h" />
+    <ClInclude Include="src\model.h" />
+    <ClInclude Include="src\numEnemies.h" />
+    <ClInclude Include="src\palabra.h" />
+    <ClInclude Include="src\scr_Princ.h" />
+    <ClInclude Include="src\settings.h" />
+    <ClInclude Include="src\showScreen.h" />
+    <ClInclude Include="src\speed.h" />
+    <ClInclude Include="src\statusIngame.h" />
+    <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\version.h" />
+    <ClInclude Include="src\volume.h" />
+    <ClInclude Include="src\wall.h" />
     <ClInclude Include="src\shader_m.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="showScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MidiMaze.rc" />

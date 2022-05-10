@@ -737,7 +737,6 @@ public:
                 }
             }
             else if (counterRegen > 0) {
-                cout << "counterregen " << counterRegen << endl;
                 counterRegen--; // Se actualiza el contador
             }
         }

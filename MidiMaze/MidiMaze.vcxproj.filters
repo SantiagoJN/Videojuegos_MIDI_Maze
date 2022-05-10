@@ -27,10 +27,10 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="src\Camera.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="stb_image.cpp">
+    <ClCompile Include="src\stb_image.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,94 +38,91 @@
     <ClInclude Include="src\shader_m.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="model.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullets.h">
+    <ClInclude Include="src\Bullets.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\irrKlang-64bit-1.6.0\examples\common\conio.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="wall.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemies.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyBullets.h">
+    <ClInclude Include="src\EnemyBullets.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="scr_Princ.h">
+    <ClInclude Include="src\Camera.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Enemies.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesh.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb_image.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wall.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dead.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="desplegable.h">
+    <ClInclude Include="src\desplegable.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="gameStarter.h">
+    <ClInclude Include="src\diccionario.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="settings.h">
+    <ClInclude Include="src\gameStarter.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="lifes.h">
+    <ClInclude Include="src\kills.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="speed.h">
+    <ClInclude Include="src\leaveGame.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="numEnemies.h">
+    <ClInclude Include="src\letra.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="leaveGame.h">
+    <ClInclude Include="src\lifes.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="mapSelector.h">
+    <ClInclude Include="src\mapSelector.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="statusIngame.h">
+    <ClInclude Include="src\mirilla.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="mirilla.h">
+    <ClInclude Include="src\palabra.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="letra.h">
+    <ClInclude Include="src\numEnemies.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="palabra.h">
+    <ClInclude Include="src\scr_Princ.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="diccionario.h">
+    <ClInclude Include="src\settings.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="kills.h">
+    <ClInclude Include="src\showScreen.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="Dead.h">
+    <ClInclude Include="src\speed.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="showScreen.h">
+    <ClInclude Include="src\statusIngame.h">
       <Filter>Archivos de encabezado\screen</Filter>
     </ClInclude>
-    <ClInclude Include="configuracionAvanzada.h">
+    <ClInclude Include="src\configuracionAvanzada.h">
       <Filter>Archivos de encabezado\screen\versionNueva</Filter>
     </ClInclude>
-    <ClInclude Include="version.h">
+    <ClInclude Include="src\version.h">
       <Filter>Archivos de encabezado\screen\versionNueva</Filter>
     </ClInclude>
-    <ClInclude Include="volume.h">
+    <ClInclude Include="src\volume.h">
       <Filter>Archivos de encabezado\screen\versionNueva</Filter>
     </ClInclude>
   </ItemGroup>

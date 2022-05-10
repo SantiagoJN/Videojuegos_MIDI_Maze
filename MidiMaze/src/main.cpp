@@ -17,7 +17,6 @@
 #include <Camera.h>
 #include <model.h>
 #include <scr_Princ.h>
-#include <menu.h>
 #include <leaveGame.h>
 #include <statusIngame.h>
 #include <mirilla.h>
