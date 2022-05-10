@@ -349,8 +349,10 @@ int main()
             bool ganaEnemigo = false;
             bool mataEnemigo = false;
             string nombreGanador = "";
+            int lastVidas = vidas;
             myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas, 
                 leave.pause() || WON || regenerando, ganaEnemigo, mataEnemigo, nombreGanador);
+            if (lastVidas != vidas) status.setUp(ourShader, vidas);
             if (mataEnemigo) cout << "--Te ha matado el bot " << nombreGanador << endl;
             if (ganaEnemigo) {
                 win.setUp(ourShader, nombreGanador);
