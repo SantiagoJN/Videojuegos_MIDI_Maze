@@ -222,7 +222,7 @@ int main()
 
 
 
-        versionModerna = !menu.config.getMovimientoOriginal();      //CONFIGURACION SANTI
+        versionModerna = !menu.config.getMovimientoOriginal();
 
 
         Bullet myBullets(0.1);
@@ -427,6 +427,7 @@ void processInput(GLFWwindow* window)
         }
         if (!WON && !regenerando) {
             if (versionModerna) {
+                // ############ VERSIÓN MODERNA ############
                 bool slow = false;
                 if ((glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) ||
                     (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) ||
@@ -463,16 +464,23 @@ void processInput(GLFWwindow* window)
                     //cout << "ou " << velocity << endl;
                 }
             }
+            // ############ VERSIÓN VIEJA ############
             else {
-                if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+                if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
                     up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
-                camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
-                if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+                    camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+                }   
+                if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
                     down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
-                camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+                    camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+                }
                 if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-                    newBullet = true;
-                    SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+                    if (currentDelay == 0 && currentRegenTime <= 0) { // Puedo disparar
+                        newBullet = true;
+                        SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+                        if (relSpeed) currentDelay = static_cast<unsigned int>(reloadTime[CAD_RAPIDA] / deltaTime);
+                        else currentDelay = static_cast<unsigned int>(reloadTime[CAD_LENTA] / deltaTime);
+                    }
                 }
                 if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
                     float xoffset = 0.7;
