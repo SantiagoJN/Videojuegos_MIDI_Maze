@@ -115,6 +115,7 @@ public:
                     if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
                         if (i == 2 ) {
                             config.buttonCalled();
+                            SoundEngine->play2D("resources/effects/plik.mp3", false);
                             if(desplegable.shown) desplegable.buttonCalled();
                         }
                         else if(i != 2) {
