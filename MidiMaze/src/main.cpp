@@ -98,8 +98,8 @@ bool lPresionado = false;
 
 int main()
 {
-    ::ShowWindow(::GetConsoleWindow(), SW_SHOW);
-    //::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+    //::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+    ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
     // =====================================================================================================================
     // =================================== INITIALIZATION AND CONFIGURATION OF LIBRARIES ===================================
     // =====================================================================================================================

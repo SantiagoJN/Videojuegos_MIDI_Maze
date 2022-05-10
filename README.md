@@ -68,6 +68,7 @@ lo muestran, como por ejemplo https://www.youtube.com/watch?v=8hSoy1S43dw
  -Reiniciar la máquina: Pulsar la opción de "Reset machine", y darle a OK.
  -Una vez se reinicie, abrir el Disk A, abrir la carpeta y ejecutar el programa
 	"MidiMaze.PRG".
+ - Configurar los controles: En las opciones seleccionar "Joystick" > "Use Keyboard"
 
 ### Iniciar una partida
  Lo primero que saldrá al abrir el juego es una ventana informándonos que somos
@@ -87,6 +88,3 @@ son:
 
 ### En la partida
  Las reglas son las mismas que las del juego implementado.
-
-
-	
