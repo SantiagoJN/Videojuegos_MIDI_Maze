@@ -1,6 +1,8 @@
 # MIDI Maze
 Videojuegos, grupo 1, Curso 2021-2022
 
+![Portada Midi Maze](https://upload.wikimedia.org/wikipedia/en/5/56/MIDI_Maze.jpg)
+
  El propósito de este README es el de explicar de forma rápida cómo se puede
 jugar al MIDI Maze desarrollado, sin necesidad de tener que leer toda la
 memoria, aunque si se necesitan más detalles o alguna característica no ha 
