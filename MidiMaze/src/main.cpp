@@ -91,7 +91,7 @@ Map temp;
 // ###Constantes varias###
 bool versionModerna = true;
 bool relSpeed;
-float volume = 0.7f;
+float volume = 0.3f;
 int currentRegenTime;
 bool oPresionado = false;
 bool lPresionado = false;
