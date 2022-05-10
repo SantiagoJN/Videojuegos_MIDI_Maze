@@ -171,6 +171,7 @@
     <ClInclude Include="mirilla.h" />
     <ClInclude Include="numEnemies.h" />
     <ClInclude Include="palabra.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="screen.h" />
     <ClInclude Include="scr_Princ.h" />
     <ClInclude Include="settings.h" />
@@ -183,6 +184,13 @@
     <ClInclude Include="src\shader_m.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="showScreen.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MidiMaze.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="resources\Fotos_midi_maze\icon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
