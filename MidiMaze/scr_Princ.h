@@ -120,9 +120,15 @@ public:
                         }
                         else if(i != 2) {
                             cout << "BOTON PULSADO" << endl;
-                            SoundEngine->play2D("resources/effects/plik.mp3", false);
-                            if(!config.shown) desplegable.buttonCalled();
-                            if (config.shown && i==0) config.buttonCalled();
+                            
+                            if (!config.shown) {
+                                desplegable.buttonCalled();
+                                SoundEngine->play2D("resources/effects/plik.mp3", false);
+                            }
+                            else if (config.shown && i == 0) {
+                                config.buttonCalled();
+                                SoundEngine->play2D("resources/effects/plik.mp3", false);
+                            }
                         }
                     }
                 }

@@ -87,6 +87,7 @@ gameLeaver leave;
 Map temp;
 
 
+bool initGame = false;
 
 // ###Constantes varias###
 bool versionModerna = true;
@@ -174,6 +175,7 @@ int main()
         leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
         processGame = false;
         bool finish = false;
+        initGame = false;
         while (!glfwWindowShouldClose(window) && !finish)
         {
             // input
@@ -276,6 +278,8 @@ int main()
         WON = false;
         regenerando = false;
         processGame = true;
+
+        initGame = true;
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================
         // =====================================================================================================================
@@ -593,7 +597,8 @@ void menu_mouse_button_callback(GLFWwindow* window, int button, int action, int 
         cout << xpos/width << "," << ypos/height << endl;
         lastButtonX = xpos / width;
         lastButtonY = ypos / height;
-        pressed = true;
+        if (!initGame) pressed = true;
+        else if (leave.shown) pressed = true;
     }
 }
 
