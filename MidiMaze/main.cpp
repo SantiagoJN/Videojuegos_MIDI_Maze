@@ -338,7 +338,7 @@ int main()
 
             if (newBullet) {
                 newBullet = false;
-                myBullets.newBullet(camera.Position, camera.Front);
+                myBullets.newBullet(glm::vec3(camera.Position+camera.Front), camera.Front);
             }
 
             //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
