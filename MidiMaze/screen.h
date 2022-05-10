@@ -1,19 +1,18 @@
 #pragma once
-#include <gameStarter.h>
-#include <settings.h>
-#include <mapSelector.h>
-#include <version.h>
-class confAvanzada {
-
+class Screen
+{
 public:
+    // model data 
+    float vertices[20];
+    glm::vec2 normal;
+    unsigned int indices[6];
+    unsigned int VBO, VAO, EBO;
+    unsigned int texture1;
 
-    bool shown;
     vector<glm::vec4> buttons;
-    Version movimiento, IA;
 
     // constructor, expects a filepath to a 3D model.
-    confAvanzada(glm::vec3 v1, glm::vec3 v2, float ySup, Shader& ourShader, glm::vec3 v1Real, glm::vec3 v2Real) {
-        shown = false;
+    Screen(glm::vec3 v1, glm::vec3 v2, Shader& ourShader, string texturePath) {
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
@@ -29,14 +28,14 @@ public:
         vertices[9] = 0.0f;
 
         vertices[10] = v1.x;
-        vertices[11] = ySup;
+        vertices[11] = v1.y + 6;
         vertices[12] = v1.z;
 
         vertices[13] = 0.0f;
         vertices[14] = 1.0f;
 
         vertices[15] = v2.x;
-        vertices[16] = ySup;
+        vertices[16] = v2.y + 6;
         vertices[17] = v2.z;
 
         vertices[18] = 1.0f;
@@ -49,80 +48,85 @@ public:
         indices[4] = 2;
         indices[5] = 3;
 
-        setUpWall(ourShader);
-        setUpButtons();
-        setUpVersions(v1Real, v2Real, ourShader);
+        setUpWall(ourShader, texturePath);
+
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
     };
 
-    confAvanzada() {};
+    // constructor, expects a filepath to a 3D model.
+    Screen(glm::vec3 v1, glm::vec3 v2, Shader& ourShader, vector<glm::vec4> buttons, string texturePath) : buttons(buttons) {
+        vertices[0] = v1.x;
+        vertices[1] = v1.y;
+        vertices[2] = v1.z;
 
+        vertices[3] = 0.0f;
+        vertices[4] = 0.0f;
 
-    void buttonCalled() {
-        shown = !shown;
-    }
+        vertices[5] = v2.x;
+        vertices[6] = v2.y;
+        vertices[7] = v2.z;
 
-    bool getShown() {
-        return shown;
-    }
+        vertices[8] = 1.0f;
+        vertices[9] = 0.0f;
 
-    void checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
-        for (int i = 0; i < buttons.size(); i++) {
-            if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
-                SoundEngine->play2D("resources/effects/plik.mp3", false);
-                if (i == 0) {
-                    shown = false;
-                }
-            }
-        }
-        movimiento.checkButton(xPos, yPos, ourShader);
-        IA.checkButton(xPos, yPos, ourShader);
+        vertices[10] = v1.x;
+        vertices[11] = v1.y + 6;
+        vertices[12] = v1.z;
+
+        vertices[13] = 0.0f;
+        vertices[14] = 1.0f;
+
+        vertices[15] = v2.x;
+        vertices[16] = v2.y + 6;
+        vertices[17] = v2.z;
+
+        vertices[18] = 1.0f;
+        vertices[19] = 1.0f;
+
+        indices[0] = 0;
+        indices[1] = 1;
+        indices[2] = 2;
+        indices[3] = 1;
+        indices[4] = 2;
+        indices[5] = 3;
+
+        setUpWall(ourShader, texturePath);
+
+        if (v1.x != v2.x) normal = glm::vec2(0, 1);
+        else normal = glm::vec2(1, 0);
     };
 
-    void setUpVersions(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
-        double totalx = v2.x - v1.x;
-        double totaly = 3 - v1.y;
-        movimiento = Version(glm::vec3(v1.x + 0.241f * totalx, v1.y + 0.605f * totaly, v1.z + 0.026f), glm::vec3(v1.x + 0.43f * totalx, v1.y + 0.605f * totaly, v1.z + 0.026f), static_cast<float>(v1.y + 0.67f * totaly), 0.395f, ourShader);
-        IA = Version(glm::vec3(v1.x + 0.241f * totalx, v1.y + 0.53f * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.43f * totalx, v1.y + 0.53f * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + 0.595f * totaly), 0.47f, ourShader);
-        //0.43
-    }
+    Screen() {};
 
-    bool getMovimientoOriginal() {
-        return movimiento.original;
-    }
 
-    bool getIAOriginal() {
-        return IA.original;
-    }
+
+
+    int checkButton(double xPos, double yPos) {
+        for (int i = 1; i < buttons.size()+1; i++) {
+            if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
+                return i;
+            }
+        }
+        return -1;
+    };
+
 
     void draw(Shader& ourShader) {
-        if (shown) {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, texture1);
 
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(0, 0, 0)); // translate it so it's at the center of the scene
-            ourShader.setMat4("model", model);
-            glBindVertexArray(VAO);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-            movimiento.draw(ourShader);
-            IA.draw(ourShader);
-        }
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0, 0, 0)); // translate it so it's at the center of the scene
+        ourShader.setMat4("model", model);
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     };
 
 private:
-    // model data 
-    float vertices[20];
-    glm::vec2 normal;
-    unsigned int indices[6];
-    unsigned int VBO, VAO, EBO;
-    unsigned int texture1;
-    void setUpButtons() {
-        buttons.push_back(glm::vec4(0.21, 0.345, 0.605, 0.698));
-    }
 
-    void setUpWall(Shader& ourShader) {
+    void setUpWall(Shader& ourShader, string texturePath) {
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
@@ -158,7 +162,7 @@ private:
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
         unsigned char* data;
-        data = stbi_load("resources/Fotos_midi_maze/configAvanzada.jpg", &width, &height, &nrChannels, 0);
+        data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -174,4 +178,5 @@ private:
         glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
 
     }
+
 };
