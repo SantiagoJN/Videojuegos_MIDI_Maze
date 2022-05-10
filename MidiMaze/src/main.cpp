@@ -180,7 +180,7 @@ int main()
             if (pressed) {
                 pressed = !pressed;
                 finish = menu.checkButton(lastButtonX, lastButtonY, ourShader, window);
-                int set_volume = menu.config.getVolume();           //VOLUME 0(mute) 1(bajo) 2(normal)
+                int set_volume = menu.config.vol.getVolume();           //VOLUME 0(mute) 1(bajo) 2(normal)
                 switch (set_volume) {
                     case MUTE: {
                         volume = 0.0f;
