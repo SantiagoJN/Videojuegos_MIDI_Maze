@@ -1,12 +1,13 @@
 #pragma once
-#include <screen.h>
 #include <desplegable.h>
+#include <configuracionAvanzada.h>
 
 class Princip {
 
 public: 
         
         Despleg desplegable;
+        confAvanzada config;
         vector<glm::vec4> buttons;
 
         // constructor, expects a filepath to a 3D model.
@@ -48,9 +49,11 @@ public:
 
             setUpWall(ourShader);
             setUpDespleg(v1,v2,ourShader);
+            setUpConfigAvanzada(v1, v2, ourShader);
 
             buttons.push_back(glm::vec4(0.177, 0.273, 0, 0.05));
             buttons.push_back(glm::vec4(0.187, 0.38, 0.245, 0.51));
+            buttons.push_back(glm::vec4(0.085, 0.14, 0, 0.05));
 
             if (v1.x != v2.x) normal = glm::vec2(0, 1);
             else normal = glm::vec2(1, 0);
@@ -95,17 +98,31 @@ public:
         void setUpDespleg(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
             double totalx = v2.x - v1.x;
             double totaly = 3 - v1.y;
-            desplegable = Despleg(glm::vec3(v1.x + 0.175f * totalx, v1.y + 0.7f * totaly, v1.z+0.01f), glm::vec3(v1.x + 0.46f * totalx, v1.y + 0.7f * totaly, v1.z+0.01f), static_cast<float>(v1.y + 0.94f * totaly), ourShader, v1,v2);
+            desplegable = Despleg(glm::vec3(v1.x + 0.175f * totalx, v1.y + 0.7f * totaly, v1.z + 0.01f), glm::vec3(v1.x + 0.46f * totalx, v1.y + 0.7f * totaly, v1.z + 0.01f), static_cast<float>(v1.y + 0.94f * totaly), ourShader, v1, v2);
+        }
+
+        void setUpConfigAvanzada(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
+            double totalx = v2.x - v1.x;
+            double totaly = 3 - v1.y;
+            config = confAvanzada(glm::vec3(v1.x + 0.061f * totalx, v1.y + 0.287f * totaly, v1.z + 0.01f), glm::vec3(v1.x + 0.54f * totalx, v1.y + 0.2867f * totaly, v1.z + 0.01f), static_cast<float>(v1.y + 0.755f * totaly), ourShader, v1, v2);
         }
 
         bool checkButton(double xPos, double yPos, Shader& ourShader, GLFWwindow* window) {
+            if(config.getShown()) config.checkButton(xPos, yPos, ourShader, window);
             if (desplegable.getShown()) desplegable.checkButton(xPos, yPos, ourShader, window);
             for (int i = 0; i < buttons.size(); i++) {
                 if (!desplegable.maps.getShown() && !desplegable.settings.getShown()) {
                     if (xPos >= buttons[i].x && xPos <= buttons[i].y && yPos >= buttons[i].z && yPos <= buttons[i].w) {
-                        cout << "BOTON PULSADO" << endl;
-                        SoundEngine->play2D("resources/effects/plik.mp3", false);
-                        desplegable.buttonCalled();
+                        if (i == 2 ) {
+                            config.buttonCalled();
+                            if(desplegable.shown) desplegable.buttonCalled();
+                        }
+                        else if(i != 2) {
+                            cout << "BOTON PULSADO" << endl;
+                            SoundEngine->play2D("resources/effects/plik.mp3", false);
+                            if(!config.shown) desplegable.buttonCalled();
+                            if (config.shown && i==0) config.buttonCalled();
+                        }
                     }
                 }
             }
@@ -147,6 +164,7 @@ public:
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
             desplegable.draw(ourShader);
+            config.draw(ourShader);
         };
 
     private:

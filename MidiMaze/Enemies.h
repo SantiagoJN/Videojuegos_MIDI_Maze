@@ -345,7 +345,7 @@ public:
                     dir = glm::vec3(0, 0, 0);
                     return glm::vec2(i, j);
                 }
-                if (times > 6)return glm::vec2(0, 0);
+                if (times > 6)return glm::vec2(1, 1);
                 times++;
             }
         }

@@ -157,6 +157,7 @@
     <ClInclude Include="..\..\..\irrKlang-64bit-1.6.0\examples\common\conio.h" />
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="configuracionAvanzada.h" />
     <ClInclude Include="Dead.h" />
     <ClInclude Include="desplegable.h" />
     <ClInclude Include="diccionario.h" />
@@ -171,11 +172,11 @@
     <ClInclude Include="mirilla.h" />
     <ClInclude Include="numEnemies.h" />
     <ClInclude Include="palabra.h" />
-    <ClInclude Include="screen.h" />
     <ClInclude Include="scr_Princ.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="speed.h" />
     <ClInclude Include="statusIngame.h" />
+    <ClInclude Include="version.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="mesh.h" />

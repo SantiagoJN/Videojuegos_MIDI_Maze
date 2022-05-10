@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
 
+#include <Windows.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -14,7 +16,6 @@
 
 #include <Camera.h>
 #include <model.h>
-#include <screen.h>
 #include <scr_Princ.h>
 #include <menu.h>
 #include <leaveGame.h>
@@ -87,7 +88,7 @@ Map temp;
 
 
 // ###Constantes varias###
-const bool versionModerna = true;
+bool versionModerna = true;
 bool relSpeed;
 float volume = 0.7f;
 int currentRegenTime;
@@ -96,6 +97,8 @@ bool lPresionado = false;
 
 int main()
 {
+    ::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+    //::ShowWindow(::GetConsoleWindow(), SW_HIDE);
     // =====================================================================================================================
     // =================================== INITIALIZATION AND CONFIGURATION OF LIBRARIES ===================================
     // =====================================================================================================================
@@ -106,6 +109,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    
 
     // If in an Apple environment, declare this thing below
 #ifdef __APPLE__
@@ -156,7 +160,7 @@ int main()
     cout << camera.getPosition().x << "," << camera.getPosition().y << "," << camera.getPosition().z << endl;
     cout << camera.Front.x << "," << camera.Front.y << "," << camera.Front.z << endl;
 
-    
+
     showScreen win = showScreen(camera.getPosition(), camera.Front, ourShader, "resources/Fotos_midi_maze/winner/", "player");
     showScreen dead = showScreen(camera.getPosition(), camera.Front, ourShader, "resources/Fotos_midi_maze/dead/", "blue");
     leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
@@ -215,6 +219,10 @@ int main()
         glfwSetMouseButtonCallback(window, mouse_button_callback);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    //Capturar el rat�n
         glfwSetCursorPosCallback(window, mouse_callback);
+
+
+
+        versionModerna = !menu.config.getMovimientoOriginal();      //CONFIGURACION SANTI
 
 
         Bullet myBullets(0.1);
