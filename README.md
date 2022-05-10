@@ -41,7 +41,7 @@ Dentro de la propia partida hay algunos controles:
 ### En la partida
 Las reglas son sencillas: ¡El primer jugador que llegue a 10 asesinatos gana la partida!
 
-## Cómo usar el emulador
+## Versión original - Emulador
  Por si alguien tiene curiosidad de ver cómo funciona o las diferencias entre
 el juego desarrollado y el original, hemos compartido también los ficheros
 necesarios para utilizar un emulador y correr el juego original, y en este
@@ -49,6 +49,9 @@ apartado explicamos qué pasos hay que tomar para ejecutarlo.
 
  Para ello hay que tener en cuenta dos partes: El propio emulador, llamado 
 "Hatari", y el juego del MIDI Maze.
+
+ Si solo queréis ver un poco el juego original, hay vídeos en youtube que 
+lo muestran, como por ejemplo https://www.youtube.com/watch?v=8hSoy1S43dw
 
 ### Configurar el emulador
  Para configurar el emulador hay que seguir unos pocos pasos:
