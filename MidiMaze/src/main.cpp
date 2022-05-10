@@ -44,6 +44,8 @@ double prevXM, prevYM;
 bool pressed = false;
 bool newBullet = false;
 
+enum volume_types { MUTE, BAJO, NORMAL };
+
 //ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
@@ -223,7 +225,29 @@ int main()
 
 
         versionModerna = !menu.config.getMovimientoOriginal();      //VERSION MODERNA RATÓN 
-        int volume = menu.config.getVolume();           //VOLUME 0(mute) 1(bajo) 2(normal)
+        int set_volume = menu.config.getVolume();           //VOLUME 0(mute) 1(bajo) 2(normal)
+        switch (set_volume) {
+            case MUTE: {
+                volume = 0.0f;
+                cout << "volume: mute" << endl;
+                break;
+            }
+            case BAJO: {
+                volume = 0.3f;
+                cout << "volume: bajo" << endl;
+                break;
+            }				
+            case NORMAL: {
+                volume = 0.7f;
+                cout << "volume: normal" << endl;
+                break;
+            }
+            default: {
+                cerr << "Something went wrong with the volumes :S" << endl;
+            }
+        }
+        cout << "volumen actual: " << volume << endl;
+        SoundEngine->setSoundVolume(volume);
 
 
         Bullet myBullets(0.1);
