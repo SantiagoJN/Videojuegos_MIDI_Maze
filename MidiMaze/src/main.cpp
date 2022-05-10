@@ -469,13 +469,11 @@ void processInput(GLFWwindow* window)
                 }
                 if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
                     up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
-                    //cout << camera.Position.x<<","<<camera.Position.y<<","<<camera.Position.z << endl;
                     camera.ProcessKeyboard(Camera_Movement::FORWARD, velocity, up, down, left, right);
                 }
 
                 if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
                     down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
-                    //cout << camera.Position.x << "," << camera.Position.y << "," << camera.Position.z << endl;
                     camera.ProcessKeyboard(Camera_Movement::BACKWARD, velocity, up, down, left, right);
                 }
 
@@ -497,11 +495,11 @@ void processInput(GLFWwindow* window)
             else {
                 if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
                     up = temp.checkIntersections(camera.Position, (camera.Position + (camera.Front * velocity)));
-                    camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+                    camera.ProcessKeyboard(Camera_Movement::FORWARD, velocity, up, down, left, right);
                 }   
                 if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
                     down = temp.checkIntersections(camera.Position, (camera.Position - (camera.Front * velocity)));
-                    camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+                    camera.ProcessKeyboard(Camera_Movement::BACKWARD, velocity, up, down, left, right);
                 }
                 if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
                     if (currentDelay == 0 && currentRegenTime <= 0) { // Puedo disparar
@@ -512,12 +510,12 @@ void processInput(GLFWwindow* window)
                     }
                 }
                 if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-                    float xoffset = 0.7;
+                    float xoffset = 360.0f * deltaTime;
                     float yoffset = 0.0;
                     camera.ProcessMouseMovement(xoffset, yoffset);
                 }
                 if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-                    float xoffset = -0.7;
+                    float xoffset = -360.0f * deltaTime;
                     float yoffset = 0.0;
                     camera.ProcessMouseMovement(xoffset, yoffset);
                 }
