@@ -98,8 +98,8 @@ bool lPresionado = false;
 
 int main()
 {
-    //::ShowWindow(::GetConsoleWindow(), SW_SHOW);
-    ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+    ::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+    //::ShowWindow(::GetConsoleWindow(), SW_HIDE);
     // =====================================================================================================================
     // =================================== INITIALIZATION AND CONFIGURATION OF LIBRARIES ===================================
     // =====================================================================================================================
@@ -271,7 +271,7 @@ int main()
         Enemy myEnemies;
         if (!glfwWindowShouldClose(window)) {
             myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, 
-                pared.getDim(), menu.getRegenSpeed(), menu.getReloadSpeed(), menu.getReviveSpeed());
+                pared.getDim(), menu.getRegenSpeed(), menu.getReloadSpeed(), menu.getReviveSpeed(), IAModerna);
         }
         cout << "Fuera enemigos" << endl;
         int puntJug = 0;

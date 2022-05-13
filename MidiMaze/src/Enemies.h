@@ -51,6 +51,8 @@ enum velocidadRegeneracion {REG_RAPIDA, REG_LENTA};
 int regenJugador[] = { 4, 8 }; // Numero de frames que se regenera el jugador
 bool regenSeleccionada;
 
+bool IAseleccionada;
+
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 float angulo_vision = 45.0f; // 90 grados en total
 
@@ -98,6 +100,7 @@ private:
     int puntuacionJugador = 0;
     float enemySpeed = 2.0f;
     float rotationSpeed = 120.0f;
+    vector<bool> tocaGirar;
 
     vector<vector<bool>> map;
 	vector<vector<bool>> spawnmap;
@@ -115,11 +118,12 @@ public:
 
     // constructor, expects a filepath to a 3D model.
     Enemy(float scale,int numvidas, int nDumbs, int nMDumbs, int nNDumbs, vector<vector<bool>> laberinto, Map mapa, 
-        float dim, bool regenSpeed, bool reloadSpeed, bool reviveSpeed) 
+        float dim, bool regenSpeed, bool reloadSpeed, bool reviveSpeed, bool IAselec) 
         : mapa(mapa), map(laberinto), dim(dim), scale(scale){
         // Comprobamos que el n�mero de enemigos es correcto
         regenSeleccionada = regenSpeed;
         spawnSeleccionado = reviveSpeed;
+        IAseleccionada = IAselec;
         num_vidas = numvidas;
         numEnemies = nDumbs + nMDumbs + nNDumbs;
         int numColors = sizeof(colors) / sizeof(colors[0]);
@@ -175,6 +179,7 @@ public:
                             glm::vec3 position(x, 0, z);
                             positions.push_back(position);
                             //cout << "\tDireccion: " << dir[0] << dir[1] << dir[2] << endl;
+                            tocaGirar.push_back(false);
                             directions.push_back(dir);
                             vidas.push_back(num_vidas); // Vidas de los enemigos
                             states.push_back(ANDANDO);   //Estado inicial
@@ -353,9 +358,79 @@ public:
                 float longit = static_cast<float>(sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2)));
                 
 
-                if (longit < (radious + radiousBullet)) {
-                    //cout << vec.x << " " << vec.y << " " << vec.z << endl;
-                    //cout << longit << "  ----  " << radious << " " << radiousBullet << endl;
+                if (longit < (radious + radiousBullet)) { // LE HA DADO!
+                    if (IAseleccionada == false && dificultades[enemy] == VERY_DUMB) {
+                        cout << "moviendo en dirección " << directions[enemy].x << ", " << directions[enemy].z << endl;
+						// Entonces, hacer que el enemigo cambie la dirección
+                        cout << "destiny: " << destiny[enemy].x << ", " << destiny[enemy].z << ", positions: " << positions[enemy].x << ", " << positions[enemy].z << endl;
+                        //destiny[enemy] = positions[enemy];
+                        if (directions[enemy].x != 0.0) { // Se está moviendo por la x
+                            double xdecimales = (positions[enemy].x - static_cast<int>(positions[enemy].x));							
+                            if (directions[enemy].x > 0.0) { // Se mueve positivo
+                                if (destiny[enemy].x > 0.0f) { // Si es positiva, habrá que sumar valores
+                                    if (xdecimales > 0.0 && xdecimales <= 0.25) destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) + 0.25f;
+                                    else if (xdecimales > 0.25 && xdecimales <= 0.75) destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) + 0.75f;
+                                    else destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) + 1.25f;
+                                }
+                                else { // Si es negativa, habrá que restarlos
+                                    xdecimales *= -1;
+                                    if (xdecimales >= 0.0 && xdecimales < 0.25) destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) + 0.25f;
+                                    else if (xdecimales >= 0.25 && xdecimales < 0.75) destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) - 0.25f;
+                                    else destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) - 0.75f;
+                                }
+                            }
+                            else { // Se mueve negativo
+                                if (destiny[enemy].x > 0.0f) { // Si es positiva, habrá que sumar valores
+                                    if (xdecimales > 0.0 && xdecimales <= 0.25) destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) - 0.25f;
+                                    else if (xdecimales > 0.25 && xdecimales <= 0.75) destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) + 0.25f;
+                                    else destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) + 0.75f;
+                                }
+                                else { // Si es negativa, habrá que restarlos
+                                    xdecimales *= -1;
+                                    if (xdecimales >= 0.0 && xdecimales < 0.25) destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) - 0.25f;
+                                    else if (xdecimales >= 0.25 && xdecimales < 0.75) destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) - 0.75f;
+                                    else destiny[enemy].x = static_cast<float>(static_cast<int>(positions[enemy].x)) - 1.25f;
+                                }
+                            }
+                        }
+                        else if (directions[enemy].z != 0.0) { // Se está moviendo por la x
+                            double zdecimales = (positions[enemy].z - static_cast<int>(positions[enemy].z));
+                            if (directions[enemy].z > 0.0) { // Se mueve positivo
+                                if (destiny[enemy].z > 0.0f) { // Si es positiva, habrá que sumar valores
+                                    if (zdecimales > 0.0 && zdecimales <= 0.25) destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) + 0.25f;
+                                    else if (zdecimales > 0.25 && zdecimales <= 0.75) destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) + 0.75f;
+                                    else destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) + 1.25f;
+                                }
+                                else { // Si es negativa, habrá que restarlos
+                                    zdecimales *= -1;
+                                    if (zdecimales >= 0.0 && zdecimales < 0.25) destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) + 0.25f;
+                                    else if (zdecimales >= 0.25 && zdecimales < 0.75) destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) - 0.25f;
+                                    else destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) - 0.75f;
+                                }
+                            }
+                            else { // Se mueve negativo
+                                if (destiny[enemy].z > 0.0f) { // Si es positiva, habrá que sumar valores
+                                    if (zdecimales > 0.0 && zdecimales <= 0.25) destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) - 0.25f;
+                                    else if (zdecimales > 0.25 && zdecimales <= 0.75) destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) + 0.25f;
+                                    else destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) + 0.75f;
+                                }
+                                else { // Si es negativa, habrá que restarlos
+                                    zdecimales *= -1;
+                                    if (zdecimales >= 0.0 && zdecimales < 0.25) destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) - 0.25f;
+                                    else if (zdecimales >= 0.25 && zdecimales < 0.75) destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) - 0.75f;
+                                    else destiny[enemy].z = static_cast<float>(static_cast<int>(positions[enemy].z)) - 1.25f;
+                                }
+                            }
+                        }
+						
+                        cout << "destiny: " << destiny[enemy].x << ", " << destiny[enemy].z << ", positions: " << positions[enemy].x << ", " << positions[enemy].z << endl;
+                        cout << "index: " << index[enemy].x << ", " << index[enemy].y << endl;
+                        float start = map.size() * dim / 2;
+                        int i = round((-positions[enemy].z + start) / dim);
+                        int j = round((positions[enemy].x + start) / dim);
+						cout << "nuevo index " << i << ", " << j << endl;
+                        index[enemy] = glm::vec2(i, j);
+                    }
                     vidas[enemy]--;
                     if (vidas[enemy] == 0) {
                         if (spawnSeleccionado) spawnCont[enemy] = static_cast<int>(spawnTime[SPAWN_RAPIDO] / deltaTime);
@@ -588,7 +663,7 @@ public:
 		//Calculamos las actualizaciones necesarias
         float start = map.size() * dim / 2;
         //if ((positions[enemyIndex].x == destiny[enemyIndex].x) && (positions[enemyIndex].z == destiny[enemyIndex].z)) {
-        if(pararAndar(enemyIndex, deltaTime)){
+        if(pararAndar(enemyIndex, deltaTime)) {
             positions[enemyIndex] = destiny[enemyIndex];
             glm::vec3 prevDir = directions[enemyIndex];
             prevIndex[enemyIndex] = index[enemyIndex];
