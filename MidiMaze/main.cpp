@@ -249,6 +249,7 @@ int main()
 
         versionModerna = !menu.config.getMovimientoOriginal();      //VERSION MODERNA RATÓN 
         
+        bool IAModerna = !!menu.config.getIAOriginal();     //Versión moderna IA
 
 
         Bullet myBullets(0.1);
