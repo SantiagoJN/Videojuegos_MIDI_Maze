@@ -349,7 +349,7 @@ int main()
             }
 
             //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
-            myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime, leave.pause() || WON);
+            myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime, leave.pause() || WON, camera.Position);
 
             int balasRecibidas = 0;
             bool ganaEnemigo = false;

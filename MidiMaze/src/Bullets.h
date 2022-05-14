@@ -38,13 +38,13 @@ public:
         collided.push_back(false);
     }
 
-    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa, float deltaTime, bool pause) {
+    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa, float deltaTime, bool pause, glm::vec3 playerPosition) {
         if (!pause) {
             for (int i = 0; i < numBullets; i++) {
                 if (!collided[i]) {
                     collided[i] = mapa.checkCollisionBullets(positions[i], positions[i] + directions[i] * bulletSpeed * deltaTime, radious * 0.8f);
                     if (!collided[i]) {
-                        collided[i] = enemies.checkCollision(positions[i], radious, deltaTime);
+                        collided[i] = enemies.checkCollision(positions[i], radious, deltaTime, playerPosition);
                         if (!collided[i]) {
                             glm::mat4 model = glm::mat4(1.0f);
                             positions[i] = positions[i] + directions[i] * bulletSpeed * deltaTime;

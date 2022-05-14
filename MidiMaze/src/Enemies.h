@@ -350,7 +350,7 @@ public:
     }
 
 
-    bool checkCollision(glm::vec3 positionBullet, float radiousBullet, float deltaTime) {
+    bool checkCollision(glm::vec3 positionBullet, float radiousBullet, float deltaTime, glm::vec3 playerPosition) {
         for (int enemy = 0; enemy < numEnemies; enemy++) {
             if (vidas[enemy] > 0) {
                 glm::vec3 vec = positions[enemy] - positionBullet;
@@ -359,6 +359,7 @@ public:
                 
 
                 if (longit < (radious + radiousBullet)) { // LE HA DADO!
+					// NUEVA IA -> VERY_DUMB
                     if (IAseleccionada == false && dificultades[enemy] == VERY_DUMB) {
                         cout << "moviendo en dirección " << directions[enemy].x << ", " << directions[enemy].z << endl;
 						// Entonces, hacer que el enemigo cambie la dirección
@@ -430,6 +431,19 @@ public:
                         int j = round((positions[enemy].x + start) / dim);
 						cout << "nuevo index " << i << ", " << j << endl;
                         index[enemy] = glm::vec2(i, j);
+                    }
+					// NUEVA IA -> [PLAIN,NOT_SO]_DUMB -> Apuntar cuando me disparen
+                    if (IAseleccionada == false && dificultades[enemy] != VERY_DUMB) {
+						cout << "current rotation: " << currentRotation[enemy] << endl;
+                        //Apuntar hacia el enemigo!
+                        glm::vec3 enemyToPlayerVec = playerPosition - positions[enemy];
+                        float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
+                        if (playerPosition.z < positions[enemy].z) {
+                            deg = 180.0f + deg;
+                        }
+                        if (deg < 0.0) deg = 360.0f + deg;
+                        goalRotation[enemy] = deg;
+                        states[enemy] = GIRANDO;
                     }
                     vidas[enemy]--;
                     if (vidas[enemy] == 0) {
@@ -773,12 +787,18 @@ public:
             }
             else { // No le está viendo
                 if (states[enemyIndex] == APUNTANDO) { // Si antes le estaba apuntando, hay que recuperar el estado
-                    if (prevState[enemyIndex] == GIRANDO) { // Si antes estaba girando, recuperamos el giro
-                        //updateGoalRotation(enemyIndex);
-                        goalRotation[enemyIndex] = prevGoalRotation[enemyIndex];
-                    }
-                    else if (prevState[enemyIndex] == ANDANDO) { // Si antes estaba andando, tendrá que corregir el giro
+                    //cout << "ya no le veo x.x" << endl;
+					//cout << "prevstate: " << prevState[enemyIndex] << endl;
+                    if (IAseleccionada == false) {
                         updateGoalRotation(enemyIndex);
+                    }
+                    else {
+                        if (prevState[enemyIndex] == GIRANDO) { // Si antes estaba girando, recuperamos el giro
+                            goalRotation[enemyIndex] = prevGoalRotation[enemyIndex];
+                        }
+                        else if (prevState[enemyIndex] == ANDANDO) { // Si antes estaba andando, tendrá que corregir el giro
+                            updateGoalRotation(enemyIndex);
+                        }
                     }
                     states[enemyIndex] = GIRANDO;
                 }
