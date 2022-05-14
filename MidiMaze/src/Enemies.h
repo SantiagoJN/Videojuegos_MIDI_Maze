@@ -55,6 +55,7 @@ bool IAseleccionada;
 
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 float angulo_vision = 45.0f; // 90 grados en total
+float rango_vision = 10.0f; 
 
 class Enemy
 {
@@ -775,7 +776,15 @@ public:
             //cout << "diferencia: " << diferencia << "; deg: " << deg << ", curr: " << currentRotation[enemyIndex] << endl;
             float distance = glm::length(playerPosition - positions[enemyIndex]);
             bool somethingBetween = mapa.wallBetween(positions[enemyIndex], playerPosition) || between(enemyIndex, positions[enemyIndex], playerPosition);
-            if ((diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) && !somethingBetween) { // Le está viendo
+            bool enRango = true;
+            if (IAseleccionada == true) { // La IA vieja
+                enRango = distance < rango_vision;
+            }
+            // Le está viendo si:
+			//   1- Está en el FOV
+			//   2- No hay nada entre el enemigo y el jugador
+			//   3- Está en el rango de visión (IA original)
+            if ((diferencia < angulo_vision || 360.0f - angulo_vision < diferencia) && !somethingBetween && enRango) { 
                 // Si le está viendo, calculamos si hay alguna pared en medio
 
                 if (states[enemyIndex] != APUNTANDO && quieto) {
