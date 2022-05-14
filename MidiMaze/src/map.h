@@ -8,6 +8,7 @@ public:
     // model data 
     vector<Wall> map;
     Wall suelo;
+    Wall techo;
     float size;
     float dim = 1.5;
     vector<vector<bool>> laberinto;
@@ -28,7 +29,8 @@ public:
             getline(filein, line);
             size = stof(line)+1;
             float start = size * dim / 2;
-            suelo = Wall(size, dim, ourShader);
+            suelo = Wall(size, dim, ourShader, true);
+            techo = Wall(size, dim, ourShader, false);
             int j = 0;
             vector<bool> aux;
             getline(filein, line);
@@ -150,6 +152,7 @@ public:
     void Draw(Shader& shader)
     {   
         suelo.draw(shader);
+        techo.draw(shader);
         for (unsigned int i = 0; i < map.size(); i++)
             map[i].draw(shader);
     }

@@ -1,42 +1,44 @@
 ﻿  main.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': redefinición de macro
 C:\Users\HOME\Documents\midiMazeArch\include\glad\glad.h(32): message : vea la definición anterior de 'APIENTRY'
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(369,45): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(429,31): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(430,31): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(444,45): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(369,65): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(444,65): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(370,41): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(445,41): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(370,57): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(445,57): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(595,81): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(670,81): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(595,60): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(670,60): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(602,42): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(677,42): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(602,67): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(677,67): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
           with
           [
               T=float

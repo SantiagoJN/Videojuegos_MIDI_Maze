@@ -190,30 +190,30 @@ int main()
                 switch (set_volume) {
                     case MUTE: {
                         volume = 0.0f;
-                        cout << "volume: mute" << endl;
+                        //cout << "volume: mute" << endl;
                         break;
                     }
                     case BAJO: {
                         volume = 0.3f;
-                        cout << "volume: bajo" << endl;
+                        //cout << "volume: bajo" << endl;
                         break;
                     }				
                     case NORMAL: {
                         volume = 0.7f;
-                        cout << "volume: normal" << endl;
+                        //cout << "volume: normal" << endl;
                         break;
                     }
                     default: {
-                        cerr << "Something went wrong with the volumes :S" << endl;
+                        //cerr << "Something went wrong with the volumes :S" << endl;
                     }
                 }
-                cout << "volumen actual: " << volume << endl;
+                //cout << "volumen actual: " << volume << endl;
                 SoundEngine->setSoundVolume(volume);
             }
 
             // render
             //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
+            glClearColor(0,0,0, 1.0f); // Los colores del juego
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
             // create transformations
@@ -324,7 +324,8 @@ int main()
 
             // render
             //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
+            //glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
+            glClearColor(0, 0, 0, 1.0f); // Los colores del juego
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
             if (currentRegenTime > 0) {
@@ -618,11 +619,17 @@ void menu_mouse_button_callback(GLFWwindow* window, int button, int action, int 
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         cout << width << "," << height << endl;
-        cout << xpos/width << "," << ypos/height << endl;
-        lastButtonX = xpos / width;
-        lastButtonY = ypos / height;
-        if (!initGame) pressed = true;
-        else if (leave.shown) pressed = true;
+        cout <<"Total\t" << xpos / width << "," << ypos / height << endl;
+        if (xpos >= screenMinX && xpos <= screenMaxX && ypos >= screenMinY && ypos <= screenMaxY) {
+            lastButtonX = (xpos - screenMinX) / (screenMaxX - screenMinX);
+            lastButtonY = (ypos - screenMinY) / (screenMaxY - screenMinY);
+            if (!initGame) pressed = true;
+            else if (leave.shown) pressed = true;
+            cout << "Parcial\t"<<(xpos-screenMinX)/(screenMaxX-screenMinX)<<","<< (ypos - screenMinY) / (screenMaxY - screenMinY)<<endl;
+        }
+        //lastButtonX = xpos / width;
+        //lastButtonY = ypos / height;
+        
     }
 }
 
