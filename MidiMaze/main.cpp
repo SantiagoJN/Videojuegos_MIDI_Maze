@@ -58,6 +58,11 @@ void nada(GLFWwindow* window, double xpos, double ypos);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+float screenMinX = 0;
+float screenMinY = 0;
+float screenMaxX = SCR_WIDTH;
+float screenMaxY = SCR_HEIGHT;
+
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f; // Initial values in the middle of the screen
@@ -432,8 +437,27 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
-	//cout << "width: " << width << " height: " << height << endl;
-    glViewport(0, 0, width, height);
+    //cout << "width: " << width << " height: " << height << endl;
+
+    // Calculate the proper aspect ratio to use based on window ratio
+    float ratioX = width / (float)SCR_WIDTH;
+    float ratioY = height / (float)SCR_HEIGHT;
+    float ratio = ratioX < ratioY ? ratioX : ratioY;
+    // Calculate the width and height that the will be rendered to
+    float viewWidth = (SCR_WIDTH * ratio);
+    float viewHeight = (SCR_HEIGHT * ratio);
+    // Calculate the position, which will apply proper "pillar" or "letterbox" 
+    float viewX = (width - SCR_WIDTH * ratio) / 2;
+    float viewY = (height - SCR_HEIGHT * ratio) / 2;
+    // Apply the viewport and switch back to the GL_MODELVIEW matrix mode
+    glViewport(viewX, viewY, viewWidth, viewHeight);
+
+    screenMinX = viewX;
+    screenMinY = viewY;
+    screenMaxX = viewX + viewWidth;
+    screenMaxY = viewY + viewHeight;
+
+    cout << "menor x: " << viewX << "menor y: " << viewY << "mayorX: " << viewX + viewWidth << "mayorY: " << viewY + viewHeight << endl;
 }
 
 void nada(GLFWwindow* window, double xpos, double ypos) {}
