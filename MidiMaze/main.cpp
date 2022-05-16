@@ -475,7 +475,7 @@ int main()
 
         }
     }
-
+	glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
