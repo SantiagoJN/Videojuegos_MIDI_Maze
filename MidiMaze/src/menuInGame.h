@@ -784,10 +784,9 @@ public:
 
 
     void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2,Enemy listEnemies) {
-        vector<int> allScores = listEnemies.getScores();
-
-        for (int i = 0; i <= totalEnemies; i++) {
-            datos[i].draw(camPosition, front, yaw, ourShader, x1, x2, y1, y2, allScores[i]);
+        datos[0].draw(camPosition, front, yaw, ourShader, x1, x2, y1, y2, listEnemies.getPuntuacionJugador());
+        for (int i = 1; i <= totalEnemies; i++) {
+            datos[i].draw(camPosition, front, yaw, ourShader, x1, x2, y1, y2, listEnemies.puntuaciones[i-1]);
         }
     };
 
@@ -1049,8 +1048,7 @@ public:
 
 
     void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2, Enemy listEnemies) {
-        vector<int> allScores = listEnemies.getScores();
-
+        
         for (int i = 0; i < totalPuntos; i++) {
             datos[i].draw(camPosition, front, yaw, ourShader, x1, x2, y1, y2, listaMuertosJugador[i],i);
         }

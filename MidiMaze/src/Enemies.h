@@ -99,7 +99,6 @@ private:
     int num_vidas;
 
     vector<int> vidas;
-    vector<int> puntuaciones;
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
     int puntuacionJugador = 0;
 	vector<string> muertesJugador;							  
@@ -113,7 +112,7 @@ private:
     float dim;
 
 public:
-    
+    vector<int> puntuaciones;
 
     vector<glm::vec3> returnPositions() {
         return positions;
@@ -224,6 +223,7 @@ public:
     int getPuntuacionJugador() {
         return puntuacionJugador;
     }
+
 
 	int getNumEnemies() {
         return numEnemies;
@@ -483,14 +483,14 @@ public:
     }
 
     // Devuelve la puntuaci�n del jugador seguida del resto de puntuaciones
-    vector<int> getScores() {
+    /*vector<int> getScores() {
         vector<int> retVal;
         retVal.push_back(puntuacionJugador);
         for (int p : puntuaciones) {
             retVal.push_back(p);
         }
         return retVal;
-    }
+    }*/
 
 
     bool between(int enemyIndex, glm::vec3 A, glm::vec3 B) {
