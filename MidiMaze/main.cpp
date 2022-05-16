@@ -356,12 +356,14 @@ int main()
             glClearColor(0, 0, 0, 1.0f); // Los colores del juego
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
+			glViewport(iniX, iniY, tamX, tamY);
             if (currentRegenTime > 0) {
                 myEnemies.blinded();
             }
             // activate shader
             ourShader.use();
 
+			glViewport(iniX, iniY, tamX, tamY);
             pared.Draw(ourShader);
             // create transformations
             glm::mat4 projection = glm::mat4(1.0f);
@@ -371,11 +373,13 @@ int main()
             glm::mat4 view = camera.GetViewMatrix();
             ourShader.setMat4("view", view);
 
+			glViewport(iniX, iniY, tamX, tamY);
             if (newBullet) {
                 newBullet = false;
                 myBullets.newBullet(glm::vec3(camera.Position+camera.Front), camera.Front);
             }
 
+			glViewport(iniX, iniY, tamX, tamY);
             //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
             myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime, leave.pause() || WON, camera.Position);
 
@@ -384,6 +388,8 @@ int main()
             bool mataEnemigo = false;
             string nombreGanador = "";
             int lastVidas = vidas;
+			
+			glViewport(iniX, iniY, tamX, tamY);
             myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas, 
                 leave.pause() || WON || regenerando, ganaEnemigo, mataEnemigo, nombreGanador);
             if (lastVidas != vidas) status.setUp(ourShader, vidas);
