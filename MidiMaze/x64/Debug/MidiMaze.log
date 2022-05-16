@@ -1,64 +1,113 @@
 ﻿  main.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': redefinición de macro
 C:\Users\HOME\Documents\midiMazeArch\include\glad\glad.h(32): message : vea la definición anterior de 'APIENTRY'
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(393,45): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(402,45): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(393,65): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(402,65): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(394,41): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(403,41): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(394,57): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(403,57): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(623,23): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(632,23): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(624,23): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(633,23): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(625,27): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(634,27): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(626,27): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(635,27): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(667,81): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(676,81): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(667,60): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(676,60): warning C4244: 'argumento': conversión de 'T' a 'int'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(674,42): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(683,42): warning C4244: 'argumento': conversión de 'T' a 'const unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(674,67): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\Enemies.h(683,67): warning C4244: 'argumento': conversión de 'T' a 'unsigned __int64'; posible pérdida de datos
           with
           [
               T=float
           ]
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(63,22): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(70,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(77,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(78,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(84,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(85,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(125,27): warning C4244: 'argumento': conversión de 'float' a 'GLsizei'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(125,23): warning C4244: 'argumento': conversión de 'float' a 'GLsizei'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(125,19): warning C4244: 'argumento': conversión de 'float' a 'GLint'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\statusIngame.h(125,15): warning C4244: 'argumento': conversión de 'float' a 'GLint'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\mirilla.h(18,36): warning C4244: 'argumento': conversión de 'float' a 'GLsizei'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\mirilla.h(18,32): warning C4244: 'argumento': conversión de 'float' a 'GLsizei'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\mirilla.h(18,28): warning C4244: 'argumento': conversión de 'float' a 'GLint'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\mirilla.h(18,24): warning C4244: 'argumento': conversión de 'float' a 'GLint'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(33,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(40,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(181,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(188,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(314,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(321,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(328,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(329,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(335,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(336,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(469,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(477,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(483,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(484,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(613,34): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(620,34): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(627,35): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(628,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(634,35): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(635,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(674,36): warning C4244: 'argumento': conversión de 'float' a 'GLsizei'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(674,32): warning C4244: 'argumento': conversión de 'float' a 'GLsizei'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(674,28): warning C4244: 'argumento': conversión de 'float' a 'GLint'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(674,24): warning C4244: 'argumento': conversión de 'float' a 'GLint'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(867,35): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(874,35): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(881,36): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(882,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(888,36): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(889,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(928,36): warning C4244: 'argumento': conversión de 'float' a 'GLsizei'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(928,32): warning C4244: 'argumento': conversión de 'float' a 'GLsizei'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(928,28): warning C4244: 'argumento': conversión de 'float' a 'GLint'; posible pérdida de datos
+C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src\menuInGame.h(928,24): warning C4244: 'argumento': conversión de 'float' a 'GLint'; posible pérdida de datos
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
   MidiMaze.vcxproj -> C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\x64\Debug\MidiMaze.exe
