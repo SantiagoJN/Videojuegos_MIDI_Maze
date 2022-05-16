@@ -432,11 +432,11 @@ int main()
             }
 
             if (WON) {
-				glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);																		   
+				glViewport(iniX, iniY, tamX, tamY);																	   
                 win.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             }
             else if (puntJug > 9) {
-				glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);																		   
+				glViewport(iniX, iniY, tamX, tamY);																	   
                 cout << "Winner" << endl;
                 WON = true;
                 win.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
