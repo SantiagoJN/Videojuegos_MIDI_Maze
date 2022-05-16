@@ -13,7 +13,6 @@
 #include <map.h>
 #include <wall.h>
 #include <Enemies.h>
-#include <menuInGame.h>
 
 #include <Camera.h>
 #include <model.h>
@@ -23,6 +22,7 @@
 #include <mirilla.h>
 #include <kills.h>
 #include <showScreen.h>
+#include <menuInGame.h>
 
 #include <iostream>
 
