@@ -340,7 +340,7 @@ int main()
             countFrames++; // Actualizar los frames en el �ltimo segundo
             // Datos para gestionar los fps
             if (currentFrame - lastFrameFPS > 1.0f) {
-                //cout << "FPS: " << countFrames << endl;
+                cout << "FPS: " << countFrames << endl;
                 countFrames = 0;
                 lastFrameFPS = currentFrame; // Actualizamos
             }
@@ -544,7 +544,7 @@ void processInput(GLFWwindow* window)
             glfwSetCursorPosCallback(window, nada);
             //glfwSetWindowShouldClose(window, true);
         }
-        if (!WON && !regenerando) {
+        else if (!WON && !regenerando) {
             if (versionModerna) {
                 // ############ VERSIÓN MODERNA ############
                 bool slow = false;
