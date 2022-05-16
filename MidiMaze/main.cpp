@@ -421,8 +421,10 @@ int main()
                 regenerando = false;
             }
 
+			glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
             leave.draw(ourShader);
-
+			glViewport(iniX, iniY, tamX, tamY);	
+			
             if (myEnemies.getPuntuacionJugador() != puntJug) {
                 puntJug = myEnemies.getPuntuacionJugador();
                 if (versionModernaGraficos) {
@@ -528,6 +530,7 @@ void processInput(GLFWwindow* window)
     if (processGame) {
         float velocity = camera.MovementSpeed * deltaTime;
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+			glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
             leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
             leave.show();
             glfwSetMouseButtonCallback(window, menu_mouse_button_callback);

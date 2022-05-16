@@ -678,7 +678,7 @@ public:
             camPosition.x = camPosition.x + front.x * dist;
             camPosition.z = camPosition.z + front.z * dist;
             glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, camPosition + glm::vec3(0, 4.02f + (0.055f * puntos), 0));
+            model = glm::translate(model, camPosition + glm::vec3(0, 4.02f + (0.052f * puntos), 0));
             //cout << front.x<<"\t"<<front.y<<"\t"<<front.z << endl;
             float angle = atan(front.x / front.z) * 180.0f / 3.1415f;
             if (front.z > 0) angle -= 180;
