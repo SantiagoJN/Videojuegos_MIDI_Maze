@@ -14,7 +14,8 @@ public:
 
 
     void draw(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader,float x1,float x2, float y1, float y2) {
-			glViewport(x1, y1, x2, y2);						   
+            
+            glViewport(x1, y1, x2, y2);
             double ancho = 0;    //ancho/2
             double dist = 0.1;  //Está a 0.12 de la cámara
 

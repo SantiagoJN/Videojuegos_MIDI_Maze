@@ -9,9 +9,10 @@ public:
         Despleg desplegable;
         confAvanzada config;
         vector<glm::vec4> buttons;
+		glm::vec3 position = glm::vec3(0, 0, 0);
 
         // constructor, expects a filepath to a 3D model.
-        Princip(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
+        Princip(glm::vec3 v1, glm::vec3 v2, Shader& ourShader, boolean menu) {
             vertices[0] = v1.x;
             vertices[1] = v1.y;
             vertices[2] = v1.z;
@@ -47,7 +48,7 @@ public:
             indices[4] = 2;
             indices[5] = 3;
 
-            setUpWall(ourShader);
+            setUpWall(ourShader,menu);
             setUpDespleg(v1,v2,ourShader);
             setUpConfigAvanzada(v1, v2, ourShader);
 
@@ -174,6 +175,38 @@ public:
             config.draw(ourShader);
         };
 
+		void drawInGame(Camera camera , Shader& ourShader) {
+
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texture1);
+
+            /*double ancho = 0;    //ancho/2
+            double dist = 0.1;  //Está a 0.12 de la cámara
+
+            glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);
+            camPosition.x = static_cast<float>(camPosition.x + front.x * dist);
+            camPosition.z = static_cast<float>(camPosition.z + front.z * dist);
+
+            glm::vec3 v1(0, 0, 0);
+            v1.x = static_cast<float>(camPosition.x - ancho * frontPerp.x);
+            v1.z = static_cast<float>(camPosition.z - ancho * frontPerp.z);*/
+
+            glm::mat4 viewMatrixInverse = glm::inverse(camera.GetViewMatrix());
+            glm::vec3 cameraPositionWorldSpace = glm::vec3(viewMatrixInverse[3][0], viewMatrixInverse[3][1], viewMatrixInverse[3][2]);
+
+
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cameraPositionWorldSpace + camera.Front * 3.0f); // translate it so it's at the center of the scene
+
+            float angle = atan(camera.Front.x / camera.Front.z) * 180.0f / 3.1415f;
+            if (camera.Front.z > 0) angle -= 180;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+            ourShader.setMat4("model", model);
+            glBindVertexArray(VAO);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            desplegable.draw(ourShader);
+            config.draw(ourShader);
+        };
     private:
         // model data 
         float vertices[20];
@@ -181,7 +214,7 @@ public:
         unsigned int indices[6];
         unsigned int VBO, VAO, EBO;
         unsigned int texture1;
-        void setUpWall(Shader& ourShader) {
+        void setUpWall(Shader& ourShader,bool menu) {
             glGenVertexArrays(1, &VAO);
             glGenBuffers(1, &VBO);
             glGenBuffers(1, &EBO);
@@ -217,7 +250,12 @@ public:
             stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
             // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
             unsigned char* data;
-            data = stbi_load("resources/Fotos_midi_maze/inicio.png", &width, &height, &nrChannels, 0);
+            if (menu) {
+                data = stbi_load("resources/Fotos_midi_maze/inicio.jpg", &width, &height, &nrChannels, 0);
+            }
+            else {
+                data = stbi_load("resources/Fotos_midi_maze/inicio.png", &width, &height, &nrChannels, 0);
+            }
             if (data)
             {
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
