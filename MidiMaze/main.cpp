@@ -22,7 +22,6 @@
 #include <mirilla.h>
 #include <kills.h>
 #include <showScreen.h>
-#include <menuInGame.h>
 
 #include <iostream>
 
@@ -30,8 +29,8 @@
 
 #include <glut/glut.h>
 
-//#include <irrKlang/irrKlang.h>
-//using namespace irrklang;
+#include <irrKlang/irrKlang.h>
+using namespace irrklang;
 
 bool WON, regenerando;
 bool processGame;
@@ -43,7 +42,6 @@ double prevXM, prevYM;
 bool pressed = false;
 bool newBullet = false;
 
-
 enum volume_types { MUTE, BAJO, NORMAL };
 
 //ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
@@ -54,7 +52,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void nada(GLFWwindow* window, double xpos, double ypos);
-void initMenuInGame();
 
 
 // Initial settings
@@ -65,10 +62,6 @@ float screenMinX = 0;
 float screenMinY = 0;
 float screenMaxX = SCR_WIDTH;
 float screenMaxY = SCR_HEIGHT;
-float screenMaxRelativeX = SCR_WIDTH;
-float screenMaxRelativeY = SCR_HEIGHT;
-
-
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -131,7 +124,7 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Midi Maze", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Midi Maze :)", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -157,7 +150,7 @@ int main()
     // build and compile our shader zprogram
     // ------------------------------------
     ourShader = Shader("shaders/1.model_loading.vs", "shaders/1.model_loading.fs");
-    //SoundEngine->setSoundVolume(volume);
+    SoundEngine->setSoundVolume(volume);
     /*
     glm::vec3 v1(-5, -3, -4.2);
     glm::vec3 v2(5, -3, -4.2);
@@ -180,7 +173,7 @@ int main()
     //leave = gameLeaver(glm::vec3(camera.getPosition().x -0.4, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x+0.4, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
     Princip menu;
     while (!glfwWindowShouldClose(window)) {
-        menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader, false);
+        menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
         camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
         glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
         leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
@@ -197,30 +190,30 @@ int main()
                 switch (set_volume) {
                     case MUTE: {
                         volume = 0.0f;
-                        cout << "volume: mute" << endl;
+                        //cout << "volume: mute" << endl;
                         break;
                     }
                     case BAJO: {
                         volume = 0.3f;
-                        cout << "volume: bajo" << endl;
+                        //cout << "volume: bajo" << endl;
                         break;
                     }				
                     case NORMAL: {
                         volume = 0.7f;
-                        cout << "volume: normal" << endl;
+                        //cout << "volume: normal" << endl;
                         break;
                     }
                     default: {
-                        cerr << "Something went wrong with the volumes :S" << endl;
+                        //cerr << "Something went wrong with the volumes :S" << endl;
                     }
                 }
-                cout << "volumen actual: " << volume << endl;
-                //SoundEngine->setSoundVolume(volume);
+                //cout << "volumen actual: " << volume << endl;
+                SoundEngine->setSoundVolume(volume);
             }
 
             // render
             //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
+            glClearColor(0,0,0, 1.0f); // Los colores del juego
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
             // create transformations
@@ -279,7 +272,7 @@ int main()
         relSpeed = reloadSpeed;
 
         killsPlayer kills(camera.getPosition(), camera.Front, ourShader);
-        statusPlayer status(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2),camera.getPosition(), camera.Front, ourShader, vidas);
+        statusPlayer status(camera.getPosition(), camera.Front, ourShader, vidas);
         Enemy myEnemies;
         if (!glfwWindowShouldClose(window)) {
             myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, 
@@ -295,28 +288,11 @@ int main()
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================
         // =====================================================================================================================
-        initMenuInGame();
-        menuTop top;
-        menuBottom bot;
-        menuRight right;
-        menuLeft left;
-
-        top = menuTop(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
-        bot = menuBottom(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
-        right = menuRight(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
-        left = menuLeft(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
         while (!glfwWindowShouldClose(window))
         {
-            float tamX = screenMaxRelativeX * 0.4895;
-            float tamY = screenMaxRelativeY * 0.479;
-            float iniX = screenMinX + (tamX * 0.115f);
-            float iniY = screenMinY + (tamY * 0.607f);
-
-            glViewport(iniX, iniY, tamX, tamY);
 
             if (pressed) {
                 pressed = !pressed;
-                glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
                 int button = leave.checkButton(lastButtonX, lastButtonY, ourShader);
                 if (button == 1) {
                     glfwSetMouseButtonCallback(window, mouse_button_callback);
@@ -326,7 +302,6 @@ int main()
                 }
                 else if (button == 0) break;
             }
-            glViewport(iniX, iniY, tamX, tamY);
             temp = pared;
 
             // Datos para gestionar los fps
@@ -349,7 +324,8 @@ int main()
 
             // render
             //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
+            //glClearColor(0.239f, 0.298f, 0.917f, 1.0f); // Los colores del juego
+            glClearColor(0, 0, 0, 1.0f); // Los colores del juego
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
             if (currentRegenTime > 0) {
@@ -373,7 +349,7 @@ int main()
             }
 
             //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
-            myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime, leave.pause() || WON);
+            myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime, leave.pause() || WON, camera.Position);
 
             int balasRecibidas = 0;
             bool ganaEnemigo = false;
@@ -413,7 +389,7 @@ int main()
             }
             else {
                 if (!WON) kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
-                if (!WON) status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader,screenMinX, screenMaxRelativeX,screenMinY,screenMaxRelativeY);
+                if (!WON) status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
                 regenerando = false;
             }
 
@@ -426,29 +402,13 @@ int main()
             }
 
             if (WON) {
-                glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
                 win.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             }
             else if (puntJug > 9) {
-                glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
                 cout << "Winner" << endl;
                 WON = true;
                 win.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             }
-
-            glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
-
-            //glm::mat4 projection = glm::mat4(1.0f);
-            projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-            ourShader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-
-            // activate shader
-            ourShader.use();
-
-            top.drawInGame(camera, ourShader);
-            bot.drawInGame(camera, ourShader);
-            left.drawInGame(camera, ourShader);
-            right.drawInGame(camera, ourShader);
 
             
 
@@ -461,7 +421,6 @@ int main()
 
         }
     }
-    glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
@@ -498,10 +457,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     screenMinY = viewY;
     screenMaxX = viewX + viewWidth;
     screenMaxY = viewY + viewHeight;
-    screenMaxRelativeX = viewWidth;
-    screenMaxRelativeY = viewHeight;
-
-
 
     cout << "menor x: " << viewX << "menor y: " << viewY << "mayorX: " << viewX + viewWidth << "mayorY: " << viewY + viewHeight << endl;
 }
@@ -576,7 +531,7 @@ void processInput(GLFWwindow* window)
                 if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
                     if (currentDelay == 0 && currentRegenTime <= 0) { // Puedo disparar
                         newBullet = true;
-                        //SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+                        SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
                         if (relSpeed) currentDelay = static_cast<unsigned int>(reloadTime[CAD_RAPIDA] / deltaTime);
                         else currentDelay = static_cast<unsigned int>(reloadTime[CAD_LENTA] / deltaTime);
                     }
@@ -599,16 +554,16 @@ void processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS && !oPresionado) {
         oPresionado = true;
         if (volume < 1.0) volume += 0.1f;
-        //SoundEngine->setSoundVolume(volume);
+        SoundEngine->setSoundVolume(volume);
         //cout << "Volumen subido a " << volume << endl;
-        //SoundEngine->play2D("resources/effects/plik.mp3", false);
+        SoundEngine->play2D("resources/effects/plik.mp3", false);
     }
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS && !lPresionado) {
         lPresionado = true;
         if (volume > 0.0) volume -= 0.1f;
-        //SoundEngine->setSoundVolume(volume);
+        SoundEngine->setSoundVolume(volume);
         //cout << "Volumen bajado a " << volume << endl;
-        //SoundEngine->play2D("resources/effects/plik.mp3", false);
+        SoundEngine->play2D("resources/effects/plik.mp3", false);
     }
     if (glfwGetKey(window, GLFW_KEY_O) == GLFW_RELEASE) oPresionado = false;
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_RELEASE) lPresionado = false;
@@ -641,7 +596,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
                 if (currentDelay == 0 && currentRegenTime <=0) { // Puedo disparar
                     //leave = gameLeaver(glm::vec3(camera.getPosition().x - 0.04, -0.01,camera.Front.z * (camera.getPosition().z - 0.12)), glm::vec3(camera.getPosition().x + 0.04, -0.01, camera.Front.z * (camera.getPosition().z - 0.12)), camera.getPosition(), ourShader);
                     newBullet = true;
-                    //SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
+                    SoundEngine->play2D("resources/effects/disparo.mp3", false); //Play the sound without loop
                     //currentDelay = static_cast<unsigned int>(reloadTime[CAD_RAPIDA] / deltaTime);
                     if (relSpeed) currentDelay = static_cast<unsigned int>(reloadTime[CAD_RAPIDA] / deltaTime);
                     else currentDelay = static_cast<unsigned int>(reloadTime[CAD_LENTA] / deltaTime);
@@ -664,16 +619,18 @@ void menu_mouse_button_callback(GLFWwindow* window, int button, int action, int 
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         cout << width << "," << height << endl;
-        cout << xpos/width << "," << ypos/height << endl;
-        lastButtonX = xpos / width;
-        lastButtonY = ypos / height;
-        if (!initGame) pressed = true;
-        else if (leave.shown) pressed = true;
+        cout <<"Total\t" << xpos / width << "," << ypos / height << endl;
+        if (xpos >= screenMinX && xpos <= screenMaxX && ypos >= screenMinY && ypos <= screenMaxY) {
+            lastButtonX = (xpos - screenMinX) / (screenMaxX - screenMinX);
+            lastButtonY = (ypos - screenMinY) / (screenMaxY - screenMinY);
+            if (!initGame) pressed = true;
+            else if (leave.shown) pressed = true;
+            cout << "Parcial\t"<<(xpos-screenMinX)/(screenMaxX-screenMinX)<<","<< (ypos - screenMinY) / (screenMaxY - screenMinY)<<endl;
+        }
+        //lastButtonX = xpos / width;
+        //lastButtonY = ypos / height;
+        
     }
-}
-
-void initMenuInGame() {
-
 }
 
 bool primeravez = true;

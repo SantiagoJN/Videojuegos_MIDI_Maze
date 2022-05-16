@@ -9,6 +9,7 @@ public:
     unsigned int VBO, VAO, EBO;
     unsigned int texture1;
     bool suelo = false;
+    bool techo = false;
 
     // constructor, expects a filepath to a 3D model.
     Wall(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
@@ -55,8 +56,9 @@ public:
 
 
     // constructor, expects a filepath to a 3D model.
-    Wall(float size, float dim, Shader& ourShader) {
-        suelo = true;
+    Wall(float size, float dim, Shader& ourShader, bool suelo_techo = false) {
+        suelo = suelo_techo;
+        techo = !suelo_techo;
         vertices[0] = size * dim/2;
         vertices[1] = -0.5;
         vertices[2] = size * dim/2;
@@ -91,6 +93,13 @@ public:
         indices[3] = 1;
         indices[4] = 2;
         indices[5] = 3;
+
+        if (techo) {
+            vertices[1] = -0.5 +2;
+            vertices[6] = -0.5 +2;
+            vertices[11] = -0.5 +2;
+            vertices[16] = -0.5 +2;
+        }
 
         setUpWall(ourShader);
     };
@@ -205,8 +214,9 @@ private:
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
         unsigned char* data;
-        if(!suelo) data = stbi_load("resources/textures/wall.jpg", &width, &height, &nrChannels, 0);
-        else data = stbi_load("resources/textures/floor.jpg", &width, &height, &nrChannels, 0);
+        if(!suelo && !techo) data = stbi_load("resources/textures/wall.jpg", &width, &height, &nrChannels, 0);
+        else if (suelo) data = stbi_load("resources/textures/floor.jpg", &width, &height, &nrChannels, 0);
+        else data = stbi_load("resources/textures/techo.png", &width, &height, &nrChannels, 0);
         if (data)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
