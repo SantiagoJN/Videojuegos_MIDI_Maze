@@ -63,7 +63,7 @@ float screenMinX = 0;
 float screenMinY = 0;
 float screenMaxX = SCR_WIDTH;
 float screenMaxY = SCR_HEIGHT;
-screenMaxRelativeX = SCR_WIDTH;
+float screenMaxRelativeX = SCR_WIDTH;
 float screenMaxRelativeY = SCR_HEIGHT;									 
 
 // camera
@@ -176,7 +176,7 @@ int main()
     //leave = gameLeaver(glm::vec3(camera.getPosition().x -0.4, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x+0.4, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
     Princip menu;
     while (!glfwWindowShouldClose(window)) {
-        menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+        menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader, false);
         camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
         glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
         leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
@@ -275,7 +275,7 @@ int main()
         relSpeed = reloadSpeed;
 
         killsPlayer kills(camera.getPosition(), camera.Front, ourShader);
-        statusPlayer status(camera.getPosition(), camera.Front, ourShader, vidas);
+        statusPlayer status(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2),camera.getPosition(), camera.Front, ourShader, vidas);
         Enemy myEnemies;
         if (!glfwWindowShouldClose(window)) {
             myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, 
