@@ -98,6 +98,7 @@ bool initGame = false;
 
 // ###Constantes varias###
 bool versionModerna = true;
+bool versionModernaGraficos = false;
 bool relSpeed;
 float volume = 0.3f;
 int currentRegenTime;
@@ -273,8 +274,10 @@ int main()
         bool reviveSpeed = menu.getReviveSpeed();           //Velocidades
         bool reloadSpeed = menu.getReloadSpeed();
         relSpeed = reloadSpeed;
-
-        killsPlayer kills(camera.getPosition(), camera.Front, ourShader);
+		killsPlayer kills;
+        if (versionModernaGraficos) {
+            kills = killsPlayer(camera.getPosition(), camera.Front, ourShader);
+        }
         statusPlayer status(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2),camera.getPosition(), camera.Front, ourShader, vidas);
         Enemy myEnemies;
         if (!glfwWindowShouldClose(window)) {
@@ -316,7 +319,7 @@ int main()
 
             if (pressed) {
                 pressed = !pressed;
-				glViewport(iniX, iniY, tamX, tamY);																		   
+				glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);																	   
                 int button = leave.checkButton(lastButtonX, lastButtonY, ourShader);
                 if (button == 1) {
                     glfwSetMouseButtonCallback(window, mouse_button_callback);
@@ -326,6 +329,7 @@ int main()
                 }
                 else if (button == 0) break;
             }
+			glViewport(iniX, iniY, tamX, tamY);
             temp = pared;
 
             // Datos para gestionar los fps
@@ -412,7 +416,7 @@ int main()
                 dead.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             }
             else {
-                if (!WON) kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
+                if (!WON && versionModernaGraficos) kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
                 if (!WON) status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader,screenMinX, screenMaxRelativeX,screenMinY,screenMaxRelativeY);
                 regenerando = false;
             }
@@ -421,7 +425,9 @@ int main()
 
             if (myEnemies.getPuntuacionJugador() != puntJug) {
                 puntJug = myEnemies.getPuntuacionJugador();
-                kills.setUp(ourShader, puntJug);
+                if (versionModernaGraficos) {
+                    kills.setUp(ourShader, puntJug);
+                }
                 
             }
 
