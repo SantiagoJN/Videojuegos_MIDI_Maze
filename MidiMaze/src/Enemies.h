@@ -102,6 +102,7 @@ private:
     vector<int> puntuaciones;
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
     int puntuacionJugador = 0;
+	vector<string> muertesJugador;							  
     float enemySpeed = 2.0f;
     float rotationSpeed = 120.0f;
     vector<bool> tocaGirar;
@@ -224,6 +225,13 @@ public:
         return puntuacionJugador;
     }
 
+	int getNumEnemies() {
+        return numEnemies;
+    }
+
+    vector<string> getListaJugador() {
+        return muertesJugador;
+    }					 
     void rotacionInicial(int enemyIndex) {
         // Girar las caras para que siempre miren hacia el frente
         if (directions[enemyIndex][2] != 0.0) { // Se est� moviendo en el eje Z
@@ -385,6 +393,7 @@ public:
                         if (spawnSeleccionado) spawnCont[enemy] = static_cast<int>(spawnTime[SPAWN_RAPIDO] / deltaTime);
                         else spawnCont[enemy] = static_cast<int>(spawnTime[SPAWN_LENTO] / deltaTime);
                         puntuacionJugador++;
+						muertesJugador.push_back(colors[enemy]);										
                         if (puntuacionJugador == 10) {
                             cout << "*******Jugador gana!!******" << endl;
                         }

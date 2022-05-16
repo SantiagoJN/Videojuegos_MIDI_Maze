@@ -13,6 +13,7 @@
 #include <map.h>
 #include <wall.h>
 #include <Enemies.h>
+#include <menuInGame.h>
 
 #include <Camera.h>
 #include <model.h>
@@ -62,6 +63,8 @@ float screenMinX = 0;
 float screenMinY = 0;
 float screenMaxX = SCR_WIDTH;
 float screenMaxY = SCR_HEIGHT;
+screenMaxRelativeX = SCR_WIDTH;
+float screenMaxRelativeY = SCR_HEIGHT;									 
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -288,11 +291,32 @@ int main()
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================
         // =====================================================================================================================
+        menuTop top;
+        menuBottom bot;
+        menuRight right;
+        menuLeft left;
+        totalPoints pointsGame;
+        jugadorMuertos muertesJugador;
+
+        top = menuTop(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+        bot = menuBottom(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+        right = menuRight(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+        left = menuLeft(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+        pointsGame = totalPoints(camera.getPosition(), camera.Front, ourShader, myEnemies);
+        muertesJugador = jugadorMuertos(camera.getPosition(), camera.Front, ourShader, myEnemies);
+				 
         while (!glfwWindowShouldClose(window))
         {
+		 float tamX = screenMaxRelativeX * 0.4895;
+            float tamY = screenMaxRelativeY * 0.479;
+            float iniX = screenMinX + (tamX * 0.115f);
+            float iniY = screenMinY + (tamY * 0.607f);
+
+            glViewport(iniX, iniY, tamX, tamY);											 
 
             if (pressed) {
                 pressed = !pressed;
+				glViewport(iniX, iniY, tamX, tamY);																		   
                 int button = leave.checkButton(lastButtonX, lastButtonY, ourShader);
                 if (button == 1) {
                     glfwSetMouseButtonCallback(window, mouse_button_callback);
@@ -402,14 +426,36 @@ int main()
             }
 
             if (WON) {
+				glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);																		   
                 win.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             }
             else if (puntJug > 9) {
+				glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);																		   
                 cout << "Winner" << endl;
                 WON = true;
                 win.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
             }
 
+			glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
+
+            //glm::mat4 projection = glm::mat4(1.0f);
+            projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+            ourShader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+
+            // activate shader
+            ourShader.use();
+
+            top.drawInGame(camera, ourShader);
+            bot.drawInGame(camera, ourShader);
+            left.drawInGame(camera, ourShader);
+            right.drawInGame(camera, ourShader);
+
+
+
+            pointsGame.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY, myEnemies);
+            muertesJugador.actualizar(camera.getPosition(), camera.Front, ourShader, myEnemies);
+            muertesJugador.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY, myEnemies);
+																		   
             
 
             if(!leave.pause() && !WON && currentRegenTime <= 0) mira.draw(camera.getPosition(), camera.Front, ourShader);
@@ -457,6 +503,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     screenMinY = viewY;
     screenMaxX = viewX + viewWidth;
     screenMaxY = viewY + viewHeight;
+	screenMaxRelativeX = viewWidth;
+    screenMaxRelativeY = viewHeight;							   
 
     cout << "menor x: " << viewX << "menor y: " << viewY << "mayorX: " << viewX + viewWidth << "mayorY: " << viewY + viewHeight << endl;
 }
