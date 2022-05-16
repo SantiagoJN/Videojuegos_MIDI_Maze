@@ -427,8 +427,8 @@ public:
                                     states[enemy] = ANDANDO;   //Estado inicial
                                     prevState[enemy] = ANDANDO; // Valor por defecto~~
 
-                                    currentDelays[enemy] = 0;
-                                    spawnCont[enemy] = 0;
+                                    //currentDelays[enemy] = 0;
+                                    //spawnCont[enemy] = 0;
 
                                     viendo[enemy] = false;
                                     prevGoalRotation[enemy] = 0.0f;
