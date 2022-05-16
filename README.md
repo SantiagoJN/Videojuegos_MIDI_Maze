@@ -16,27 +16,42 @@ configurar la partida que se quiere jugar. Para ello se configuran dos cosas:
 el mapa en el que jugar, y las características de la partida.
 
  Para acceder a la configuración, presionar el texto "MAZE" de la parte superior
-o la flecha azul, y aparecerá un desplegable.
+o la flecha azul, y aparecerá un desplegable. En ella se configuran:
 
  Para acceder a la configuración extra, presionar el botón a la izquierda del
-texto "MAZE".
+texto "MAZE". En ella se configuran:
+ - Tipo de controles
+ - Tipo de IA
+ - Volumen del juego
 
  El mapa se carga en la opción "load". Al darle a esta opción, se muestran los
-mapas que se encuentran en la carpeta "maps" (se pueden modificar con un editor
+mapas que se encuentran en la carpeta "maps" (los podéis modificar con un editor
 de texto; más información en la memoria). Se selecciona un mapa dándole click.
 
  Si se selecciona la opción de "Play", se pueden elegir los diferentes parámetros
-de la partida (más información en la memoria). Una vez elegidos los parámetros
-deseados, pulsar "Yeah!" para que empiece la partida!
+de la partida: 
+ - Tiempo de recarga
+ - Tiempo de regeneración
+ - Tiempo de respawn
+ - Número de vidas
+ - Número de enemigos y sus dificultades
+Una vez elegidos los parámetros deseados, pulsar "Yeah!" para que empiece la partida!
 
 ### Controles
-Dentro de la propia partida hay algunos controles:
+ Dentro de la propia partida se pueden seleccionar dos tipos de controles, los
+originales de la Atari, y los "modernos". Los controles modernos serían:
  - La cámara se mueve con el ratón
  - El personaje se mueve con las teclas WASD (adelante, izquierda, atrás, derecha
 	respectivamente)
  - Se dispara con el click derecho
+Y los controles originales serían:
+ - Mover la cámara con las flechas izquierda y derecha
+ - Andar con las flechas arriba y abajo
+ - Disparar con el control izquierdo
+Ambos controles comparten:
  - Se sube y baja el volumen con la O y la L respectivamente
  - Al darle al botón de escape se pausa la partida, pudiéndola continuar o salir
+
 
 ### En la partida
 Las reglas son sencillas: ¡El primer jugador que llegue a 10 asesinatos gana la partida!
