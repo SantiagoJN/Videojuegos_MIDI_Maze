@@ -176,7 +176,7 @@ int main()
     //leave = gameLeaver(glm::vec3(camera.getPosition().x -0.4, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x+0.4, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
     Princip menu;
     while (!glfwWindowShouldClose(window)) {
-        menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader, false);
+        menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
         camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
         glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
         leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
@@ -413,7 +413,7 @@ int main()
             }
             else {
                 if (!WON) kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
-                if (!WON) status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
+                if (!WON) status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader,screenMinX, screenMaxRelativeX,screenMinY,screenMaxRelativeY);
                 regenerando = false;
             }
 
@@ -458,7 +458,7 @@ int main()
 																		   
             
 
-            if(!leave.pause() && !WON && currentRegenTime <= 0) mira.draw(camera.getPosition(), camera.Front, ourShader);
+            if(!leave.pause() && !WON && currentRegenTime <= 0) mira.draw(camera.getPosition(), camera.Front, ourShader, iniX, tamX, iniY ,tamY);
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             // -------------------------------------------------------------------------------
