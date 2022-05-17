@@ -38,7 +38,8 @@ public:
         collided.push_back(false);
     }
 
-    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa, float deltaTime, bool pause, glm::vec3 playerPosition) {
+    void DrawBullets(Shader& shader, Enemy& enemies, Map mapa, float deltaTime, bool pause, glm::vec3 playerPosition, bool& hayHit) {
+        hayHit = false;
         if (!pause) {
             for (int i = 0; i < numBullets; i++) {
                 if (!collided[i]) {
@@ -53,7 +54,11 @@ public:
                             shader.setMat4("model", model);
                             bullet.Draw(shader);
                         }
+                        else {
+                            hayHit = true;
+                        }
                     }
+                    
                 }
             }
         }

@@ -105,6 +105,8 @@ int currentRegenTime;
 bool oPresionado = false;
 bool lPresionado = false;
 
+bool tocaActualizar = false;
+
 int main()
 {
     ::ShowWindow(::GetConsoleWindow(), SW_SHOW);
@@ -381,8 +383,12 @@ int main()
 
 			glViewport(iniX, iniY, tamX, tamY);
             //cout << camera.Position[0] << ", " << camera.Position[1] << ", " << camera.Position[2] << ", " << endl;
-            myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime, leave.pause() || WON, camera.Position);
-
+            bool hayHit = false;
+            myBullets.DrawBullets(ourShader, myEnemies, pared, deltaTime, leave.pause() || WON, camera.Position, hayHit);
+            if (hayHit) {
+                tocaActualizar = true;
+                //cout << "Ha habido un hit" << endl;
+            }
             int balasRecibidas = 0;
             bool ganaEnemigo = false;
             bool mataEnemigo = false;
@@ -411,6 +417,8 @@ int main()
 
             if (balasRecibidas > 0) {
                 status.setUp(ourShader, vidas);
+                tocaActualizar = true;
+                //cout << "He recibido bala D:" << endl;
             }
 
 
@@ -458,7 +466,7 @@ int main()
 
             // activate shader
             ourShader.use();
-
+            
             top.drawInGame(camera, ourShader);
             bot.drawInGame(camera, ourShader);
             left.drawInGame(camera, ourShader);
@@ -467,10 +475,13 @@ int main()
 
 
             pointsGame.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY, myEnemies);
-            muertesJugador.actualizar(camera.getPosition(), camera.Front, ourShader, myEnemies);
+            if (tocaActualizar == true) {
+                muertesJugador.actualizar(camera.getPosition(), camera.Front, ourShader, myEnemies);
+                tocaActualizar = false;
+                //cout << "ACTUALIZAAAAAAAAA" << endl;
+            }
             muertesJugador.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY, myEnemies);
-																		   
-            
+			
 
             if(!leave.pause() && !WON && currentRegenTime <= 0) mira.draw(camera.getPosition(), camera.Front, ourShader, iniX, tamX, iniY ,tamY);
 

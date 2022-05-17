@@ -669,7 +669,7 @@ public:
     pointsToWin() {};
 
 
-    void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2, int puntos) {
+    void draw(glm::vec3 camPosition, glm::vec3& front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2, int puntos) {
         if (shown) {
             glViewport(static_cast<GLint>(x1), static_cast<GLint>(y1), static_cast<GLsizei>(x2), static_cast<GLsizei>(y2));
             float dist = 0.12f;
@@ -783,7 +783,7 @@ public:
     totalPoints() {};
 
 
-    void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2,Enemy listEnemies) {
+    void draw(glm::vec3 camPosition, glm::vec3& front, float& yaw, Shader& ourShader, float x1, float x2, float y1, float y2,Enemy& listEnemies) {
         datos[0].draw(camPosition, front, yaw, ourShader, x1, x2, y1, y2, listEnemies.getPuntuacionJugador());
         for (int i = 1; i <= totalEnemies; i++) {
             datos[i].draw(camPosition, front, yaw, ourShader, x1, x2, y1, y2, listEnemies.puntuaciones[i-1]);
@@ -923,7 +923,7 @@ public:
     enemigoMuerto() {};
 
 
-    void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2, string name,int index) {
+    void draw(glm::vec3 camPosition, glm::vec3& front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2, string& name,int index) {
         if (shown) {
             glViewport(static_cast<GLint>(x1), static_cast<GLint>(y1), static_cast<GLsizei>(x2), static_cast<GLsizei>(y2));
             float dist = 0.12f;
@@ -1047,7 +1047,7 @@ public:
     };
 
 
-    void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2, Enemy listEnemies) {
+    void draw(glm::vec3 camPosition, glm::vec3& front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2, Enemy& listEnemies) {
         
         for (int i = 0; i < totalPuntos; i++) {
             datos[i].draw(camPosition, front, yaw, ourShader, x1, x2, y1, y2, listaMuertosJugador[i],i);
