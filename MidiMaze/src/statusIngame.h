@@ -60,29 +60,29 @@ public:
         indices[3] = 1;
         indices[4] = 2;
         indices[5] = 3;*/
-		vertices[0] = v1.x + 3.33;
+		vertices[0] = v1.x + 3.33f;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
 
         vertices[3] = 0.0f;
         vertices[4] = 0.0f;
 
-        vertices[5] = v2.x - 3.9;
+        vertices[5] = v2.x - 3.9f;
         vertices[6] = v2.y;
         vertices[7] = v2.z;
 
         vertices[8] = 1.0f;
         vertices[9] = 0.0f;
 
-        vertices[10] = v1.x + 3.33;
-        vertices[11] = v1.y + 0.65;
+        vertices[10] = v1.x + 3.33f;
+        vertices[11] = v1.y + 0.65f;
         vertices[12] = v1.z;
 
         vertices[13] = 0.0f;
         vertices[14] = 1.0f;
 
-        vertices[15] = v2.x - 3.9;
-        vertices[16] = v2.y + 0.65;
+        vertices[15] = v2.x - 3.9f;
+        vertices[16] = v2.y + 0.65f;
         vertices[17] = v2.z;
 
         vertices[18] = 1.0f;
@@ -122,7 +122,7 @@ public:
 
     void draw(glm::vec3 camPosition, glm::vec3 front, float yaw, Shader& ourShader, float x1, float x2, float y1, float y2) {
         if (shown) {
-			glViewport(x1, y1, x2, y2);						   
+			glViewport(static_cast<GLint>(x1), static_cast<GLint>(y1), static_cast<GLsizei>(x2), static_cast<GLsizei>(y2));
             float dist = 0.12f;
             double ancho = 0.01;
             glm::vec3 frontPerp = glm::vec3(-front.z, 0, front.x);

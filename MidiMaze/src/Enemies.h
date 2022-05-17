@@ -399,8 +399,8 @@ public:
                         }
                         cout << "PUNTO!" << endl;
 						// Reiniciamos el enemigo
-                        map[prevIndex[enemy].x][prevIndex[enemy].y] = false;
-                        map[index[enemy].x][index[enemy].y] = false;
+                        map[static_cast<unsigned int>(prevIndex[enemy].x)][static_cast<unsigned int>(prevIndex[enemy].y)] = false;
+                        map[static_cast<unsigned int>(index[enemy].x)][static_cast<unsigned int>(index[enemy].y)] = false;
                         vidas[enemy] = num_vidas;
                         bool spawned = false;
                         bool end = false;
@@ -629,10 +629,10 @@ public:
             bool change = false;
             int changeI, changeJ;
             if (dumbHit[enemyIndex]) {
-                int i = index[enemyIndex].x;
-                int j = index[enemyIndex].y;
-                int prevI = prevIndex[enemyIndex].x;
-                int prevJ = prevIndex[enemyIndex].y;
+                int i = static_cast<int>(index[enemyIndex].x);
+                int j = static_cast<int>(index[enemyIndex].y);
+                int prevI = static_cast<int>(prevIndex[enemyIndex].x);
+                int prevJ = static_cast<int>(prevIndex[enemyIndex].y);
                 
                 
                 if (i > prevI) {
@@ -673,14 +673,14 @@ public:
             positions[enemyIndex] = destiny[enemyIndex];
             glm::vec3 prevDir = directions[enemyIndex];
             prevIndex[enemyIndex] = index[enemyIndex];
-            index[enemyIndex] = nextIndex(index[enemyIndex].x, index[enemyIndex].y, directions[enemyIndex]);
+            index[enemyIndex] = nextIndex(static_cast<int>(index[enemyIndex].x), static_cast<int>(index[enemyIndex].y), directions[enemyIndex]);
             if (prevDir != directions[enemyIndex]) {
                 //cout << "Cambiando dir" << prevDir.x<< " " << prevDir.z << " --> " << directions[enemyIndex].x << " " << directions[enemyIndex].z << endl;
                 updateGoalRotation(enemyIndex);
                 states[enemyIndex] = GIRANDO;
             }
             else {
-                map[prevIndex[enemyIndex].x][prevIndex[enemyIndex].y] = false;
+                map[static_cast<unsigned int>(prevIndex[enemyIndex].x)][static_cast<unsigned int>(prevIndex[enemyIndex].y)] = false;
             }
             destiny[enemyIndex] = glm::vec3(-start + index[enemyIndex].y * dim, 0, start - index[enemyIndex].x * dim);
             if (dificultades[enemyIndex] != VERY_DUMB) actualizarViendo(enemyIndex, playerPosition, true);
