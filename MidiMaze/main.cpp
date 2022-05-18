@@ -519,6 +519,7 @@ int main()
             glfwPollEvents();
 
         }
+        currentRegenTime = 0;
     }
 	glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
     // glfw: terminate, clearing all previously allocated GLFW resources.
