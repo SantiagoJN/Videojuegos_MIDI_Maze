@@ -7,8 +7,9 @@ public:
     vector<glm::vec4> buttons;
 
     // constructor, expects a filepath to a 3D model.
-    Version(glm::vec3 v1, glm::vec3 v2, float ySup, float where, Shader& ourShader) {
+    Version(glm::vec3 v1, glm::vec3 v2, float ySup, float where, Shader& ourShader, bool yes_ = false) {
         original = true;
+        yes = yes_;
         vertices[0] = v1.x;
         vertices[1] = v1.y;
         vertices[2] = v1.z;
@@ -46,8 +47,14 @@ public:
 
         setUpWall(ourShader, 0);
         cout << "DIM:" << ySup << endl;
-        buttons.push_back(glm::vec4(0.3475, 0.415, where - 0.06, where));
-        buttons.push_back(glm::vec4(0.43, 0.498, where - 0.06, where));
+        if (!yes) {
+            buttons.push_back(glm::vec4(0.3475, 0.415, where - 0.06, where));
+            buttons.push_back(glm::vec4(0.43, 0.498, where - 0.06, where));
+        }
+        else {
+            buttons.push_back(glm::vec4(0.3475, 0.395, where - 0.06, where));
+            buttons.push_back(glm::vec4(0.445, 0.498, where - 0.06, where));
+        }
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
     };
@@ -88,6 +95,7 @@ private:
     // model data 
     float vertices[20];
     glm::vec2 normal;
+    bool yes;
     unsigned int indices[6];
     unsigned int VBO, VAO, EBO;
     unsigned int texture1;
@@ -128,9 +136,14 @@ private:
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
         unsigned char* data;
         string img = "resources/Fotos_midi_maze/";
-        if (fast == 0) img = img + "original.jpg";
-        else if (fast == 1) img = img + "moderno.jpg";
-
+        if (!yes) {
+            if (fast == 0) img = img + "original.jpg";
+            else if (fast == 1) img = img + "moderno.jpg";
+        }
+        else {
+            if (fast == 1) img = img + "yes.jpg";
+            else if (fast == 0) img = img + "no.jpg";
+        }
         data = stbi_load(img.c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {

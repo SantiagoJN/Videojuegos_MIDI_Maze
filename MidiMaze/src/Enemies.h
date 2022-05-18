@@ -130,7 +130,7 @@ public:
         // Comprobamos que el n�mero de enemigos es correcto
         regenSeleccionada = regenSpeed;
         spawnSeleccionado = reviveSpeed;
-        IAseleccionada = IAselec;
+        IAseleccionada = !IAselec;
         num_vidas = numvidas;
         numEnemies = nDumbs + nMDumbs + nNDumbs;
         int numColors = sizeof(colors) / sizeof(colors[0]);

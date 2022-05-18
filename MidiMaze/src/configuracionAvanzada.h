@@ -96,7 +96,7 @@ public:
         movimiento = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yM * totaly, v1.z + 0.026f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yM * totaly, v1.z + 0.026f), static_cast<float>(v1.y + (yM+0.055) * totaly), 1-yM, ourShader);
         IA = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yI * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yI * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yI + 0.055) * totaly), 1-yI, ourShader);
         appearence = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yA * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yA * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yA + 0.055) * totaly), 1 - yA, ourShader);
-        safer = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yS * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yS * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yS + 0.055) * totaly), 1 - yS, ourShader);
+        safer = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yS * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yS * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yS + 0.055) * totaly), 1 - yS, ourShader,true);
         vol = Volume(glm::vec3(v1.x + 0.275f * totalx, v1.y + yVol * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yVol * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yVol + 0.055) * totaly), 1 - yVol, ourShader);
  
     }
