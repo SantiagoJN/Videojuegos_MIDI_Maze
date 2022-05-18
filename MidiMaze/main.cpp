@@ -53,6 +53,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void nada(GLFWwindow* window, double xpos, double ypos);
+void initMenuInGame();
 
 
 // Initial settings
@@ -71,6 +72,12 @@ Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f; // Initial values in the middle of the screen
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+
+//HUD in game
+menuTop topHUD;
+menuBottom botHUD;
+menuRight rightHUD;
+menuLeft leftHUD;
 
 
 double lastButtonX = 0.0f;
@@ -178,6 +185,9 @@ int main()
     leave = gameLeaver(camera.getPosition(), camera.Front, ourShader);
     //leave = gameLeaver(glm::vec3(camera.getPosition().x -0.4, -0.01, camera.getPosition().z - 0.12), glm::vec3(camera.getPosition().x+0.4, -0.01, camera.getPosition().z - 0.12), camera.getPosition(), ourShader);
     Princip menu;
+	initMenuInGame();
+    totalPoints pointsGame;
+    jugadorMuertos muertesJugador;
     while (!glfwWindowShouldClose(window)) {
         menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
         camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -280,7 +290,7 @@ int main()
         if (versionModernaGraficos) {
             kills = killsPlayer(camera.getPosition(), camera.Front, ourShader);
         }
-        statusPlayer status(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2),camera.getPosition(), camera.Front, ourShader, vidas);
+        statusPlayer status(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2),camera.getPosition(), camera.Front, ourShader, vidas,versionModernaGraficos);
         Enemy myEnemies;
         if (!glfwWindowShouldClose(window)) {
             myEnemies = Enemy(0.5, vidas, menu.getVeryDumb(), menu.getPlainDumb(), menu.getNotDumb(), pared.getLab(), pared, 
@@ -296,26 +306,32 @@ int main()
         // =====================================================================================================================
         // ==================================================== GAME LOOP ====================================================
         // =====================================================================================================================
-        menuTop top;
-        menuBottom bot;
-        menuRight right;
-        menuLeft left;
-        totalPoints pointsGame;
-        jugadorMuertos muertesJugador;
+		
+		
+        if (!versionModernaGraficos) {
+            pointsGame = totalPoints(camera.getPosition(), camera.Front, ourShader, myEnemies);
+            muertesJugador = jugadorMuertos(camera.getPosition(), camera.Front, ourShader, myEnemies);
+        }
 
-        top = menuTop(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
-        bot = menuBottom(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
-        right = menuRight(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
-        left = menuLeft(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
-        pointsGame = totalPoints(camera.getPosition(), camera.Front, ourShader, myEnemies);
-        muertesJugador = jugadorMuertos(camera.getPosition(), camera.Front, ourShader, myEnemies);
+        float tamX = 0;
+        float tamY = 0;
+        float iniX = 0;
+        float iniY = 0;
 				 
         while (!glfwWindowShouldClose(window))
         {
-		 float tamX = screenMaxRelativeX * 0.4895;
-            float tamY = screenMaxRelativeY * 0.479;
-            float iniX = screenMinX + (tamX * 0.115f);
-            float iniY = screenMinY + (tamY * 0.607f);
+			if (versionModernaGraficos) {
+                tamX = screenMaxRelativeX;
+                tamY = screenMaxRelativeY;
+                iniX = screenMinX;
+                iniY = screenMinY;
+            }
+            else {
+                tamX = screenMaxRelativeX * 0.4895;
+                tamY = screenMaxRelativeY * 0.479;
+                iniX = screenMinX + (tamX * 0.115f);
+                iniY = screenMinY + (tamY * 0.607f);
+            }
 
             glViewport(iniX, iniY, tamX, tamY);											 
 
@@ -430,7 +446,12 @@ int main()
                 myEnemies.blinded();
                 //cout << "Regenerando... " << currentRegenTime << endl;
                 currentRegenTime--;
+				if (!versionModernaGraficos) {
+                    status.setUp(ourShader, 0);
+                    status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY);
+                }
                 dead.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
+				status.setUp(ourShader, vidas);
             }
             else {
                 if (!WON && versionModernaGraficos) kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
@@ -470,19 +491,19 @@ int main()
             // activate shader
             ourShader.use();
             
-            top.drawInGame(camera, ourShader);
-            bot.drawInGame(camera, ourShader);
-            left.drawInGame(camera, ourShader);
-            right.drawInGame(camera, ourShader);
-
-
-
-            pointsGame.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY, myEnemies);
-            if (tocaActualizar == true) {
+            if (tocaActualizar == true && !versionModernaGraficos) {
                 muertesJugador.actualizar(camera.getPosition(), camera.Front, ourShader, myEnemies);
                 tocaActualizar = false;
             }
-            muertesJugador.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY, myEnemies);
+			
+			if (!versionModernaGraficos) {
+                topHUD.drawInGame(camera, ourShader);
+                botHUD.drawInGame(camera, ourShader);
+                leftHUD.drawInGame(camera, ourShader);
+                rightHUD.drawInGame(camera, ourShader);
+                pointsGame.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY, myEnemies);
+                muertesJugador.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY, myEnemies);
+            }
 			
 
             if(!leave.pause() && !WON && currentRegenTime <= 0) mira.draw(camera.getPosition(), camera.Front, ourShader, iniX, tamX, iniY ,tamY);
