@@ -771,12 +771,10 @@ class totalPoints {
 
 public:
     bool shown;
-    int totalEnemies;
 
     // constructor, expects a filepath to a 3D model.
-    totalPoints(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader,Enemy listaEnemigos) {
-        totalEnemies = listaEnemigos.getNumEnemies();
-        for (int i = 0; i <= totalEnemies; i++) {
+    totalPoints(glm::vec3 camPosition, glm::vec3 front, Shader& ourShader) {
+        for (int i = 0; i <= 15; i++) {
             datos[i] = pointsToWin(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), camPosition, front, ourShader, i, true);
         }
     };
@@ -785,6 +783,7 @@ public:
 
     void draw(glm::vec3 camPosition, glm::vec3& front, float& yaw, Shader& ourShader, float x1, float x2, float y1, float y2,Enemy& listEnemies) {
         datos[0].draw(camPosition, front, yaw, ourShader, x1, x2, y1, y2, listEnemies.getPuntuacionJugador());
+		int totalEnemies = listEnemies.getNumEnemies();
         for (int i = 1; i <= totalEnemies; i++) {
             datos[i].draw(camPosition, front, yaw, ourShader, x1, x2, y1, y2, listEnemies.puntuaciones[i-1]);
         }
@@ -796,61 +795,6 @@ private:
     pointsToWin datos[16];
     float vertices[20];
     glm::vec2 normal;
-
-    /*void setUpWall(Shader& ourShader, int numLives) {
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
-
-        glBindVertexArray(VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(2);
-
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        // set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // load image, create texture and generate mipmaps
-        int width, height, nrChannels;
-        stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-        // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-        string photo = "resources/objects/smileys/yellow/yellow.jpg";
-        /*if (numLives <= 0) photo = photo + "0hp.jpg";
-        else if (numLives == 1) photo = photo + "1hp.jpg";
-        else if (numLives == 2) photo = photo + "2hp.jpg";
-        else photo = photo + "3hp.jpg";
-
-        unsigned char* data;
-        data = stbi_load(photo.c_str(), &width, &height, &nrChannels, 0);
-        if (data)
-        {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }
-        else
-        {
-            std::cout << "Failed to load texture" << std::endl;
-        }
-        stbi_image_free(data);
-
-        ourShader.use();
-        glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
-
-    };*/
 };
 
 class enemigoMuerto {
@@ -1058,58 +1002,4 @@ private:
 
     // model data 
     enemigoMuerto datos[10];
-    /*void setUpWall(Shader& ourShader, int numLives) {
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
-
-        glBindVertexArray(VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(2);
-
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        // set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // load image, create texture and generate mipmaps
-        int width, height, nrChannels;
-        stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-        // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-        string photo = "resources/objects/smileys/yellow/yellow.jpg";
-        /*if (numLives <= 0) photo = photo + "0hp.jpg";
-        else if (numLives == 1) photo = photo + "1hp.jpg";
-        else if (numLives == 2) photo = photo + "2hp.jpg";
-        else photo = photo + "3hp.jpg";
-
-        unsigned char* data;
-        data = stbi_load(photo.c_str(), &width, &height, &nrChannels, 0);
-        if (data)
-        {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }
-        else
-        {
-            std::cout << "Failed to load texture" << std::endl;
-        }
-        stbi_image_free(data);
-
-        ourShader.use();
-        glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
-
-    };*/
 };

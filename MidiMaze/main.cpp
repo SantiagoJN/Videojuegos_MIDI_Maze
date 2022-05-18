@@ -187,7 +187,9 @@ int main()
     Princip menu;
 	initMenuInGame();
     totalPoints pointsGame;
+	pointsGame = totalPoints(camera.getPosition(), camera.Front, ourShader);
     jugadorMuertos muertesJugador;
+	
     while (!glfwWindowShouldClose(window)) {
         menu = Princip(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
         camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -309,7 +311,6 @@ int main()
 		
 		
         if (!versionModernaGraficos) {
-            pointsGame = totalPoints(camera.getPosition(), camera.Front, ourShader, myEnemies);
             muertesJugador = jugadorMuertos(camera.getPosition(), camera.Front, ourShader, myEnemies);
         }
 
