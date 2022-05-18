@@ -272,8 +272,11 @@ int main()
 
         versionModerna = !menu.config.getMovimientoOriginal();      //VERSION MODERNA RATÓN 
         
-        bool IAModerna = !!menu.config.getIAOriginal();     //Versión moderna IA
+        bool IAModerna = !menu.config.getIAOriginal();     //Versión moderna IA
 
+        versionModernaGraficos = !menu.config.appearence.getOriginal();
+
+        bool safeRegen = !menu.config.safer.getOriginal();
 
         Bullet myBullets(0.1);
         vector<EnemBullet> enemyBullets;
@@ -411,7 +414,7 @@ int main()
             bool mataEnemigo = false;
             string nombreGanador = "";
             int lastVidas = vidas;
-            bool safeRegen = true;
+            
             bool justRegen = currentRegenTime == 1 && safeRegen; // Si justo reaparece, y está activa la opción
             if (justRegen) myEnemies.setInv(deltaTime);
 			

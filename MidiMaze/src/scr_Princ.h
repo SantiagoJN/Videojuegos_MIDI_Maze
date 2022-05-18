@@ -52,9 +52,9 @@ public:
             setUpDespleg(v1,v2,ourShader);
             setUpConfigAvanzada(v1, v2, ourShader);
 
-            buttons.push_back(glm::vec4(0.177, 0.273, 0, 0.05));
+            buttons.push_back(glm::vec4(0.22, 0.315, 0, 0.05));
             buttons.push_back(glm::vec4(0.187, 0.38, 0.245, 0.51));
-            buttons.push_back(glm::vec4(0.085, 0.14, 0, 0.05));
+            buttons.push_back(glm::vec4(0.01, 0.13, 0, 0.05));
 
             if (v1.x != v2.x) normal = glm::vec2(0, 1);
             else normal = glm::vec2(1, 0);

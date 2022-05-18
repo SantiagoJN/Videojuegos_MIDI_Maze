@@ -10,7 +10,7 @@ public:
 
     bool shown;
     vector<glm::vec4> buttons;
-    Version movimiento, IA;
+    Version movimiento, IA, appearence, safer;
     Volume vol;
 
     // constructor, expects a filepath to a 3D model.
@@ -81,14 +81,23 @@ public:
         movimiento.checkButton(xPos, yPos, ourShader);
         IA.checkButton(xPos, yPos, ourShader);
         vol.checkButton(xPos, yPos, ourShader);
+        appearence.checkButton(xPos, yPos, ourShader);
+        safer.checkButton(xPos, yPos, ourShader);
     };
 
     void setUpVersions(glm::vec3 v1, glm::vec3 v2, Shader& ourShader) {
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
-        movimiento = Version(glm::vec3(v1.x + 0.241f * totalx, v1.y + 0.6f * totaly, v1.z + 0.026f), glm::vec3(v1.x + 0.418f * totalx, v1.y + 0.6f * totaly, v1.z + 0.026f), static_cast<float>(v1.y + 0.665f * totaly), 0.39f, ourShader);
-        IA = Version(glm::vec3(v1.x + 0.241f * totalx, v1.y + 0.525f * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.418f * totalx, v1.y + 0.525f * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + 0.59f * totaly), 0.475f, ourShader);
-        vol = Volume(glm::vec3(v1.x + 0.241f * totalx, v1.y + 0.435f * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.515f * totalx, v1.y + 0.435f * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + 0.50f * totaly), 0.55f, ourShader);
+        float yM = 0.665f;
+        float yI = yM - 0.065;
+        float yA = yI - 0.065;
+        float yS = yA - 0.065;
+        float yVol = yS - 0.065;
+        movimiento = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yM * totaly, v1.z + 0.026f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yM * totaly, v1.z + 0.026f), static_cast<float>(v1.y + (yM+0.055) * totaly), 1-yM, ourShader);
+        IA = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yI * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yI * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yI + 0.055) * totaly), 1-yI, ourShader);
+        appearence = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yA * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yA * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yA + 0.055) * totaly), 1 - yA, ourShader);
+        safer = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yS * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yS * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yS + 0.055) * totaly), 1 - yS, ourShader);
+        vol = Volume(glm::vec3(v1.x + 0.275f * totalx, v1.y + yVol * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yVol * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yVol + 0.055) * totaly), 1 - yVol, ourShader);
  
     }
 
@@ -117,6 +126,8 @@ public:
             movimiento.draw(ourShader);
             IA.draw(ourShader);
             vol.draw(ourShader);
+            appearence.draw(ourShader);
+            safer.draw(ourShader);
         }
     };
 

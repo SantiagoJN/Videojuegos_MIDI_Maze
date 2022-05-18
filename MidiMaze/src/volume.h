@@ -46,9 +46,9 @@ public:
 
         setUpWall(ourShader, 1);
         cout << "DIM:" << ySup << endl;
-        buttons.push_back(glm::vec4(0.24, 0.321, 0.5, 0.56));
-        buttons.push_back(glm::vec4(0.335, 0.415, 0.5, 0.56));
-        buttons.push_back(glm::vec4(0.4325, 0.5125, 0.5, 0.56));
+        buttons.push_back(glm::vec4(0.272, 0.345, where-0.06, where));
+        buttons.push_back(glm::vec4(0.348, 0.425, where-0.06, where));
+        buttons.push_back(glm::vec4(0.427, 0.5, where-0.06, where));
         if (v1.x != v2.x) normal = glm::vec2(0, 1);
         else normal = glm::vec2(1, 0);
     };
