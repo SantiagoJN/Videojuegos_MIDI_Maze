@@ -318,7 +318,7 @@ int main()
         float tamY = 0;
         float iniX = 0;
         float iniY = 0;
-				 
+        newBullet = false;  //Bug de que empieza disparando
         while (!glfwWindowShouldClose(window))
         {
 			if (versionModernaGraficos) {
