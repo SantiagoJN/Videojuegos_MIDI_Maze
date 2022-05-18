@@ -23,6 +23,8 @@ texto "MAZE". En ella se configuran:
  - Tipo de controles
  - Tipo de IA
  - Volumen del juego
+ - Apariencia del HUD
+ - Si se desean unos segundos de invulnerabilidad al reaparecer
 
  El mapa se carga en la opción "load". Al darle a esta opción, se muestran los
 mapas que se encuentran en la carpeta "maps" (los podéis modificar con un editor
@@ -52,6 +54,8 @@ Ambos controles comparten:
  - Se sube y baja el volumen con la O y la L respectivamente
  - Al darle al botón de escape se pausa la partida, pudiéndola continuar o salir
 
+ En cualquier momento de la partida se puede pausar pulsando la tecla Escape. También
+sirve para volver al menú al finalizar la partida.
 
 ### En la partida
 Las reglas son sencillas: ¡El primer jugador que llegue a 10 asesinatos gana la partida!
