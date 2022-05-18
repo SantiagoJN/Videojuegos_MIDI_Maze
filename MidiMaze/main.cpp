@@ -451,6 +451,7 @@ int main()
                     status.setUp(ourShader, 0);
                     status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY);
                 }
+				glViewport(iniX, iniY, tamX, tamY);
                 dead.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
 				status.setUp(ourShader, vidas);
             }
