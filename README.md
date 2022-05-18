@@ -18,8 +18,8 @@ el mapa en el que jugar, y las características de la partida.
  Para acceder a la configuración, presionar el texto "MAZE" de la parte superior
 o la flecha azul, y aparecerá un desplegable. En ella se configuran:
 
- Para acceder a la configuración extra, presionar el botón a la izquierda del
-texto "MAZE". En ella se configuran:
+ Para acceder a la configuración extra, presionar el texto "ADVANCED" a la 
+izquierda del texto "MAZE". En ella se configuran:
  - Tipo de controles
  - Tipo de IA
  - Volumen del juego
