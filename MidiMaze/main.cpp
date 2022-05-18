@@ -731,4 +731,11 @@ void menu_mouse_button_callback(GLFWwindow* window, int button, int action, int 
     }
 }
 
+void initMenuInGame() {
+    topHUD = menuTop(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+    botHUD = menuBottom(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+    rightHUD = menuRight(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+    leftHUD = menuLeft(glm::vec3(-4, -3, -4.2), glm::vec3(4, -3, -4.2), ourShader);
+}
+
 bool primeravez = true;
