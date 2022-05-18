@@ -129,7 +129,7 @@ private:
         unsigned char* data;
         string img = "resources/Fotos_midi_maze/";
         if (fast == 0) img = img + "original.jpg";
-        else if (fast == 1) img = img + "nuevo.jpg";
+        else if (fast == 1) img = img + "moderno.jpg";
 
         data = stbi_load(img.c_str(), &width, &height, &nrChannels, 0);
         if (data)
