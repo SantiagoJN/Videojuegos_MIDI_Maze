@@ -394,6 +394,9 @@ int main()
             bool mataEnemigo = false;
             string nombreGanador = "";
             int lastVidas = vidas;
+            bool safeRegen = true;
+            bool justRegen = currentRegenTime == 1 && safeRegen; // Si justo reaparece, y está activa la opción
+            if (justRegen) myEnemies.setInv(deltaTime);
 			
 			glViewport(iniX, iniY, tamX, tamY);
             myEnemies.DrawEnemies(ourShader, camera.Position, myEnemies, pared, deltaTime, balasRecibidas, vidas, 
@@ -478,7 +481,6 @@ int main()
             if (tocaActualizar == true) {
                 muertesJugador.actualizar(camera.getPosition(), camera.Front, ourShader, myEnemies);
                 tocaActualizar = false;
-                //cout << "ACTUALIZAAAAAAAAA" << endl;
             }
             muertesJugador.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY, myEnemies);
 			

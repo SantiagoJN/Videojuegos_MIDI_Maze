@@ -52,6 +52,9 @@ int regenJugador[] = { 4, 8 }; // Numero de frames que se regenera el jugador
 bool regenSeleccionada;
 
 bool IAseleccionada;
+bool safeRespawn;
+int safeTimes[] = {1, 2};
+int safeCont = 0;
 
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
 float angulo_vision = 45.0f; // 90 grados en total
@@ -158,7 +161,6 @@ public:
         spawnmap = vector<vector<bool>>(map);
 //        bullets.reserve(numEnemies);
         
-        cout << numEnemies << endl;
         for (int enemy = 0; enemy < numEnemies; enemy++) {
             bool end = false;
             int random = rand() % (spawn.size()-3) +1;
@@ -750,7 +752,9 @@ public:
             actualizarRotacion(enemyIndex, deltaTime, playerPosition); // Rotar lo que sea necesario
             if (abs(currentRotation[enemyIndex] - goalRotation[enemyIndex]) < rotationSpeed * deltaTime) {
                 //Si forma un ángulo lo suficientemente pequeño, es que ya le está apuntando
-                disparaEnemigo(enemyIndex, deltaTime, playerPosition);
+                if (safeCont == 0) { // Si se ha acabado el tiempo de invulnerabilidad
+                    disparaEnemigo(enemyIndex, deltaTime, playerPosition);
+                }
             }
             
         }
@@ -829,6 +833,17 @@ public:
         if (spawnCont[enemyIndex] > 0) spawnCont[enemyIndex]--;
     }
 
+    void actualizarInvulnerabilidad() {
+        if (safeCont > 0) {
+            safeCont--;
+            //blinded();
+        }
+    }
+
+    void setInv(float deltaTime) { // Para poner el contador de invulnerabilidad
+        safeCont = static_cast<int>(static_cast<float>(safeTimes[1]) / deltaTime);
+    }
+
     void actualizarRegenJugador(int& vidasJugador, float deltaTime) {
         if (vidasJugador < num_vidas) {
             if (counterRegen == 1) { // Se le suma una vida
@@ -858,6 +873,7 @@ public:
         ganaEnemigo = false;
         mataEnemigo = false;
         actualizarRegenJugador(vidasJugador, deltaTime);
+        actualizarInvulnerabilidad();
         int balasAcertadas = 0;
         int balasEnemigo = 0;
         for (int i = 0; i < numEnemies; i++) {
