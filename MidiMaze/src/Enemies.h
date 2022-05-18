@@ -377,7 +377,7 @@ public:
                     }
 					// NUEVA IA -> [PLAIN,NOT_SO]_DUMB -> Apuntar cuando me disparen
                     if (IAseleccionada == false && dificultades[enemy] != VERY_DUMB) {
-						cout << "current rotation: " << currentRotation[enemy] << endl;
+						//cout << "current rotation: " << currentRotation[enemy] << endl;
                         //Apuntar hacia el enemigo!
                         glm::vec3 enemyToPlayerVec = playerPosition - positions[enemy];
                         float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
@@ -807,6 +807,20 @@ public:
         }
     }
 
+    void girarParaVer(int enemyIndex, glm::vec3 playerPosition, bool quieto) {
+        bool somethingBetween = mapa.wallBetween(positions[enemyIndex], playerPosition) || between(enemyIndex, positions[enemyIndex], playerPosition);
+        if (!somethingBetween) { // Si no hay nada entre medio, se gira para apuntarle
+            glm::vec3 enemyToPlayerVec = playerPosition - positions[enemyIndex];
+            float deg = -atan(enemyToPlayerVec[0] / enemyToPlayerVec[2]) * 180.0f / 3.1415f;
+            if (playerPosition.z < positions[enemyIndex].z) {
+                deg = 180.0f + deg;
+            }
+            if (deg < 0.0) deg = 360.0f + deg;
+            goalRotation[enemyIndex] = deg;
+            states[enemyIndex] = GIRANDO;
+        }
+    }
+
     void actualizarDelay(int enemyIndex) {
         if (currentDelays[enemyIndex] > 0) currentDelays[enemyIndex]--;
     }
@@ -852,6 +866,9 @@ public:
                 actualizarSpawn(i);
                 if (spawnCont[i] == 0) {
                     if (dificultades[i] != VERY_DUMB) actualizarViendo(i, playerPosition, false); // Actualizar si el enemigo i me está viendo o no
+                    if (dificultades[i] == NOT_SO_DUMB && IAseleccionada == false && states[i] != APUNTANDO) {
+                        girarParaVer(i, playerPosition, false); // Girar si no hay nada entre medio
+                    }
                     actualizarDelay(i); // Actualizamos el contador del enemigo
                     //cout << "Enemigo " << i << ": " << states[i] << endl;
                     switch (states[i]) {
