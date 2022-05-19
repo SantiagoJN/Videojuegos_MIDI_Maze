@@ -56,7 +56,7 @@ public:
     Volume() {};
 
 
-    bool getVolume() {
+    int getVolume() {
         return volume;
     }
 

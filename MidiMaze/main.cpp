@@ -107,7 +107,7 @@ bool initGame = false;
 bool versionModerna = true;
 bool versionModernaGraficos = false;
 bool relSpeed;
-float volume = 0.3f;
+float volume = 0.1f;
 int currentRegenTime;
 bool oPresionado = false;
 bool lPresionado = false;
@@ -205,6 +205,7 @@ int main()
                 pressed = !pressed;
                 finish = menu.checkButton(lastButtonX, lastButtonY, ourShader, window);
                 int set_volume = menu.config.vol.getVolume();           //VOLUME 0(mute) 1(bajo) 2(normal)
+                //cout << "Set_volume = " << set_volume << endl;
                 switch (set_volume) {
                     case MUTE: {
                         volume = 0.0f;
@@ -212,12 +213,12 @@ int main()
                         break;
                     }
                     case BAJO: {
-                        volume = 0.3f;
+                        volume = 0.1f;
                         //cout << "volume: bajo" << endl;
                         break;
                     }				
                     case NORMAL: {
-                        volume = 0.7f;
+                        volume = 0.6f;
                         //cout << "volume: normal" << endl;
                         break;
                     }
