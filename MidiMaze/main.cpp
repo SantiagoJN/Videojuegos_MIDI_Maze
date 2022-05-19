@@ -43,6 +43,9 @@ double prevXM, prevYM;
 bool pressed = false;
 bool newBullet = false;
 
+bool first1 = true;
+bool first2 = true;
+
 enum volume_types { MUTE, BAJO, NORMAL };
 
 //ISoundEngine* SoundEngine = createIrrKlangDevice(); // to manage the sound effects
@@ -452,17 +455,25 @@ int main()
                 //cout << "Regenerando... " << currentRegenTime << endl;
                 currentRegenTime--;
 				if (!versionModernaGraficos) {
-                    status.setUp(ourShader, 0);
+                    if (first1) {
+                        status.setUp(ourShader, 0);
+                        first1 = false;
+                    }
                     status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader, screenMinX, screenMaxRelativeX, screenMinY, screenMaxRelativeY);
                 }
 				glViewport(iniX, iniY, tamX, tamY);
                 dead.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
-				status.setUp(ourShader, vidas);
+                if (first2) {
+                    status.setUp(ourShader, vidas);
+                    first2 = false;
+                }
             }
             else {
                 if (!WON && versionModernaGraficos) kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
                 if (!WON) status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader,screenMinX, screenMaxRelativeX,screenMinY,screenMaxRelativeY);
                 regenerando = false;
+                first1 = true;
+                first2 = false;
             }
 
 			glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
