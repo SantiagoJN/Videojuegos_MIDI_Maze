@@ -89,10 +89,10 @@ public:
         double totalx = v2.x - v1.x;
         double totaly = 3 - v1.y;
         float yM = 0.665f;
-        float yI = yM - 0.065;
-        float yA = yI - 0.065;
-        float yS = yA - 0.065;
-        float yVol = yS - 0.065;
+        float yI = yM - 0.065f;
+        float yA = yI - 0.065f;
+        float yS = yA - 0.065f;
+        float yVol = yS - 0.065f;
         movimiento = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yM * totaly, v1.z + 0.026f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yM * totaly, v1.z + 0.026f), static_cast<float>(v1.y + (yM+0.055) * totaly), 1-yM, ourShader);
         IA = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yI * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yI * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yI + 0.055) * totaly), 1-yI, ourShader);
         appearence = Version(glm::vec3(v1.x + 0.35f * totalx, v1.y + yA * totaly, v1.z + 0.0255f), glm::vec3(v1.x + 0.5f * totalx, v1.y + yA * totaly, v1.z + 0.0255f), static_cast<float>(v1.y + (yA + 0.055) * totaly), 1 - yA, ourShader);
