@@ -44,7 +44,6 @@ bool pressed = false;
 bool newBullet = false;
 
 bool first1 = true;
-bool first2 = true;
 
 enum volume_types { MUTE, BAJO, NORMAL };
 
@@ -464,10 +463,6 @@ int main()
                 }
 				glViewport(iniX, iniY, tamX, tamY);
                 dead.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
-                //if (first2) {
-                    
-                    first2 = false;
-                //}
             }
             else if (currentRegenTime == 1) {
                 status.setUp(ourShader, vidas);
@@ -479,7 +474,6 @@ int main()
                 
                 regenerando = false;
                 first1 = true;
-                first2 = false;
             }
 
 			glViewport(screenMinX, screenMinY, screenMaxRelativeX, screenMaxRelativeY);
