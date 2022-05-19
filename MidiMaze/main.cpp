@@ -436,9 +436,10 @@ int main()
                 glm::vec2 pos = myEnemies.getFreePosition();
                 camera.updatePosition(glm::vec3(pos.x, 0.0, pos.y));
                 vidas = menu.getNumVidas();
-                status.setUp( ourShader, vidas);
+                //status.setUp( ourShader, vidas);
                 if (reviveSpeed) currentRegenTime = static_cast<int>(spawnTime[SPAWN_RAPIDO] / deltaTime);
                 else currentRegenTime = static_cast<int>(spawnTime[SPAWN_LENTO] / deltaTime);
+                status.setUp(ourShader, 0);
                 dead.setUp(ourShader, nombreGanador);
             }
 
@@ -449,7 +450,7 @@ int main()
             }
 
 
-            if (currentRegenTime > 0) {
+            if (currentRegenTime > 1) {
                 regenerando = true;
                 myEnemies.blinded();
                 //cout << "Regenerando... " << currentRegenTime << endl;
@@ -463,14 +464,19 @@ int main()
                 }
 				glViewport(iniX, iniY, tamX, tamY);
                 dead.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
-                if (first2) {
-                    status.setUp(ourShader, vidas);
+                //if (first2) {
+                    
                     first2 = false;
-                }
+                //}
             }
-            else {
+            else if (currentRegenTime == 1) {
+                status.setUp(ourShader, vidas);
+                currentRegenTime--;
+            }
+            else{
                 if (!WON && versionModernaGraficos) kills.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader);
                 if (!WON) status.draw(camera.getPosition(), camera.Front, camera.Pitch, ourShader,screenMinX, screenMaxRelativeX,screenMinY,screenMaxRelativeY);
+                
                 regenerando = false;
                 first1 = true;
                 first2 = false;
