@@ -60,6 +60,8 @@ int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpea
 float angulo_vision = 45.0f; // 90 grados en total
 float rango_vision = 10.0f; 
 
+int contadorInicial = 20; // Contador para quitar el bug de que al principio se quedan parados
+
 class Enemy
 {
 private:
@@ -821,6 +823,7 @@ public:
             }
             if (deg < 0.0) deg = 360.0f + deg;
             goalRotation[enemyIndex] = deg;
+            //cout << "Estoy en " << currentRotation[enemyIndex] << ", y voy a girar a " << goalRotation[enemyIndex] << endl;
             states[enemyIndex] = GIRANDO;
         }
     }
@@ -867,6 +870,10 @@ public:
         }
     }
 	
+    void actualizarContador() {
+        if (contadorInicial > 0) contadorInicial--;
+    }
+	
     void DrawEnemies(Shader& shader, glm::vec3 playerPosition, Enemy& enemies, Map mapa, float deltaTime, 
         int& balasRecibidas, int& vidasJugador, bool pause, bool& ganaEnemigo, bool& mataEnemigo, string& enemigoGanador) {
         hit_time = static_cast<int>(0.1 / deltaTime);
@@ -874,6 +881,7 @@ public:
         mataEnemigo = false;
         actualizarRegenJugador(vidasJugador, deltaTime);
         actualizarInvulnerabilidad();
+        actualizarContador();
         int balasAcertadas = 0;
         int balasEnemigo = 0;
         for (int i = 0; i < numEnemies; i++) {
@@ -882,7 +890,7 @@ public:
                 actualizarSpawn(i);
                 if (spawnCont[i] == 0) {
                     if (dificultades[i] != VERY_DUMB) actualizarViendo(i, playerPosition, false); // Actualizar si el enemigo i me está viendo o no
-                    if (dificultades[i] == NOT_SO_DUMB && IAseleccionada == false && states[i] != APUNTANDO) {
+                    if (dificultades[i] == NOT_SO_DUMB && IAseleccionada == false && states[i] != APUNTANDO && contadorInicial == 0) {
                         girarParaVer(i, playerPosition, false); // Girar si no hay nada entre medio
                     }
                     actualizarDelay(i); // Actualizamos el contador del enemigo
