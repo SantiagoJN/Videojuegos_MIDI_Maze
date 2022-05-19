@@ -53,7 +53,7 @@ bool regenSeleccionada;
 
 bool IAseleccionada;
 bool safeRespawn;
-int safeTimes[] = {1, 2};
+int safeTimes[] = {2, 4};
 int safeCont = 0;
 
 int hit_time = 50; // Numero de frames que un enemigo se pone amarillo al golpearlo
