@@ -48,7 +48,7 @@ bool spawnSeleccionado;
 enum nivelesDificultad { VERY_DUMB, PLAIN_DUMB, NOT_SO_DUMB};
 
 enum velocidadRegeneracion {REG_RAPIDA, REG_LENTA};
-int regenJugador[] = { 4, 8 }; // Numero de frames que se regenera el jugador
+int regenJugador[] = { 10, 20 }; // Numero de frames que se regenera el jugador
 bool regenSeleccionada;
 
 bool IAseleccionada;
