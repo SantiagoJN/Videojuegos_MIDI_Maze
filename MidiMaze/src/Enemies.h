@@ -107,7 +107,7 @@ private:
     vector<int> hit_timeout; // Vector para dibujar los enemigos 
     int puntuacionJugador = 0;
 	vector<string> muertesJugador;							  
-    float enemySpeed = 2.0f;
+    float enemySpeed = 3.5f;
     float rotationSpeed = 120.0f;
     vector<bool> tocaGirar;
 

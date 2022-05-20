@@ -652,12 +652,12 @@ void processInput(GLFWwindow* window)
                     }
                 }
                 if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-                    float xoffset = 660.0f * deltaTime;
+                    float xoffset = 1300.0f * deltaTime;
                     float yoffset = 0.0;
                     camera.ProcessMouseMovement(xoffset, yoffset);
                 }
                 if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-                    float xoffset = -660.0f * deltaTime;
+                    float xoffset = -1300.0f * deltaTime;
                     float yoffset = 0.0;
                     camera.ProcessMouseMovement(xoffset, yoffset);
                 }

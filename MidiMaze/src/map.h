@@ -130,7 +130,7 @@ public:
     bool checkIntersections(glm::vec3 camera, glm::vec3 newCamera) {
         bool intersects = false;
         for (unsigned int i = 0; i < map.size(); i++) {
-            intersects = map[i].intersect(camera.x, camera.z, newCamera.x, newCamera.z,true,0.2f);
+            intersects = map[i].intersect(camera.x, camera.z, newCamera.x, newCamera.z,true,0.15f);
             if (intersects) {
                 return true;
             }
