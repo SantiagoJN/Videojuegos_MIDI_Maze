@@ -325,6 +325,7 @@ int main()
         float iniX = 0;
         float iniY = 0;
         newBullet = false;  //Bug de que empieza disparando
+        temp = pared;
         while (!glfwWindowShouldClose(window))
         {
 			if (versionModernaGraficos) {
@@ -355,7 +356,7 @@ int main()
                 else if (button == 0) break;
             }
 			glViewport(iniX, iniY, tamX, tamY);
-            temp = pared;
+            
 
             // Datos para gestionar los fps
             float currentFrame = static_cast<float>(glfwGetTime());
