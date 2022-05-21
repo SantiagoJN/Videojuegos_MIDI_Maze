@@ -13,21 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de encabezado\screen">
+      <UniqueIdentifier>{a431bbc1-dac7-469b-9437-3254ebc4f5ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\screen\versionNueva">
+      <UniqueIdentifier>{963c6924-e6be-4b22-9ffe-3d526f732ab6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\glad\src\glad.c">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="sprite_renderer.cpp">
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb_image.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,40 +38,105 @@
     <ClInclude Include="src\shader_m.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="model.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullets.h">
+    <ClInclude Include="src\Bullets.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\irrKlang-64bit-1.6.0\examples\common\conio.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="wall.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemies.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-<<<<<<< Updated upstream
-    <ClInclude Include="EnemyBullets.h">
+    <ClInclude Include="src\EnemyBullets.h">
       <Filter>Archivos de origen</Filter>
-=======
-    <ClInclude Include="sprite_renderer.h">
-      <Filter>Archivos de encabezado</Filter>
->>>>>>> Stashed changes
     </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Enemies.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesh.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb_image.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wall.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dead.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\desplegable.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\diccionario.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameStarter.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kills.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\leaveGame.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\letra.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lifes.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mapSelector.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mirilla.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\palabra.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\numEnemies.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scr_Princ.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\settings.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\showScreen.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\speed.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\statusIngame.h">
+      <Filter>Archivos de encabezado\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\configuracionAvanzada.h">
+      <Filter>Archivos de encabezado\screen\versionNueva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\version.h">
+      <Filter>Archivos de encabezado\screen\versionNueva</Filter>
+    </ClInclude>
+    <ClInclude Include="src\volume.h">
+      <Filter>Archivos de encabezado\screen\versionNueva</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MidiMaze.rc">
+      <Filter>Archivos de recursos</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="resources\Fotos_midi_maze\icon.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
   </ItemGroup>
 </Project>

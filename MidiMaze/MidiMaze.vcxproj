@@ -78,8 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\Universidad\Videojuegos\Opengl\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Universidad\Videojuegos\Opengl\include;</IncludePath>
+    <LibraryPath>C:\Users\HOME\Documents\midiMazeArch\lib;C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -119,8 +118,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\HOME\Documents\midiMazeArch\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Universidad\Videojuegos\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Universidad\Videojuegos\Videojuegos_MIDI_Maze\MidiMaze;C:\Universidad\Videojuegos\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Users\HOME\Documents\midiMazeArch\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\Config VS2022\include;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\santy\OneDrive - unizar.es\Videojuegos\github\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\‌include;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze\src;C:\Users\HOME\Documents\GitHub\Videojuegos_MIDI_Maze\MidiMaze;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,27 +149,48 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\glad\src\glad.c" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="sprite_renderer.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\irrKlang-64bit-1.6.0\examples\common\conio.h" />
-    <ClInclude Include="Bullets.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Enemies.h" />
-<<<<<<< Updated upstream
-    <ClInclude Include="EnemyBullets.h" />
-=======
-    <ClInclude Include="sprite_renderer.h" />
->>>>>>> Stashed changes
-    <ClInclude Include="wall.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="model.h" />
+    <ClInclude Include="src\Bullets.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\configuracionAvanzada.h" />
+    <ClInclude Include="src\Dead.h" />
+    <ClInclude Include="src\desplegable.h" />
+    <ClInclude Include="src\diccionario.h" />
+    <ClInclude Include="src\Enemies.h" />
+    <ClInclude Include="src\EnemyBullets.h" />
+    <ClInclude Include="src\gameStarter.h" />
+    <ClInclude Include="src\kills.h" />
+    <ClInclude Include="src\leaveGame.h" />
+    <ClInclude Include="src\letra.h" />
+    <ClInclude Include="src\lifes.h" />
+    <ClInclude Include="src\map.h" />
+    <ClInclude Include="src\mapSelector.h" />
+    <ClInclude Include="src\mesh.h" />
+    <ClInclude Include="src\mirilla.h" />
+    <ClInclude Include="src\model.h" />
+    <ClInclude Include="src\numEnemies.h" />
+    <ClInclude Include="src\palabra.h" />
+    <ClInclude Include="src\scr_Princ.h" />
+    <ClInclude Include="src\settings.h" />
+    <ClInclude Include="src\showScreen.h" />
+    <ClInclude Include="src\speed.h" />
+    <ClInclude Include="src\statusIngame.h" />
+    <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\version.h" />
+    <ClInclude Include="src\volume.h" />
+    <ClInclude Include="src\wall.h" />
     <ClInclude Include="src\shader_m.h" />
-    <ClInclude Include="stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MidiMaze.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="resources\Fotos_midi_maze\icon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
